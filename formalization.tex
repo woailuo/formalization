@@ -1,0 +1,91 @@
+\documentclass{article}
+
+\usepackage{bcprules,amsmath,amsthm,amssymb,amsfonts,extarrows,geometry,amsopn,enumerate,xcolor,url}
+\usepackage[sort]{cite}
+\usepackage{graphicx}
+\usepackage{boxedminipage}
+\usepackage{url}
+\usepackage{multirow}
+
+% set some new commands %
+\newcommand\tB{\;|\;}
+\newcommand\LET{\mathbf{let}\;}
+\newcommand\FREE{\mathbf{free(x)}\;}
+\newcommand\IN{\mathbf{in}\;}
+\newcommand\SKIP{\mathbf{skip}}
+\newcommand\Rtab{\; \; \; \;}
+\newcommand\NULL{\mathbf{null}}
+\newcommand\IFNULL{\mathbf{ifnull}\;}
+\newcommand\THEN{\mathbf{then}\;}
+\newcommand\ELSE{\mathbf{else}\;}
+\newcommand\Lcc{\left(}
+\newcommand\Rcc{\right)}
+\newcommand\Lfc{\left\{}
+\newcommand\Rfc{\right\}}
+\newcommand\Lb{\left[}
+\newcommand\Rb{\right]}
+\newcommand\coma{,\;}
+\newcommand\MALLOC{\mathbf{malloc()}\;}
+\newcommand\Malloc{\mathbf{malloc}}
+\newcommand\Free{\mathbf{free}}
+\newcommand\Cirx{(x)}
+\newcommand\Sirx{(*x)}
+\newcommand\dtb{\;\;\ \;\;\ \;\;\ \;\;\  }
+\newcommand\set[1]{\{#1\}}
+\newcommand\VAR{\mathbf{Var}}
+\newcommand\OK{\mathit{OK}}
+\newcommand\COL{\!:\!}
+\newcommand\TSEQ{;\!}
+\newcommand\TSKIP{\mathbf{0}}
+\renewcommand\rn[1]{\textsc{{#1}}}
+\newcommand\OVERFLOW{\mathbf{OutOfMemory}}
+\newcommand\DOM{\mathbf{Dom}}
+\newcommand\FUNTYPE{\varphi}
+\newcommand\bs{\backslash}
+\newcommand\MEMEX{\mathbf{MemEx}}
+\newcommand\CONSTEX{\mathbf{ConstEx}}
+
+\newcommand\xnull{*x = \NULL}
+\newcommand\xnnull{*x \ne \NULL}
+%% \newcommand\assx{\mathbf{assume(x = null)}}
+%% \newcommand\assxn{\mathbf{assume(x != null)}}
+\newcommand\const{\mathbf{const}(\sigma, n)}
+
+\newcommand\sassx{\mathbf{assume}(\xnull)}
+\newcommand\sassxn{\mathbf{assume}(\xnnull)}
+\newcommand\sconst{\mathbf{consistency}(\sigma)}
+\newcommand\scon{\mathbf{const}}
+\newcommand\Startconst{\mathbf{startconst}\Sirx}
+\newcommand\Endconst{\mathbf{endconst}\Sirx}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{myDef}{Definition}
+\newtheorem{remark}{Remark}[section]
+
+\theoremstyle{definition}
+\newtheorem{exmp}{Example}[section]
+
+\newenvironment{nospaceflalign*}
+ {\setlength{\abovedisplayskip}{0pt}\setlength{\belowdisplayskip}{0pt}%
+  \csname flalign*\endcsname}
+ {\csname endflalign*\endcsname\ignorespacesafterend}
+
+\newenvironment{pfof}[1]{%
+  {\it Proof of {#1}}:%
+}{\qed}
+
+
+\begin{document}
+
+\input{language}
+\input{typesystem}
+%% \input{reconstruction}
+
+\input{proof}
+\input{sdtyping}
+\input{typeinference}
+
+\end{document}

@@ -1,0 +1,179 @@
+
+\section{Language \(\mathcal{L}\)}\label{sec:language}
+
+\begin{eqnarray*}
+  x,y,z,\dots \mbox{ (variables)} &\in& \VAR\\
+  s \mbox{ (statements)} & ::= &  \SKIP \mid s_{1};s_{2} \mid *x \leftarrow y \mid \Free(x) \\
+  & \mid & \LET x = \MALLOC \IN s \mid \LET x = \NULL\ \IN s  \\
+  & \mid & \LET x = y \; \IN s \mid   \LET x = *y \; \IN s \\
+  & \mid & \IFNULL(*x) \; \THEN s_{1}\; \ELSE s_{2} \mid f(\vec{x})\\
+  & \mid & \scon\Sirx s \mid \Endconst  \\
+  d \mbox{ (proc. defs.)} & ::= & \set{f \mapsto (x_1,\dots,x_n)s}\\
+  D \mbox{ (definitions) } &::=& \langle d_1 \cup \dots \cup d_n \rangle\\
+  P \mbox{ (programs)} &::=& \langle D, s \rangle\\
+  E \mbox{ (contex)} &::=& E;s \mid \scon\Sirx E \mid [ ] 
+\end{eqnarray*}
+
+\subsection{Operational semantics}
+\label{sec:languageSemantics}
+\begin{itemize}
+\item \(H\), a \emph{heap}, is a finite mapping from \(\mathcal{H}\)
+  to \(\mathcal{H} \cup \set{\NULL}\);
+\item \(R\), an \emph{environment}, is a finite mapping from \(\VAR\)
+  to \(\mathcal{H} \cup \set{\NULL}\);
+\item \(s\) is the statement that is being executed; and
+\item \(n\) is a natural number that represents the number of memory
+  cells available for allocation.
+\item \(\rho   \mbox{ (label)} ::= \Malloc \mid \Free \mid \sassx \mid \sassxn\)   \\
+ \( \Rtab \mid \Startconst \mid \Endconst \)  \\
+\end{itemize}
+
+The operational semantics is given by relation \(\langle H, R, s, n, C
+\rangle \xlongrightarrow{\rho}_D \langle H', R', s', n', C \rangle\)
+where \(\rho\), an \emph{action}, is \(\Malloc\), \(\Free\),
+\(\sassx\), \(\sassxn\),, \(\Startconst\), \(\Endconst \) or \(\tau\).
+The action \(\Malloc\) expresses an allocation of a memory cell;
+\(\Free\) expresses a deallocation; \(\sassx\) and \(\sassxn\) express
+the guard part of conditional are \( \xnull \) and \(\xnnull\)
+respectively; \(\Startconst\) means \(*x\) should be constant from
+here; \(\Endconst\) means the \(*x\) will not be guaranteed a
+constant from here; \(\tau\) expresses the other actions.  We often omit
+\(\tau\) in \(\xlongrightarrow{\tau}_D\).  We use a metavariable
+\(\sigma\) for a finite sequence of actions \(\rho_1\dots\rho_n\).  We
+write \(\xlongrightarrow{\rho_1\dots\rho_n}_D\) for
+\(\xlongrightarrow{\rho_1}_D\xlongrightarrow{\rho_2}_D\dots\xlongrightarrow{\rho_n}_D\).
+We write \(\xLongrightarrow{\rho}_D\) for
+\(\xlongrightarrow{}_D^*\xlongrightarrow{\rho}_D\xlongrightarrow{}_D^*\).
+We write \(\xLongrightarrow{\rho_1\dots\rho_n}_D\) for
+\(\xLongrightarrow{\rho_1}_D\dots\xLongrightarrow{\rho_n}_D\).
+
+%% \begin{figure}
+\begin{minipage}{\textwidth}
+
+\infax[Sem-ConstSkip]
+{\langle H, R, \Endconst, n, C \uplus {x} \rangle \xlongrightarrow{\Endconst}_{D} \langle H, R, \SKIP , n, C  \rangle}
+
+\vspace{2mm}
+
+\infax[Sem-ConstSeq]
+{\langle H, R, \scon\Sirx s, n, C \rangle
+\xlongrightarrow{\Startconst}_{D}
+\langle H, R, s;\Endconst , n, C \cup {x} \rangle}
+
+\vspace{2mm}  
+
+\infax[Sem-Skip]
+{\langle H, R, \SKIP;s, n, C \rangle
+\longrightarrow_{D}
+\langle H, R, s, n, C\rangle}
+
+\vspace{2mm}
+
+\infrule[Sem-Seq]
+{\langle H, R, s_1, n, C \rangle \xlongrightarrow{\rho}_{D} \langle H', R', s_1', n', C \rangle}
+{\langle H, R, s_1;s_2, n, C \rangle \xlongrightarrow{\rho}_{D} \langle H', R', s_1';s_2, n', C \rangle}
+ 
+\vspace{2mm}
+
+\infrule[Sem-LetNull]
+{x' \notin \DOM(R)}
+{\langle H\coma R\coma  \LET x = \NULL \ \IN s , n, C \rangle
+  \longrightarrow_{D}
+  \langle H\coma R\Lfc x' \mapsto \NULL \Rfc \coma   \Lb x'/x \Rb s , n, C  \rangle }
+
+\vspace{2mm}
+
+\infrule[Sem-LetEq]
+{x' \notin \DOM(R)}
+{\langle H\coma R\coma \LET x = y \; \IN s , n, C \rangle
+  \longrightarrow_{D}
+  \langle H\coma R\Lfc x' \mapsto R(y) \Rfc \coma   \Lb x'/x \Rb s , n, C\rangle }
+
+\vspace{2mm}
+
+\infrule[Sem-IfNullT]
+{H(R(x)) = \NULL}
+{\langle H \coma R \coma \IFNULL\Sirx \ \THEN   s_{1}\ \ELSE\  s_{2} \coma  n, C \rangle
+  \xlongrightarrow{\sassx}_{D}
+  \langle H\coma R\coma s_{1} \coma n, C\rangle}
+
+\vspace{2mm}
+
+\infrule[Sem-IfNullF]
+{H(R(x)) \neq \NULL}
+{\langle H \coma R \coma \IFNULL\Sirx\ \THEN  s_{1}\ \ELSE  s_{2} \coma  n, C\rangle
+  \xlongrightarrow{\sassxn}_{D}
+  \langle H\coma R\coma s_{2} \coma  n, C\rangle}
+
+\vspace{2mm}
+
+\infrule[Sem-Call]
+{D(f) = (\vec{y})s}
+{ \langle H\coma R\coma  f(\vec{x}) , n, C\rangle
+  \longrightarrow_{D}
+  \langle H\coma R\coma  \Lb \vec{x}/\vec{y} \Rb s , n, C\rangle}
+
+\vspace{2mm}
+
+\infax[Sem-Assign]
+{ \langle H \set{R(x) \mapsto v}, R, *x \leftarrow y , n, C\rangle \xlongrightarrow{}_{D}
+  \langle H \Lfc R(x) \mapsto R(y) \Rfc , R, \SKIP , n, C\rangle }
+
+\vspace{2mm}
+
+\infrule[Sem-LetDeref]
+{x' \notin \DOM(R) \andalso R(y) \in \DOM(H)}
+{\langle H\coma R\coma  \LET x = *y \; \IN s , n, C\rangle
+  \longrightarrow_{D}
+  \langle H\coma R\Lfc x' \mapsto H(R(y)) \Rfc \coma   \Lb x'/x \Rb s , n, C\rangle }
+
+\vspace{2mm}
+
+\infrule[Sem-Free]
+{R(x) \neq \NULL \mbox{ and } R(x) \in \DOM(H)}
+{\langle H\set{R(x) \mapsto v}\coma R\coma \Free(x) , n, C \rangle \xlongrightarrow{\Free}_{D}
+  \langle H\backslash R(x) \coma R \coma \SKIP , n+1, C \rangle}
+
+\vspace{2mm}
+
+\infrule[Sem-Malloc]
+{l \notin \DOM(H) \andalso n > 0}
+{\langle H\coma R\coma  \LET x = \Malloc() \; \IN s , n, C\rangle
+  \xlongrightarrow{\Malloc}_{D}
+  \langle H \Lfc l \mapsto v\Rfc \coma R\Lfc x' \mapsto l \Rfc \coma   \Lb x'/x \Rb s , n-1, C  \rangle }
+
+\vspace{2mm}
+
+\begin{minipage}{0.5\textwidth}
+\infrule[Sem-AssignExn]
+{R(x) = \NULL \mbox{ or } R(x) \notin \DOM(H)}
+{\langle H\coma R\coma  *x \leftarrow y , n, C\rangle
+  \longrightarrow_{D} \MEMEX }
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+\infrule[Sem-DerefExn]
+{R(y) = \NULL \mbox{ or } R(y) \notin \DOM(H)}
+{\langle H\coma R\coma  \LET x = *y \; \IN s, n, C\rangle
+    \longrightarrow_{D} \MEMEX}
+\end{minipage}
+
+\infrule[Sem-FreeExn]
+{R(x) = \NULL \mbox{ or } R(x) \notin \DOM(H)}
+{\langle H\coma R\coma \Free(x) , n, C\rangle \xlongrightarrow{\Free}_{D} \MEMEX}
+
+\infrule[Sem-ConstExn]
+        { H(R(x)) \neq H'(R(x))
+          \Rtab
+          \langle H, R, s, n, C \rangle \xlongrightarrow{\rho}_{D} \langle H', R', s', n', C \rangle}
+{\langle H, R, \scon\Sirx s, n, C \rangle \xlongrightarrow{\rho}_{D} \CONSTEX }
+
+
+\infax[Sem-OutOfMem]
+{ \langle H\coma R\coma \LET x = \Malloc() \ \IN s ,  0, C  \rangle    \xlongrightarrow{\Malloc}_{D}
+  \OVERFLOW}
+
+\end{minipage}
+
+%% \caption{Operational semantics of \(\mathcal{L}\).}
+%% \label{fig:transitionRules}
+%% \end{figure}

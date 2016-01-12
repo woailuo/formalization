@@ -1,0 +1,226 @@
+
+\section{Type system}
+\label{sec:typesystem}
+
+\subsection{Types}
+
+The syntax of the types is as follows.
+\[
+\begin{array}{rlcl}
+  P & (\mbox{behavioral types})&::=& {\bf 0} \mid P_{1};P_{2}  \mid \Malloc \mid \Free \mid \alpha \mid \mu\alpha.P \\
+  &  &  & \mid (*x)(P_1,P_2) \mid P_1 + P_2 \mid \scon\Sirx P  \mid \Endconst\\
+  \Gamma & (\mbox{variable type environments}) &::=& \set{x_1, x_2, \dots, x_n}\\
+  \Psi & (\mbox{dependent function type}) &::=& (\vec{x})P\\
+  \Theta & (\mbox{function type environments}) &::=& \set{f_1\COL \Psi_1,\dots,f_n\COL \Psi_n}\\
+\end{array}
+\]
+
+
+\infax[Tr-Skip]
+{\mathbf{0};P \xlongrightarrow{\tau} P}
+
+\infax[Tr-Malloc]
+{\Malloc \xlongrightarrow{\Malloc} {\bf 0}}
+
+\infax[Tr-Free]
+{\Free \xlongrightarrow{\Free} {\bf 0}}
+
+%% \begin{minipage}{0.33\textwidth}
+\infax[Tr-Rec]
+{\mu \alpha.P \xlongrightarrow{\tau}  [\mu \alpha . P/\alpha]  P}
+%% \end{minipage}
+
+\infax[Tr-Dep1]
+{ (*x)(P_1,P_2) \xlongrightarrow{\sassx } P_1 }
+
+
+\infax[Tr-Dep2]
+      { (*x)(P_1,P_2) \xlongrightarrow{\sassxn} P_2 }
+
+\infax[Tr-SConst]
+      { \scon\Sirx P \xlongrightarrow{\Startconst} P;\Endconst }
+
+\infax[Tr-EndConst]
+      { \Endconst \xlongrightarrow{\Endconst} \mathbf{0} }
+
+ \infax[Tr-ChoiceL]
+      { P_1 + P_2 \xlongrightarrow{\tau} P_1 }
+
+\infax[Tr-ChoiceR]
+      { P_1 + P_2 \xlongrightarrow{\tau} P_2 }
+
+%% \vspace{2mm}
+
+ %% \infax[Tr-Dep2]
+ %% { \Pi_x \{ value1: P_1 , value2: P_2 \} \xlongrightarrow{x = value2} P_{2}}
+
+\infrule[Tr-Seq]
+{P_{1} \xlongrightarrow{\rho} P_{1}' }
+{P_{1};P_{2} \xlongrightarrow{\rho} P_{1}';P_{2}}
+
+%% \paragraph{Notation} The variable \(x\) in \(\Pi_x(P_1, P_2) \) must be a free variable in \( P_1\) and \(P_2\).
+\begin{myDef}
+  \label{df:fv}
+  \mbox{The set of free variables of behavioral type \(P\) is defined as
+    follows:}
+
+  \( \mathbf{FV}(\bf{0}) = \mathbf{FV}(\Malloc) =
+  \mathbf{FV}(\Free) = \mathbf{FV}(\alpha) = \emptyset \) 
+
+  \( \mathbf{FV}(P_1 + P_2) = \mathbf{FV}(P_1;P_2) = \mathbf{FV}(P_1) \cup \mathbf{FV}(P_2)\)
+
+  \( \mathbf{FV}((x)(P_1,P_2)) \) = \{x\} \(\cup \ \mathbf{FV}(P_1) \cup
+  \mathbf{FV}(P_2)\)
+\end{myDef}
+
+
+\subsection{Typing rules}
+
+\(\OK_n(P)\) means that \(P\) describes
+the behavior of a program that requires at most \(n\) memory cells.
+
+\begin{myDef}[\(\sharp_{\rho}(\sigma)\)]
+\label{df:sharf}
+\(\sharp_{\rho}(\sigma)\) is the number of \(\rho\) in the sequence
+\(\sigma\).
+\end{myDef}
+
+
+\begin{myDef}
+\label{df:const}
+\(\sconst\) means:\\
+\( \forall \sigma',\sigma''\). \(\sigma'\) is a subsequence
+of \(\sigma\), and \(\sigma' = \Startconst;\sigma'';\Endconst\) or \(\sigma' = \sigma'';\Endconst\) is a prefix of \(\sigma\). The \(\sigma''\) does not contain \(\Startconst\) or \(\Endconst \), and it also does not contain both \(\sassx\) and \(\sassxn\) 
+\end{myDef}
+
+
+\begin{myDef}
+\label{df:okn}
+\(OK_{n}(P)\) holds if, \(\forall\) \(P'\) and \(\sigma\). if \(P
+\xlongrightarrow{\sigma}P'\) and \(\sconst\), then \( \sharp_m(\sigma) - \sharp_f(\sigma) \le n\) 
+\end{myDef}
+
+
+\begin{myDef}[Subtyping]
+\(P_1 \le P_2\) is the largest relation such that, for any \(P_1'\)
+and \(\rho\), if \(P_1 \xlongrightarrow{\rho} P_1'\), then there
+exists \(P_2'\) such that \(P_2 \xLongrightarrow{\rho} P_2'\) and
+\(P_1' \le P_2'\).
+\label{df:subtype}
+\end{myDef}
+
+
+\begin{minipage}{\textwidth}
+
+\begin{minipage}{0.5\textwidth}
+\infax[T-Skip]
+{\Theta ; \Gamma \vdash \SKIP : \mathbf{0}}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+\infrule[T-Seq]
+{\Theta ; \Gamma \vdash s_{1} : P_{1} \Rtab \Theta ; \Gamma \vdash s_{2} : P_{2}}
+{\Theta ; \Gamma \vdash s_{1} ; s_{2} : P_{1};P_{2} }
+\end{minipage}
+
+\vspace{2mm}
+
+\begin{minipage}{0.5\textwidth}
+\infax[T-Assign]
+{\Theta ; \Gamma, x, y \vdash *x \leftarrow y : \mathbf{0} }
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+\infax[T-Free]
+{\Theta ; \Gamma, x \vdash \Free(x) : \Free}
+\end{minipage}
+
+\vspace{2mm}
+
+\begin{minipage}{0.5\textwidth}
+\infrule[T-Malloc]
+{\Theta ; \Gamma,x \vdash s : P  \Rtab}
+{\Theta ; \Gamma \vdash \LET x = \MALLOC \; \IN s  : \Malloc;P}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+\infrule[T-LetEq]
+{\Theta ; \Gamma , x, y  \vdash s : P}
+{\Theta ; \Gamma, y \vdash \LET x = y \; \IN s : P}
+\end{minipage}
+
+\vspace{2mm}
+
+\begin{minipage}{0.5\textwidth}
+\infrule[T-LetDeref]
+{\Theta ; \Gamma , x, y  \vdash s : P  \Rtab}
+{\Theta ; \Gamma, y \vdash \LET x = *y \; \IN s : P}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+\infrule[T-LetNull]
+{\Theta ; \Gamma, x  \vdash s : P  \Rtab}
+{\Theta ; \Gamma \vdash \LET x = \mathbf{null} \; \IN s : P}
+\end{minipage}
+
+\infax[T-Endconst] 
+{\Theta ; \Gamma,x \vdash \Endconst : \Endconst}
+
+\infrule[T-Const] 
+{\Theta ; \Gamma, x \vdash s : P }
+{\Theta ; \Gamma,x \vdash \scon\Sirx s : \scon\Sirx P}
+
+
+%%\begin{minipage}{0.5\textwidth}  \andalso x \in \mathbf{FV}(P_1) \cup \mathbf{FV}(P_2)
+\infrule[T-IfNull] 
+{\Theta ; \Gamma, x \vdash s_{1} : P_1 \andalso \Theta ; \Gamma, x \vdash s_{2} : P_2}
+{\Theta ; \Gamma, x \vdash \IFNULL\Sirx \; \THEN s_{1}\; \ELSE s_{2} : (*x)(P_1,P_2)}
+%%\end{minipage}
+%%\begin{minipage}{0.5\textwidth}
+\infax[T-Call] {\Theta, f \COL (\vec{y})P; \Gamma, \vec{x} \vdash f(\vec{x}) :  P[\vec{x}/\vec{y}]}
+%%\end{minipage}
+
+%%\vspace{2mm} 
+
+\infrule[T-Sub]
+{\Theta ; \Gamma \vdash s : P_{1} \andalso P_{1} \le P_{2}}
+{\Theta ; \Gamma \vdash s : P_{2}}
+
+\infrule[T-Def]
+        { \Theta(f) = (\vec{x})P \andalso \DOM(D) = \DOM(\Theta)
+          \andalso \Theta; x_1,\dots,x_n \vdash s \COL P
+          \mbox{ for each \(f \mapsto (x_1,\dots,x_n)s \in D\)}
+        }
+        {\vdash D \COL \Theta}
+% Program
+\infrule[T-Program]
+{\vdash D : \Theta \andalso \Theta; \emptyset\vdash s : P \Rtab OK_{n}(P)}
+{\vdash \langle D, s \rangle : n}
+
+\end{minipage}
+
+The type judgment for statements is of the form $\Theta ; \Gamma
+\vdash s : P$.  It expresses that, under the variable type environment
+\(\Gamma\) and the function type environment \(\Theta\), the behavior
+of $s$ is abstracted by behavior $P$.
+
+\subsection{Type soundness}
+\begin{theorem}\label{thm1}
+If $\vdash \langle D, s \rangle : n$ for some \(n\), then \(\langle D,
+s \rangle\) is totally memory-leak free.
+\end{theorem}
+
+The proof is based on the following lemmas: preservation and lack of
+immediate overflow.
+
+\begin{lemma}[Preservation]
+\label{lem:preservation}
+If $OK_{n}(P)$, $\Theta; \Gamma \vdash s : P$, \(\vdash D \COL
+\Theta\), and $\langle H,R,s,n \rangle \xlongrightarrow{\rho} \langle
+H',R',s', n' \rangle$, then there exists $P'$ such that (1) $ \Theta;
+\Gamma^{'} \vdash s' : P'$, (2) \(P \xLongrightarrow{\rho} P'\), and (3)
+\(OK_{n'}(P')\).
+\end{lemma}
+
+\begin{lemma}[Lack of immediate overflow]
+\label{lem:immediateSafety}
+If $\Theta; \Gamma \vdash s \COL P$, \(\vdash D \COL \Theta\), and
+\(\OK_n(P)\), then $\langle H, R, s, n \rangle
+\not\xlongrightarrow{\Malloc} \OVERFLOW$.
+\end{lemma}
