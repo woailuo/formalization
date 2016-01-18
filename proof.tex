@@ -2,150 +2,232 @@
 \label{sec:proof}
 
 \begin{lemma}
+\label{lem:okFpreserved}
+If \( \langle P, F \rangle \xlongrightarrow{\rho} \langle P', F' \rangle\) and \( OK(F)\), then \(OK(F')\)
+\end{lemma}
+
+\begin{proof}
+By induction on \( \langle P, F \rangle \xlongrightarrow{\rho} \langle P', F' \rangle\).
+  \begin{itemize}
+
+  \item Case \( P = {\bf 0};P'\) and \( \langle {\bf 0};P', F \rangle \rightarrow \langle P', F \rangle \)
+    
+      We need to prove \(OK(F')\). From assumption, we have that
+      \(OK(F)\) holds and F' is the same as F. Therefore, \(OK(F')\)
+      holds.
+
+    \item Case \( P = \Malloc\) and \( \langle \Malloc, F \rangle \xlongrightarrow{\Malloc} \langle {\bf 0}, F \rangle \) 
+
+      Similiar to above.
+
+    \item Case \( P = \Free\) and \( \langle \Free, F \rangle \xlongrightarrow{\Free} \langle {\bf 0}, F \rangle \)
+
+      Similiar to above.
+
+    \item Case \( P = \Sirx(P_1,P_2)\) and \( \frac{\snnull \notin F
+      \andalso \scon\Sirx \in F} { \langle \Sirx(P_1, P_2), F \rangle
+      \rightarrow \langle P_1, F\cup \{\snull \} \rangle } \)
+      
+      We need to prove \( OK(F\cup\{ \snull\})\). From the assumption,
+      we have that \(OK(F)\) holds and \( \snnull \notin F\). Then, we
+      have \(F\cup\{ \snull\}\) does not contain both \(\snull\) and
+      \( \snnull\). Therefore, \( OK(F\cup\{ \snull\})\) holds.
+
+    \item Case \( P = \Sirx(P_1,P_2)\) and \( \frac{\scon\Sirx \notin F}
+      { \langle \Sirx(P_1, P_2), F \rangle
+      \rightarrow \langle P_1, F \rangle } \) \\
+      We need to prove \( OK(F)\). From the assumption, \(OK(F)\) holds.
+
+    \item Case \( P = \Sirx(P_1,P_2)\) and \( \frac{\scon\Sirx \notin F}
+      { \langle \Sirx(P_1, P_2), F \rangle
+      \rightarrow \langle P_2, F \rangle } \) \\
+      We need to prove \( OK(F)\). From the assumption, \(OK(F)\) holds.
+
+    \item Case \( P = \Sirx(P_1,P_2)\) and \( \frac{ \snull \in F \andalso \scon\Sirx \in F}
+      { \langle \Sirx(P_1, P_2), F \rangle
+      \rightarrow \langle P_1, F \rangle } \) \\
+      We need to prove \( OK(F)\). From the assumption, \(OK(F)\) holds.
+
+    \item Case \( P = \scon\Sirx P'\) and \(  \langle \scon\Sirx
+      P', F \rangle \rightarrow \langle P';\Endconst, F\cup\{\scon\Sirx\} \rangle \) \\
+      We need to prove \( OK(F\cup\{\scon\Sirx\})\). From the
+      assumption, we have \(OK(F)\) holds. Therefore,
+      \(F\cup\{\scon\Sirx\}\) does not contain both \(\snull\) and \(
+      \snnull\). \( OK(F\cup\{ \scon\Sirx\})\) holds.
+
+    \item Case \( P = \Sirx(P_1,P_2)\) and \( \frac{ \snull \notin F \andalso \scon\Sirx \notin F}
+      { \langle \Sirx(P_1, P_2), F \rangle
+      \rightarrow \langle P_2, F\cup\{\snnull\} \rangle } \) \\
+      We need to prove \( OK(F\cup\{\snnull\})\). From the assumption,
+      we have that \(OK(F)\) holds and \( \snull \not in F\). Then we
+      get \(F\cup\{\snnull\}\) does not contain both \(\snull\) and
+      \(\snnull\). Therefore, \( OK(F\cup\{\snnull\})\) holds.
+
+
+    \item Case \( P = \mu\alpha.P'\) and \( \langle \mu\alpha.P', F \rangle
+      \rightarrow \langle [\mu\alpha.P']P', F \rangle \) \\
+      We need to prove \( OK(F)\). From the assumption, we have that
+      \(OK(F)\) holds.
+
+    \item Case \( P = P_1 + P_2\) and \( \langle P_1 + P_2, F \rangle
+      \rightarrow \langle P_1, F \rangle \) \\
+      We need to prove \( OK(F)\). From the assumption, we have that
+      \(OK(F)\) holds.
+
+    \item Case \( P = P_1 + P_2\) and \(  \langle P_1 + P_2, F \rangle
+      \rightarrow \langle P_2, F \rangle \) \\
+      We need to prove \( OK(F)\). From the assumption, we have that
+      \(OK(F)\) holds.
+
+    \item Case \( P = P_1;P_2\) and \( \frac{ \langle P_1, F \rangle \xlongrightarrow{\rho} \langle P_1', F' \rangle }
+      {\langle P_1;P_2, F \rangle \xlongrightarrow{\rho} \langle P_1';P_2, F' \rangle} \) \\
+    We need to prove \(OK(F')\). By IH, we have \( \langle P_1, F
+    \rangle \xlongrightarrow{\rho} \langle P_1', F' \rangle \) and \(
+    OK(F) \) holds, then \(OK(F')\) holds.
+      
+      
+  \end{itemize}
+\end{proof}
+
+
+
+\begin{lemma}
 \label{lem:okPreserved}
-If \(\OK_n(P)\) and \(P \xlongrightarrow{\rho} P'\), then
+If \(\OK_n(P, F)\) and \( \langle P, F \rangle \xlongrightarrow{\rho} \langle P', F' \rangle\), then
 \begin{itemize}
-\item \(\OK_{n-1}(P')\) if \(\rho = \Malloc\),
-\item \(\OK_{n+1}(P')\) if \(\rho = \Free\),
-\item \(\OK_n(P')\) if \(\rho = \sassx\) \( \mbox{ or } \rho = \sassxn \)
-\item \(\OK_n(P')\) if \(\rho = \Startconst\) \( \mbox{ or } \rho = \Endconst \)
-\item \(\OK_n(P')\) if \(\rho = \tau\).
+\item \(\OK_{n-1}(P', F')\) if \(\rho = \Malloc\),
+\item \(\OK_{n+1}(P', F')\) if \(\rho = \Free\),
+\item \(\OK_n(P')\) if \(\rho = \mbox{Otherwise}  \)
 \end{itemize}
 \end{lemma}
 
 \begin{proof}
-Case analysis on \(P \xlongrightarrow{\rho} P'\).
+By induction on \(\langle P, F \rangle \xlongrightarrow{\rho} \langle P', F' \rangle \).
 
 \begin{itemize}
 
-\item Case $P = \TSKIP;P'$ and \(\TSKIP;P' \xlongrightarrow{\tau} P'\)
+\item Case \(P = {\bf 0};P'\) and \( \langle P', F \rangle \rightarrow \langle P', F \rangle\)
 
-  We need to prove \(\OK_n(P')\).  Assume that \(\OK_n(P')\) does not
-  hold. Then, we have \(\TSKIP;P' \xlongrightarrow{\tau} P'
-  \xlongrightarrow{\sigma} Q\) such that \(\sharp_{m}(\sigma) -
-  \sharp_{f}(\sigma) > n\) for some \(\sigma\).  From the definition
-  of \(\OK_n(P)\), we have \(\sharp_m(\tau\sigma) - \sharp_f(\tau
-  \sigma) \le n \).  From the definition of \(\sharp_\rho(\sigma)\),
-  we get \(\sharp_m(\tau) + \sharp_m(\sigma) - \sharp_f(\tau) -
-  \sharp_f(\sigma) \le n\) that is equivalent to \(\sharp_m(\sigma) -
-  \sharp_f(\sigma) \le n\), which is contradiction.
+  We need to prove \(\OK_n(P', F)\).  Assume that \(\OK_n(P', F)\)
+  does not hold. Then, we have (1) \( \exists \sigma \) and \(Q\) s.t. \(
+  \langle P', F \rangle \xlongrightarrow{\sigma} \langle Q, F' \rangle
+  \) and \(\sharp_{m}(\sigma) - \sharp_{f}(\sigma) > n\) or (2) \(
+  OK(F)\) does not hold.
 
-\item Case $P = \Malloc$ and \(\Malloc \xlongrightarrow{\Malloc} \TSKIP\)
+  From the definition of that \(OK({\bf 0};P', F)\) holds, we have (1)
+  \( \langle {\bf 0};P', F \rangle \rightarrow \langle P', F \rangle
+  \xlongrightarrow{\sigma} \langle Q, F' \rangle \) s.t.
+  \(\sharp_m(\sigma) - \sharp_f(\sigma) \le n \) and (2) \(OK(F)\),
+  which are in contradiction to the assumption. Therefore, \(\OK_n(P',
+  F)\) holds.
 
-  We need to prove \(\OK_{n-1}(\TSKIP)\).  From the definition of
-  \(\OK_n(P)\), we have that \(\OK_{n-1}(\TSKIP)\) holds if, for any
-  \(P'\), if \(\TSKIP \xlongrightarrow{\sigma} P'\) then
-  \(\sharp_m(\sigma) - \sharp_f(\sigma) \le n - 1\). There is no such \(P'\) s.t. \(\TSKIP
-  \xlongrightarrow{\sigma} P'\), therefore, \(\OK_{n-1}(\TSKIP)\) holds.
+\item Case \(P = \Malloc\) and \( \langle \Malloc, F \rangle \xlongrightarrow{\Malloc} \langle {\bf 0}, F \rangle\)
 
-\item Case $P = \Free$ and \(\Free \xlongrightarrow{\Free} \TSKIP\)
+  We need to prove \(\OK_{n-1}({\bf 0}, F)\), which means we need to
+  prove (1) \( \forall \sigma \) and \(Q\) s.t. \( \langle {\bf 0}, F
+  \rangle \xlongrightarrow{\sigma} \langle Q, F' \rangle \) and
+  \(\sharp_{m}(\sigma) - \sharp_{f}(\sigma) \le n\) and (2) \( OK(F)\)
+  holds.  There is no \(Q\) and \(\sigma\) s.t. \(\langle {\bf 0}, F
+  \rangle \xlongrightarrow{\sigma} \langle Q, F \rangle \), so (1)
+  holds.  \(OK(F)\) holds from that \(OK(\Malloc, F)\)
+  holds. Therefore, \(OK({\bf 0}, F)\) holds.
+  
+\item Case \(P = \Free\) and \(\langle \Free, F \rangle \xlongrightarrow{\Free} \langle {\bf 0}, F \rangle \)
 
-    We need to prove \(\OK_{n+1}(\TSKIP)\).  From the definition of
-    \(\OK_n(P)\), we have that \(\OK_{n+1}(\TSKIP)\) holds if, for any
-    \(P'\), if \(\TSKIP \xlongrightarrow{\sigma} P'\) then
-    \(\sharp_m(\sigma) - \sharp_f(\sigma) \le n + 1\). There is no
-    such \(P'\) s.t. \(\TSKIP \xlongrightarrow{\sigma} P'\),
-    therefore, \(\OK_{n+1}(\TSKIP)\) holds.    
+  Similiar to above.
 
-\item Case \( P = (*x)(P_1,P_2) \) and \( (*x)(P_1,P_2) \) \(\xlongrightarrow{\sassx} P_1\)
+\item Case \( P = (*x)(P_1,P_2) \) and \( \frac{\snnull \notin F
+      \andalso \scon\Sirx \in F} { \langle \Sirx(P_1, P_2), F \rangle
+      \rightarrow \langle P_1, F\cup \{\snull \} \rangle } \) 
 
-  We prove \(\OK_n(P_1)\) by contradiction. Assume that
-  \(OK_{n}(P_1)\) does not hold.  Then, there exists \(\sigma\) such
-  that \( (*x)(P_1,P_2) \xlongrightarrow{\sassx} P_{1}
-  \xlongrightarrow{\sigma} Q\) and \(\sharp_{m}(\sigma) -
-  \sharp_{f}(\sigma) > n\).  From the definition of \(\OK_n(P)\), we
-  have \(\sharp_m(\sassx) + \sharp_m(\sigma) -\sharp_f(\sassx)
-  -\sharp_f(\sigma) \le n\).  By the definition of
-  \(\sharp_\rho(\sigma)\), we get \(\sharp_m(\sigma) -\sharp_f(\sigma)
-  \le n\). Therefore, we get the contradiction.
+  We need to prove \(\OK_n(P_1, F\cup\{\snull\})\).  Assume that
+  \(\OK_n(P_1, F\cup\{\snull\})\) does not hold. Then, we have (1) \(
+  \exists \sigma \) and \(Q\) s.t. \( \langle P_1, F\cup\{\snull\}
+  \rangle \xlongrightarrow{\sigma} \langle Q, F' \rangle \) and
+  \(\sharp_{m}(\sigma) - \sharp_{f}(\sigma) > n\) or (2) \(
+  OK(F\cup\{\snull\})\) does not hold.
 
-\item Case \( P = (*x)(P_1,P_2) \) and \( (*x)(P_1,P_2)\xlongrightarrow{\sassxn} P_2\)
+  From the definition of that \(OK_n(\Sirx(P_1, P_2), F)\) holds,
+  we have (1) \( \langle \scon\Sirx(P_1, P_2), F \rangle \rightarrow
+  \langle P_1, F \rangle \xlongrightarrow{\sigma} \langle Q, F'
+  \rangle \) s.t.  \(\sharp_m(\sigma) - \sharp_f(\sigma) \le n \),
+  which is a contradiction; and (2) \(OK(F)\)
+  holds. \(OK(F\cup\{\snull\})\) holds by
+  Lemma~\ref{lem:okFpreserved}. Therefore, \(\OK_n(P_1,
+  F\cup\{\snull\})\) holds.
 
-  Similar to the case of \( (*x)(P_1,P_2) \xlongrightarrow{\sassx}
-  P_1\).
 
-  \item Case \(P = \scon\Sirx P'\) and \( \scon\Sirx P'
-    \xlongrightarrow{\Startconst} P';\Endconst \) 
+\item Case \( P = \Sirx(P_1,P_2) \) and \( \frac{ \scon\Sirx \notin F}
+  { \langle \Sirx(P_1, P_2), F \rangle \rightarrow \langle P_1, F
+    \rangle } \)
 
-    We prove \( OK_n(P';\Endconst) \) by
-    contradiction. Assume that \( OK_n(P';\Endconst) \) does not
-    hold, then we have \( \scon\Sirx P' \xlongrightarrow{\Startconst}
-    P';\Endconst \xlongrightarrow{\sigma} Q \) such that \(
-    \sharp_m(\sigma) - \sharp_f(\sigma) > n \) for some \( \sigma \)
-    and \( Q \).  From the definition of \( OK_n(P)\), we have \(
-    \sharp_m(\Startconst;\sigma) - \sharp_f(\Startconst;\sigma) \le n
-    \), then we get \( \sharp_m(\sigma) - \sharp_f(\sigma) \le n \),
-    which is a contradiction.
+  We need to prove \(\OK_n(P_1, F)\).  Assume that \(\OK_n(P_1, F)\)
+  does not hold. Then, we have (1) \( \exists \sigma \) and \(Q\)
+  s.t. \( \langle P_1, F \rangle \xlongrightarrow{\sigma} \langle Q,
+  F' \rangle \) and \(\sharp_{m}(\sigma) - \sharp_{f}(\sigma) > n\) or
+  (2) \( OK(F)\) does not hold.
 
-\item Case \(P = \Endconst \) and \( \Endconst \xlongrightarrow{\Endconst}  0 \)
+  From the definition of that \(OK_n(\Sirx(P_1, P_2), F)\) holds, we
+  have (1) \( \langle \Sirx(P_1, P_2), F \rangle \rightarrow \langle
+  P_1, F \rangle \xlongrightarrow{\sigma} \langle Q, F' \rangle \)
+  s.t. \(\sharp_m(\sigma) - \sharp_f(\sigma) \le n \) and (2)
+  \(OK(F)\) holds, which are in contradiction to the assumption.
+  Therefore, \(\OK_n(P_1, F)\) holds.
 
-    We need to prove \( OK_n(0) \). From the definition of \( OK_n(P)
-    \), we have that \( OK_n(0) \) holds if, \( \forall \sigma, P'
-    \). if \( 0 \xlongrightarrow{\sigma} P' \) and \( \sconst\), then
-    \( \sharp_m(\sigma) - \sharp_f(\sigma) \le n \). There is no such
-    \(P'\) s.t. \( 0 \xlongrightarrow{\sigma} P' \), therefore, \( OK_n(0)
-    \) holds.
+\item Case \( P = \Sirx(P_1,P_2) \) and \( \frac{ \scon\Sirx \notin F}
+  { \langle \Sirx(P_1, P_2), F \rangle \rightarrow \langle P_2, F
+    \rangle } \)
 
-\item Case $P = P_{1} + P_{2}$ and \(P_1 + P_2 \xlongrightarrow{\tau} P_1\)
+  We need to prove \(\OK_n(P_2, F)\).  Assume that \(\OK_n(P_2, F)\)
+  does not hold. Then, we have (1) \( \exists \sigma \) and \(Q\)
+  s.t. \( \langle P_2, F \rangle \xlongrightarrow{\sigma} \langle Q,
+  F' \rangle \) and \(\sharp_{m}(\sigma) - \sharp_{f}(\sigma) > n\) or
+  (2) \( OK(F)\) does not hold.
 
-  We prove \(\OK_n(P_1)\) by contradiction.  Assume that
-  \(OK_{n}(P_1)\) does not hold.  Then, there exists \(\sigma\) such
-  that \(P_{1} + P_{2} \xlongrightarrow{\tau} P_{1}
-  \xlongrightarrow{\sigma} Q\) and \(\sharp_{m}(\sigma) -
-  \sharp_{f}(\sigma) > n\).  From the definition of \(\OK_n(P)\), we
-  have \(\sharp_m(\tau\sigma) -\sharp_f(\tau\sigma) \le n\). Then, we
-  have \(\sharp_m(\tau) + \sharp_m(\sigma) - \sharp_f(\tau)
-  -\sharp_f(\sigma) \le n\).  By the definition of \(
-  \sharp_\rho(\sigma) \), we get \( \sharp_m(\sigma) -\sharp_f(\sigma)
-  \le n \). Therefore, we get the contradiction.
+  From the definition of that \(OK_n(\Sirx(P_1, P_2), F)\) holds, we
+  have (1) \( \langle \Sirx(P_1, P_2), F \rangle \rightarrow \langle
+  P_2, F \rangle \xlongrightarrow{\sigma} \langle Q, F' \rangle \)
+  s.t. \(\sharp_m(\sigma) - \sharp_f(\sigma) \le n \) and (2)
+  \(OK(F)\) holds, which are in contradiction to the assumption.
+  Therefore, \(\OK_n(P_2, F)\) holds.
 
-\item Case $P = P_{1} + P_{2}$ and \(P_1 + P_2 \xlongrightarrow{\tau} P_2\)
+\item Case \( P = \Sirx(P_1,P_2) \) and \( \frac{ \snull \in F
+  \andalso \scon\Sirx \in F} { \langle \Sirx(P_1, P_2), F \rangle
+  \rightarrow \langle P_1, F \rangle } \)
 
-  Similar to the case of \(P_1 + P_2 \xlongrightarrow{\tau} P_1\).
+  We need to prove \(\OK_n(P_1, F)\).  Assume that \(\OK_n(P_1, F)\)
+  does not hold. Then, we have (1) \( \exists \sigma \) and \(Q\)
+  s.t. \( \langle P_1, F \rangle \xlongrightarrow{\sigma} \langle Q,
+  F' \rangle \) and \(\sharp_{m}(\sigma) - \sharp_{f}(\sigma) > n\) or
+  (2) \( OK(F)\) does not hold.
 
-\item Case $P = P_{1};P_{2}$ and \(P_1;P_2 \xlongrightarrow{\rho} P_1';P_2\).
+  From the definition of that \(OK_n(\Sirx(P_1, P_2), F)\) holds, we
+  have (1) \( \langle \Sirx(P_1, P_2), F \rangle \rightarrow \langle
+  P_2, F \rangle \xlongrightarrow{\sigma} \langle Q, F' \rangle \)
+  s.t. \(\sharp_m(\sigma) - \sharp_f(\sigma) \le n \) and (2)
+  \(OK(F)\) holds, which are in contradiction to the assumption.
+  Therefore, \(\OK_n(P_1, F)\) holds.
 
-We need to prove \(\OK_{n'}(P_1';P_2)\) where \(n'\) is determined by
-\[
-   n'=\left\{
-   \begin{array}{ll}
-     n + 1 & \rho = \Free\\
-     n - 1 & \rho = \Malloc\\
-     n & \mbox{Otherwise.}
-   \end{array}
-   \right.
-\]
-Assume that \(OK_{n'}(P_{1}';P_{2})\) does not hold. Then, there
-exists \(\sigma\) such that \(P_{1};P_{2} \xlongrightarrow{\rho}
-P_{1}';P_{2} \xlongrightarrow{\sigma} Q\) and \(\sharp_{m}(\sigma) -
-\sharp_{f}(\sigma) > n'\).  From the definition of \(\OK_n(P)\), we
-have \( \sharp_{m}(\rho\sigma) - \sharp_{f}(\rho\sigma) \le n\); hence
-we have \(\sharp_{m}(\rho) + \sharp_{m}(\sigma) - \sharp_{f}(\rho)
--\sharp_{f}(\sigma) \le n\).  From the assumption \(\sharp_{m}(\sigma)
-- \sharp_{f}(\sigma) > n'\), we have
-\[
-n' + \sharp_m(\rho) - \sharp_f(\rho) < \sharp_{m}(\rho) +
-\sharp_{m}(\sigma) - \sharp_{f}(\rho) -\sharp_{f}(\sigma) \le n.
-\]
-%% If \(\rho = \Free\), then \(n + 1 - 1 < n\); if \(\rho = \Malloc\),
-%% then \( n - 1 + 1 < n \); if \( \rho = other\), then \( n < n
-%% \). Therefore, we have \(n < n\), and then we get the contradiction.
-The leftmost term \(n' + \sharp_m(\rho) - \sharp_f(\rho)\) is equal to
-\(n\) for any \(\rho\).  Hence, we get contradiction.
+\item Case \( P = \Sirx(P_1,P_2) \) and \( \frac{ \snull \in F
+  \andalso \scon\Sirx \in F} { \langle \Sirx(P_1, P_2), F \rangle
+  \rightarrow \langle P_1, F \rangle } \)
 
-\item Case \(P = \mu\alpha.P'\) and \(\mu\alpha.P'  \xlongrightarrow{\tau} [\mu\alpha.P'\slash\alpha]P'\)
+  We need to prove \(\OK_n(P_1, F)\).  Assume that \(\OK_n(P_1, F)\)
+  does not hold. Then, we have (1) \( \exists \sigma \) and \(Q\)
+  s.t. \( \langle P_1, F \rangle \xlongrightarrow{\sigma} \langle Q,
+  F' \rangle \) and \(\sharp_{m}(\sigma) - \sharp_{f}(\sigma) > n\) or
+  (2) \( OK(F)\) does not hold.
 
-We need to prove \(\OK_n([\mu\alpha.P' / \alpha]P')\).  Suppose not.
-Then, there exists \(\sigma\) and \(Q\) such that \([\mu\alpha.P' /
-  \alpha]P' \xlongrightarrow{\sigma} Q\) and \(\sharp_m(\sigma) -
-\sharp_f(\sigma) > n\).  However, this contradicts to \(P
-\xlongrightarrow{\tau\sigma} Q\) and \(\OK_n(P)\) as follows.
-\[
-n \ge \sharp_m(\tau\sigma) - \sharp_f(\tau\sigma) = \sharp_m(\sigma) -
-\sharp_f(\sigma) > n.
-\]
+  From the definition of that \(OK_n(\Sirx(P_1, P_2), F)\) holds, we
+  have (1) \( \langle \Sirx(P_1, P_2), F \rangle \rightarrow \langle
+  P_2, F \rangle \xlongrightarrow{\sigma} \langle Q, F' \rangle \)
+  s.t. \(\sharp_m(\sigma) - \sharp_f(\sigma) \le n \) and (2)
+  \(OK(F)\) holds, which are in contradiction to the assumption.
+  Therefore, \(\OK_n(P_1, F)\) holds.
+   
 
 \end{itemize}
+
 \end{proof}
 
 \begin{pfof}{Lemma~\ref{lem:preservation}}
