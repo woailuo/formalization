@@ -208,23 +208,117 @@ By induction on \(\langle P, F \rangle \xlongrightarrow{\rho} \langle P', F' \ra
   \(OK(F)\) holds, which are in contradiction to the assumption.
   Therefore, \(\OK_n(P_1, F)\) holds.
 
-\item Case \( P = \Sirx(P_1,P_2) \) and \( \frac{ \snull \in F
-  \andalso \scon\Sirx \in F} { \langle \Sirx(P_1, P_2), F \rangle
-  \rightarrow \langle P_1, F \rangle } \)
 
-  We need to prove \(\OK_n(P_1, F)\).  Assume that \(\OK_n(P_1, F)\)
-  does not hold. Then, we have (1) \( \exists \sigma \) and \(Q\)
-  s.t. \( \langle P_1, F \rangle \xlongrightarrow{\sigma} \langle Q,
-  F' \rangle \) and \(\sharp_{m}(\sigma) - \sharp_{f}(\sigma) > n\) or
-  (2) \( OK(F)\) does not hold.
+\item Case \( P = \scon\Sirx P' \) and \( \langle \scon\Sirx P', F \rangle
+  \rightarrow \langle P';\Endconst, F\cup{\scon\Sirx} \rangle  \)
+
+  We need to prove \(\OK_n(P';\Endconst, F\cup{\scon\Sirx})\).  Assume
+  that \(\OK_n(P';\Endconst, F\cup{\scon\Sirx})\) does not hold. Then,
+  we have (1) \( \exists \sigma \) and \(Q\) s.t. \( \langle
+  P';\Endconst, F\cup{\scon\Sirx} \rangle \xlongrightarrow{\sigma}
+  \langle Q, F' \rangle \) and \(\sharp_{m}(\sigma) -
+  \sharp_{f}(\sigma) > n\) or (2) \( OK(F\cup{\scon\Sirx})\) does not
+  hold.
+
+  From the definition of that \(OK_n(\scon\Sirx P', F)\) holds, we
+  have (1) \( \langle \scon\Sirx P', F \rangle \rightarrow \langle
+  P;\Endconst, F\cup{\scon\Sirx} \rangle \xlongrightarrow{\sigma}
+  \langle Q, F' \rangle \) s.t. \(\sharp_m(\sigma) - \sharp_f(\sigma)
+  \le n \) and (2) \(OK(F)\) holds, which are in contradiction to the
+  assumption.  Therefore, \(\OK_n(P_1, F)\) holds.
+
+
+\item Case \( P = \Sirx(P_1,P_2) \) and \( \frac{ \snull \notin F
+  \andalso \scon\Sirx \in F} { \langle \Sirx(P_1, P_2), F \rangle
+  \rightarrow \langle P_2, F\cup{\snnull} \rangle } \)
+
+  We need to prove \(\OK_n(P_2, F\cup{\snnull})\).  Assume that
+  \(\OK_n(P_2, F\cup{\snnull})\) does not hold. Then, we have (1) \(
+  \exists \sigma \) and \(Q\) s.t. \( \langle P_2, F\cup{\snnull}
+  \rangle \xlongrightarrow{\sigma} \langle Q, F' \rangle \) and
+  \(\sharp_{m}(\sigma) - \sharp_{f}(\sigma) > n\) or (2) \(
+  OK(F\cup{\snnull})\) does not hold.
 
   From the definition of that \(OK_n(\Sirx(P_1, P_2), F)\) holds, we
   have (1) \( \langle \Sirx(P_1, P_2), F \rangle \rightarrow \langle
-  P_2, F \rangle \xlongrightarrow{\sigma} \langle Q, F' \rangle \)
+  P_2, F\cup{\snnull} \rangle \xlongrightarrow{\sigma} \langle Q, F'
+  \rangle \) s.t. \(\sharp_m(\sigma) - \sharp_f(\sigma) \le n \),
+  which is a contradiction; and (2) \(OK(F)\) holds. From the
+  Lemma~\ref{lem:okFpreserved}, \(OK(F\cup{\snnull})\)
+  holds. Therefore, \(OK(P_2, F\cup{\snnull})\) holds.
+
+\item Case \( P = \mu\alpha.P' \) and \(  \langle \mu\alpha.P', F \rangle
+  \rightarrow \langle [\mu\alpha.P'/\alpha]P', F  \rangle  \)
+
+  We need to prove \(\OK_n([\mu\alpha.P'/\alpha]P', F) \).  Assume
+  that \(\OK_n( [\mu\alpha.P'/\alpha]P', F) \) does not hold. Then, we
+  have (1) \( \exists \sigma \) and \(Q\) s.t. \( \langle
+  [\mu\alpha.P'/\alpha]P', F \rangle \xlongrightarrow{\sigma} \langle
+    Q, F' \rangle \) and \(\sharp_{m}(\sigma) - \sharp_{f}(\sigma) >
+    n\) or (2) \( OK(F)\) does not hold.
+
+  From the definition of that \(OK_n(\mu\alpha.P', F)\) holds, we have
+  (1) \( \langle \mu\alpha.P', F \rangle \rightarrow \langle
+  [\mu\alpha.P'/\alpha]P', F \rangle \xlongrightarrow{\sigma} \langle
+  Q, F' \rangle \) s.t. \(\sharp_m(\sigma) - \sharp_f(\sigma) \le n
+  \), which is a contradiction; and (2) \(OK(F)\) holds. From the
+  Lemma~\ref{lem:okFpreserved}, \(OK(F\cup{\snnull})\)
+  holds. Therefore, \(OK([\mu\alpha.P'/\alpha]P', F) \) holds.
+
+
+\item Case \( P = P_1 + P_2 \) and \(  \langle P_1 + P_2, F \rangle
+  \rightarrow \langle P_1, F  \rangle  \)
+
+  We need to prove \(\OK_n(P_1, F) \).  Assume
+  that \(\OK_n(P_1, F) \) does not hold. Then, we
+  have (1) \( \exists \sigma \) and \(Q\) s.t. \( \langle
+  P_1, F \rangle \xlongrightarrow{\sigma} \langle
+    Q, F' \rangle \) and \(\sharp_{m}(\sigma) - \sharp_{f}(\sigma) >
+    n\) or (2) \( OK(F)\) does not hold.
+
+  From the definition of that \(OK_n(P_1 + P_2, F)\) holds, we have
+  (1) \( \langle P_1 + P_2, F \rangle \rightarrow \langle P_1, F
+  \rangle \xlongrightarrow{\sigma} \langle Q, F' \rangle \)
   s.t. \(\sharp_m(\sigma) - \sharp_f(\sigma) \le n \) and (2)
-  \(OK(F)\) holds, which are in contradiction to the assumption.
-  Therefore, \(\OK_n(P_1, F)\) holds.
-   
+  \(OK(F)\) holds, which are in contradiction to assumption
+  . Therefore, \(OK(P_1, F) \) holds.
+
+
+\item Case \( P = P_1;P_2 \) and \( \frac{ \langle P_1, F \rangle
+  \xLongrightarrow{\rho} \langle P_1', F' \rangle} { \langle P_1;P_2,
+  F \rangle \xLongrightarrow{\rho} \langle P_1';P_2, F' \rangle } \)
+
+  We need to prove \(\OK_{n'}(P_1';P_2, F) \), where \(n'\) is
+  determined by 
+  \[
+   n'=\left\{
+   \begin{array}{ll}
+     n + 1 & \rho = \Free\\
+     n - 1 & \rho = \Malloc\\
+     n & \mbox{Otherwise.}
+   \end{array}
+   \right.
+   \]
+
+  Assume that \(\OK_{n'}(P_1';P_2, F') \) does not hold. Then, we have (1) \(
+  \exists \sigma \), \(Q\) and \(F''\) s.t. \( \langle P_1';P_2, F \rangle
+  \xlongrightarrow{\sigma} \langle Q, F'' \rangle \) and
+  \(\sharp_{m}(\sigma) - \sharp_{f}(\sigma) > n'\) or (2) \( OK(F')\)
+  does not hold.
+
+  From the definition of that \(OK_n(P_1;P_2, F)\) holds, we have
+  (1) \( \langle P_1;P_2, F \rangle \xLongrightarrow{\rho} \langle P_1';P_2, F'
+  \rangle \xlongrightarrow{\sigma} \langle Q, F'' \rangle \)
+  s.t. \(\sharp_m(\rho\sigma) - \sharp_f(\rho\sigma) \le n \) and (2)
+  \(OK(F)\) holds.
+
+  From (1), we get \( n' + \sharp_m(\rho) - \sharp_f(\rho) <
+  \sharp_m(\rho) + \sharp_m(\sigma) - \sharp_f(\rho) -
+  \sharp_f(\sigma) \le n\). For any \(\rho\), the \( n' +
+  \sharp_m(\rho) - \sharp_f(\rho) = n\), therefore we get a
+  contradiction. By IH, we have \(OK(F')\) holds, which is a
+  contradiction. Therefore, \(OK_{n'}(P_1;P_2, F')\) holds.
+  
 
 \end{itemize}
 
@@ -240,145 +334,125 @@ By induction on the derivation of \(\langle H,R,s,n, C \rangle
   \xlongrightarrow{\Startconst} \langle H, R, s;\Endconst, n, C\cup
   {x} \rangle \)
 
-  We have \( \Theta; \Gamma \vdash \scon\Sirx s:P\) and \( OK_n(P)
+  We have \( \Theta; \Gamma \vdash \scon\Sirx s:P\) and \( OK_n(P, F)
   \). From the inversion of typing rules, we get \( \Theta; \Gamma
   \vdash s:P'' \) and \( \scon\Sirx P'' \le P \) for some \( P''
-  \). By subtyping, we get \( P'';\Endconst \le Q \) and \( P
-  \xLongrightarrow{\Startconst} Q \) for some \( Q \).
+  \). By subtyping, we have \( P'';\Endconst \le Q \) and \( \langle P, F 
+  \xLongrightarrow Q, F' \rangle \) for some \( Q \).
 
   we need to find \(P'\) s.t. \( \Theta; \Gamma \vdash
-  s;\Endconst:P'\), \( OK_n(P')\) and \( P
-  \xLongrightarrow{\Startconst} P' \). Taking \( Q \) as \( P'\), \( P
-  \xLongrightarrow{\Startconst}\) and \( OK_n(P')\) hold. From \(
-  \Theta; \Gamma \vdash s;\Endconst:P'';\Endconst \), \( P'';\Endconst
-  \le Q \) and \rn{T-Sub}, we have \( \Theta; \Gamma \vdash
-  s;\Endconst:P'\).
+  s;\Endconst:P'\), \( OK_n(P', F')\), \( \langle P, F'
+  \xLongrightarrow P', F' \) and \(\scon\Sirx\in F'\). Taking \( Q \)
+  as \( P'\) and \( F \cup \{\scon\Sirx\} F' \). Therefore \( \langle
+  P, F \xLongrightarrow P', F' \rangle\) and \( OK_n(P', F')\) hold. From \(
+  \Theta; \Gamma \vdash s:P'';\Endconst \), \( P'';\Endconst \le Q \)
+  and \rn{T-Sub}, \( \Theta; \Gamma \vdash s;\Endconst:P'\) holds.
 
 \item Case: \( \langle H, R, \Endconst, n, C \uplus {x} \rangle
   \xlongrightarrow{\Endconst} \langle H, R, \SKIP, n, C \rangle \)
 
-  We have \( \Theta; \Gamma \vdash \Endconst:P\) and \( OK_n(P)
+  We have \( \Theta; \Gamma \vdash \Endconst:P\) and \( OK_n(P, F)
   \). From the inversion of typing rules, we get \( \Theta; \Gamma
   \vdash \Endconst:\Endconst \) and \( \Endconst \le P \). By
-  subtyping, we get \( 0 \le P'' \) and \( P
-  \xLongrightarrow{\Endconst} P'' \) for some \( P'' \).
+  subtyping, we get \( 0 \le Q \) and \( \langle P, F
+  \xLongrightarrow Q, F' \rangle\) for some \( Q \).
 
   we need to find \(P'\) s.t. \( \Theta; \Gamma \vdash
-  \SKIP:P'\), \( OK_n(P')\) and \( P \xLongrightarrow{\Endconst} P'
-  \). Taking \( P'' \) as \( P'\), \( P \xLongrightarrow{\Endconst}
-  P'\) and \( OK_n(P')\) hold. From \rn{T-Skip}, \rn{T-Sub} and \( 0
-  \le P''\), we have \( \Theta; \Gamma \vdash \SKIP:P'\).
+  \SKIP:P'\), \( OK_n(P', F')\) and \( \langle P, F \xLongrightarrow
+  P', F' \rangle \). Taking \( Q \) as \( P'\), therefore \( \langle
+  P, F \xLongrightarrow P', F' \rangle\) and \( OK_n(P', F')\)
+  hold. From \rn{T-Skip}, \rn{T-Sub} and \( 0 \le Q\), then \( \Theta;
+  \Gamma \vdash \SKIP:P'\) holds.
 
 \item Case: \(\langle H, R, \FREE, n, C\rangle \xlongrightarrow{\Free}
   \langle H', R', \SKIP, n + 1, C \rangle \)
 
-We have \(\OK_n(P)\) and \(\Theta; \Gamma \vdash \Free(x) \COL P\).
-From inversion of the typing rules, we have \(\Theta; \Gamma \vdash
-\Free(x) \COL \Free\) and \(\Free \le P\).  Hence, from the definition
-of subtyping, we have \(\TSKIP \le P''\) and \(P
-\xLongrightarrow{\Free} P''\) for some \(P''\).  We need to find
-\(P'\) such that \(P \xLongrightarrow{\Free} P'\), \(\Theta; \Gamma
-\vdash \SKIP \COL P'\), and \(\OK_{n+1}(P')\).  Take \(P''\) as
-\(P'\).  Then, \(P \xLongrightarrow{\Free} P''\) as we stated above.
-We also have \(\Theta; \Gamma \vdash \SKIP \COL P''\) from
-\rn{T-Skip}, \(\TSKIP \le P''\), and \rn{T-Sub}.  \(\OK_{n+1}(P'')\)
-follows from Lemma~\ref{lem:okPreserved}.
+   We have \(\OK_n(P, F)\) and \(\Theta; \Gamma \vdash \Free(x) \COL
+   P\).  From inversion of the typing rules, we have \(\Theta; \Gamma
+   \vdash \Free(x) \COL \Free\) and \(\Free \le P\). From the
+   definition of subtyping, we have \(\TSKIP \le Q \) and \( \langle
+   P, F \xLongrightarrow{\Free} Q, F'\) for some \(Q\).
+
+   We need to find \(P'\) such that \( \langle P, F
+   \xLongrightarrow{\Free} P', F' \rangle \), \(\Theta; \Gamma
+   \vdash \SKIP \COL P'\), and \(\OK_{n+1}(P', F')\).  Take \(Q\) as
+   \(P'\) and \(F\) as \(F'\).  Then, \( \langle P, F
+   \xLongrightarrow{\Free} P', F'\) and \(OK_{n+1}(P', F')\) hold.  We
+   also have \(\Theta; \Gamma \vdash \SKIP \COL P'\) from \rn{T-Skip},
+   \(\TSKIP \le Q\).
 
 \item Case: \( \langle H, R, \LET x = \MALLOC \IN s, n, C \rangle
   \xlongrightarrow{\Malloc} \langle H', R', [x'/x]s, n - 1, C \rangle \)
 
-From the assumption, we have \(\Theta; \Gamma \vdash \LET x = \MALLOC
-\IN s \COL P\) and \(\OK_{n}(P)\). By the inversion of typing rules,
-we have \(\Malloc;P_1 \le P\) and \(\Theta; \Gamma \vdash s : P_{1}\)
-for some \(P_1\). We have the following derivation: \infrule{ \Malloc
-  \xlongrightarrow{\Malloc} 0} {\Malloc;P_1 \xlongrightarrow{\Malloc}
-  0;P_{1}} and \(0;P_1 \rightarrow P_{1}\), then we have
-\(\Malloc;P_{1} \xLongrightarrow{\Malloc} P_{1}\). Hence, By the
-definition of subtyping, we have \(P \xLongrightarrow{\Malloc}P''\)
-and \(P_{1} \le P''\) for some \(P''\).
+  We have \(\Theta; \Gamma \vdash \LET x = \MALLOC \IN s \COL P\) and
+  \(\OK_{n}(P, F)\). By the inversion of typing rules, we have
+  \(\Malloc;P'' \le P\) and \(\Theta; \Gamma \vdash s : P'' \) for
+  some \(P''\). By subtyping, we get \( \langle P, F
+  \xLongrightarrow{\Malloc} Q, F' \langle \) and \( P'' \le Q\) for
+  some \(Q\).
 
-We need to find \(P'\) and \(\Gamma'\) such that \(\Theta; \Gamma'
-\vdash [x'/x]s\COL P'\) and \(P\xLongrightarrow{\Malloc} P'\). Take
-\(P''\) as \(P'\) and \([x'/x]\Gamma\) as \(\Gamma'\).  (Note that
-\([x'/x]\Gamma\) is well-formed because \(x'\) is fresh.)  Then \(P
-\xLongrightarrow{\Malloc} P''\) as we state above. We also have
-\(\Theta;[x'/x]\Gamma \vdash [x'/x]s \COL P''\) from \rn{T-Sub},
-\(\Theta;[x'/x]\Gamma \vdash [x'/x]s \COL P_1\), and \(P_1 \le P''\).
-\(\OK_{n-1}(P'')\) follows from Lemma~\ref{lem:okPreserved}.
-
+  We need to find \(P'\) such that \(\Theta; \Gamma \vdash [x'/x]s\COL
+  P'\) and \( \langle P, F \xLongrightarrow{\Malloc} P', F' \rangle\)
+  and \(OK_{n-1}(P', F')\). Take \(Q\) as \(P'\) and \(F\) as \(F'\).
+  Then \( \langle P, F \xLongrightarrow{\Malloc} P', F' \rangle\) and
+  \(OK_{n-1}(P', F')\) hold. We also have \(\Theta;[x'/x]\Gamma \vdash
+      [x'/x]s \COL P'\) from \rn{T-Sub}, \(\Theta;[x'/x]\Gamma \vdash
+      [x'/x]s \COL P''\), and \(P'' \le Q\).
+      
 \item Case: \( \langle H, R, \SKIP;s, n, C \rangle \rightarrow \langle
   H, R, s, n, C \rangle \)
 
-  we have \(\Theta;\Gamma \vdash \SKIP;s\COL  P\) and
-  \(\OK_{n}(P)\). From the inversion of the typing rules, we have
-  \(\Theta; \Gamma \vdash s\COL P_{1}\) and \(0;P_{1} \le
-  P\). Hence, from the definition of subtyping, we have \(P
-  \xLongrightarrow{\tau} P''\) and \(P_{1} \le P''\) for some \(P''\).
+  we have \(\Theta;\Gamma \vdash \SKIP;s\COL P\) and \(\OK_{n}(P,
+  F)\). From the inversion of the typing rules, we get \(\Theta;
+  \Gamma \vdash s\COL P''\) and \(0;P'' \le P\). From the definition
+  of subtyping, we have \( \langle P, F \xLongrightarrow Q, F'
+  \rangle\) and \(P'' \le Q\) for some \(Q\).
 
   We need to find \(P'\) such that \(\Theta; \Gamma \vdash s : P'\)
-  and \(P \xLongrightarrow{\tau} P'\). Take \(P''\) as \(P'\). Then \(P
-  \xLongrightarrow{\tau} P''\) as we stated above. We also have
-  \(\Theta;\Gamma \vdash s\COL P''\) from \rn{T-Sub}, \(\Gamma \vdash
-  s\COL P_{1}\) and \(P_{1} \le P''\). \(\OK_n(P'')\) follows from
-  Lemma~\ref{lem:okPreserved}
+  and \(\langle P, F \xLongrightarrow P', F' \rangle\) and \(OK_n(P',
+  F')\). Take \(Q\) as \(P'\) and \(F\) as \(F'\). Then \(\langle P, F
+  \xLongrightarrow P', F' \rangle\) and \(OK_n(P', F')\) hold. We also
+  have \(\Theta;\Gamma \vdash s\COL P'\) from \rn{T-Sub}, \(\Gamma
+  \vdash s\COL P''\) and \(P'' \le Q\). 
 
 \item Case: \( \langle H, R, *x \leftarrow y , n, C \rangle \rightarrow
   \langle H', R', \SKIP, n, C \rangle \)
 
   We have \(\Theta; \Gamma \vdash *x \leftarrow y : P\) and
-  \(\OK_{n}(P)\). From the inversion of typing rules, we have \(0 \le
+  \(\OK_{n}(P, F)\). From the inversion of typing rules, we have \(0 \le
   P\).
 
-  We need to find $P'$ such that \(\Theta; \Gamma \vdash \SKIP: P'\),
-  \(P \xLongrightarrow{\tau} P'\) and \(\OK_n(P')\). Take $P$ as $P'$. Then,
-  \(P \xLongrightarrow{\tau} P'\) and \(\OK_n(P')\) hold. We also have \(\Theta;
-  \Gamma \vdash \SKIP: P'\) from \rn{T-Skip}, \(0 \le P\) and
-  \rn{T-Sub}.
+  We need to find \(P'\) such that \(\Theta; \Gamma \vdash \SKIP:
+  P'\), \( \langle P, F \xLongrightarrow P', F' \rangle \) and
+  \(\OK_n(P', F')\). Take \(P\) as \(P'\) and \(F\) as \(F'\). Then,
+  \( \langle P, F \xLongrightarrow P', F'\) and \(\OK_n(P', F')\)
+  hold. We also have \(\Theta; \Gamma \vdash \SKIP: P'\) from
+  \rn{T-Skip}, \(0 \le P\) and \rn{T-Sub}.
 
 \item Case: \( \langle H, R, \LET x = y\ \IN s , n, C \rangle
   \rightarrow \langle H', R', [x'/x]s, n, C \rangle \)a
 
   We have \(\Theta; \Gamma \vdash \LET x = y \ \IN s \COL P\) and
-  \(OK_{n}(P)\). From the inversion of typing rules, we have \(\Theta;
-  \Gamma \vdash s\COL P_{1}\) and \(P_{1} \le P\).
+  \(OK_{n}(P, F)\). From the inversion of typing rules, we have \(\Theta;
+  \Gamma \vdash s\COL P''\) and \(P'' \le P\).
 
-  We need to find $P'$ and \(\Gamma'\) such that \(\Theta; \Gamma'
-  \vdash [x'/x]s : P'\) , \(P \xLongrightarrow{\tau} P'\) and
-  \(\OK_n(P'\)). Take \(P\) as \(P'\) and \([x'/x]\Gamma\) as
-  \(\Gamma'\). Then \( P \xLongrightarrow{\tau} P'\) and \(\OK_n(P')\)
-  hold.  We also have \(\Theta; \Gamma \vdash [x'/x]s\COL P\) from
-  \rn{T-Sub}, \(\Theta; \Gamma \vdash [x'/x]s\COL P_{1}\) and \( P_{1}
-  \le P\).
+  We need to find \(P'\) and \(\Gamma'\) such that \(\Theta; \Gamma
+  \vdash [x'/x]s : P'\) , \( \langle P, F \xLongrightarrow P', F'
+  \rangle\) and \(\OK_n(P', F'\)). Take \(P\) as \(P'\) and \(F\) as
+  \(F'\). Then \( \langle P,F \xLongrightarrow P', F'\) and
+  \(\OK_n(P', F')\) hold.  We also have \(\Theta; \Gamma \vdash
+       [x'/x]s\COL P'\) from \rn{T-Sub}, \(\Theta; \Gamma \vdash
+       [x'/x]s\COL P''\) and \( P'' \le P\).
 
 \item Case: \( \langle H, R, \LET x = \NULL \ \IN \ s, n, C\rangle
   \rightarrow \langle H', R', [x'/x]s, n, C \rangle \)
 
-  We have \(\Theta; \Gamma \vdash \LET x = \NULL \ \IN \ s\COL P\)
-  and \(OK_{n}(P)\). From the inversion of typing rules, we have
-  \(\Theta; \Gamma \vdash s\COL P_{1}\) and \( P_{1} \le P\).
-
-  We need to find $P'$ and \(\Gamma'\) such that \(\Theta; \Gamma'
-  \vdash [x'/x]s\COL P'\), \(P \xLongrightarrow{\tau} P'\) and
-  \(\OK_n(P')\).  Take \(P\) as \(P'\) and \([x'/x]\Gamma\) as
-  \(\Gamma'\).  Then, \(P \xLongrightarrow{\tau} P'\) and
-  \(\OK_n(P')\) hold.  We also have \(\Theta; \Gamma \vdash
-       [x'/x]s\COL P\) from \rn{T-Sub}, \(\Theta; \Gamma \vdash
-       [x'/x]s\COL P_{1}\)\( P_{1} \le P\).
+  Similar to the above.
 
 \item Case: \( \langle H, R, \LET x = *y \ \IN \ s, n, C\rangle
   \rightarrow \langle H', R', [x'/x]s, n, C\rangle \)
 
-  We have \(\Theta; \Gamma \vdash \LET x = *y \ \IN \ s\COL  P\) and
-  \(OK_{n}(P)\). From the inversion of typing rules, we have \(\Theta;
-  \Gamma \vdash s\COL P_{1}\) and \(P_{1} \le P\).
-
-  We need to find \(P'\) and \(\Gamma'\) such that \(\Theta; \Gamma'
-  \vdash [x'/x]s\COL P'\), \(P \xLongrightarrow{\tau} P'\) and
-  \(\OK_n(P')\). Take \(P\) as \(P'\) and \([x'/x]\Gamma\) as
-  \(\Gamma'\). Then, \(P \xLongrightarrow{\tau} P'\) and \(\OK_n(P')\)
-  hold.  We also have \(\Theta; \Gamma' \vdash [x'/x]s\COL P\) from
-  \rn{T-Sub}, \(\Theta; \Gamma' \vdash [x'/x]s\COL P_{1}\) and \(P_{1}
-  \le P\).
+  Similar to the above.
 
 \item Case: \(\langle H, R, \IFNULL \Sirx \ \THEN s_{1} \ \ELSE
   \ s_{2}, n, C\rangle \xlongrightarrow{\sassx} \langle H, R, s_{1}, n, C \rangle\)

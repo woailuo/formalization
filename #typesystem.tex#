@@ -242,9 +242,9 @@ H',R',s', n' \rangle \) , then there exists \(P'\) and \(F'\) such that (1) \( \
   \label{df:Rab}
   Rab(\(\langle P, F \rangle \xlongrightarrow{\rho} \langle P', F' \rangle\)) should be
   \[
-   \left\\{
+    \left\{
    \begin{array}{ll}
-     \langle P, F \rangle \xlongrightarrow{\rho} \langle P', F' \rangle & \rho = {\Free, \Malloc}\\
+     \langle P, F \rangle \xlongrightarrow{\rho} \langle P', F' \rangle & \rho = \{\Free, \Malloc\}\\
      \langle P, F \rangle \rightarrow \langle P', F' \rangle & \mbox{Otherwise.}
    \end{array}
    \right.
