@@ -458,36 +458,63 @@ By induction on the derivation of \(\langle H,R,s,n, C \rangle
   \ s_{2}, n, C\rangle \xlongrightarrow{\sassx} \langle H, R, s_{1}, n, C \rangle\)
 
   We have \(\Theta; \Gamma \vdash \IFNULL \Sirx \ \THEN \ s_{1}
-  \ \ELSE \ s_{2}\COL P\) and \(\OK_{n}(P)\). From the inversion of
-  typing rules, we have \(\Theta; \Gamma \vdash s_{1} : P_{1}\),
-  \(\Theta; \Gamma \vdash s_{2} : P_{2}\) and \( (*x)(P_1,P_2) \le
-  P\). By subtyping we get \(P \xLongrightarrow{\sassx} \) \(
-  P''\)and \( P_1 \le P''\) for some \( P '' \).
+  \ \ELSE \ s_{2}\COL P\) and \(\OK_{n}(P, F)\). From the inversion of
+  typing rules, we get \(\Theta; \Gamma \vdash s_1 : P_1\),
+  \(\Theta; \Gamma \vdash s_2 : P_2\) and \( (*x)(P_1,P_2) \le
+  P\). 
 
-  We need to find $P'$ such that \(\Theta; \Gamma \vdash s_1\COL P'\)
-  , \(P \xLongrightarrow{\sassx} P'\) and \(\OK_n(P'\)).  Take \(P''\) as
-  \(P'\).  Then, \(\OK_n(P')\) and \(P \xLongrightarrow{\sassx} P'\)
-  hold. We also have \(\Theta; \Gamma' \vdash s_{1}\COL P'\) from
-  \(\Theta; \Gamma \vdash s_{1}\COL P_1\), \(P_{1} \le P'' \) and
-  \rn{T-Sub}.
+  \subitem assume that \(\snnull \notin F\) and \(\scon\Sirx \in F \)
+
+  By subtying, we get \( \langle P, F \xLongrightarrow Q, F'\) and
+  \(P_1 \le Q\) for some \(Q\).
+
+  We need to find \(P'\) s.t. \(\Theta;\Gamma\vdash s_1:P'\), \(
+  \langle P, F \xLongrightarrow P', F' \rangle\) and \(OK_n(P',F')\).
+  Take \(Q\) as \(P'\) and \( F \cup{\snull}\}\) as \(F'\), therefore
+  \( \langle P, F \xLongrightarrow P', F' \rangle\) and
+  \(OK_n(P',F')\) hold. From \(\Theta;\Gamma\vdash s_1:P_1\), \(P_1
+  \le Q\) and \(\rn{T-Sub}\), \(\Theta;\Gamma\vdash s_1:P'\) holds.
+
+  \subitem assume that \(\scon\Sirx \notin F\)
+
+  By subtying, we get \( \langle P, F \xLongrightarrow Q, F\) and
+  \(P_1 \le Q\) for some \(Q\).
+
+  We need to find \(P'\) s.t. \(\Theta;\Gamma\vdash s_1:P'\), \(
+  \langle P, F \xLongrightarrow P', F' \rangle\) and \(OK_n(P',F')\).
+  Take \(Q\) as \(P'\) and \(F\) as \(F'\), therefore
+  \( \langle P, F \xLongrightarrow P', F' \rangle\) and
+  \(OK_n(P',F')\) hold. From \(\Theta;\Gamma\vdash s_1:P_1\), \(P_1
+  \le Q\) and \(\rn{T-Sub}\), \(\Theta;\Gamma\vdash s_1:P'\) holds.
+
+  \subitem assume that \(\scon\Sirx \notin F\)
+
+  By subtying, we get \( \langle P, F \xLongrightarrow Q, F\) and
+  \(P_1 \le Q\) for some \(Q\).
+
+  We need to find \(P'\) s.t. \(\Theta;\Gamma\vdash s_1:P'\), \(
+  \langle P, F \xLongrightarrow P', F' \rangle\) and \(OK_n(P',F')\).
+  Take \(Q\) as \(P'\) and \(F\) as \(F'\), therefore
+  \( \langle P, F \xLongrightarrow P', F' \rangle\) and
+  \(OK_n(P',F')\) hold. From \(\Theta;\Gamma\vdash s_1:P_1\), \(P_1
+  \le Q\) and \(\rn{T-Sub}\), \(\Theta;\Gamma\vdash s_1:P'\) holds.
+
 
 \item Case: \(\langle H, R, \IFNULL \Sirx \ \THEN s_{1} \ \ELSE \ s_{2},
   n , C \rangle \xlongrightarrow{\sassxn} \langle H, R, s_{2}, n, C\rangle\).
 
- The proof is similar to case of  \(\langle H, R, \IFNULL \Sirx \ \THEN s_{1} \ \ELSE
-  \ s_{2}, n, C \rangle \xlongrightarrow{\sassx} \langle H, R, s_{1}, n, C\rangle\).
+  Similar to the above proof.
+  
+%% \item Case: \( \langle H, R, f(\vec{x}) , n, C \rangle \rightarrow  \langle H, R, [\vec{x}/\vec{y}]s, n, C \rangle \)
 
-\item Case: \( \langle H, R, f(\vec{x}) , n, C \rangle \rightarrow  \langle H, R, [\vec{x}/\vec{y}]s, n, C \rangle \)
 
-% We have \(D(f) = s\) and \(\Theta(f) = P_1\), we have \(s \COL P_1\). 
-
-From the inversion of \rn{T-Call}, we have \(\Theta; \Gamma \vdash
-f(\vec{x}) \COL \Theta(f)\) and \(\Theta(f) \le P\).  From
-\rn{Sem-Call}, we have \(D(f) = (\vec{y})s\).  From the assumption
-\(\vdash D \COL \Theta\), we have \(\Theta; \vec{y} \vdash s \COL
-\Theta(f)\); hence, with \(\Theta(f) \le P\), we have \(\Theta;
-\vec{y} \vdash s \COL P\).  We then have \(\Theta; \vec{x} \vdash
-    [\vec{x}/\vec{y}]s \COL P\) as required.
+%% From the inversion of \rn{T-Call}, we have \(\Theta; \Gamma \vdash
+%% f(\vec{x}) \COL \Theta(f)\) and \(\Theta(f) \le P\).  From
+%% \rn{Sem-Call}, we have \(D(f) = (\vec{y})s\).  From the assumption
+%% \(\vdash D \COL \Theta\), we have \(\Theta; \vec{y} \vdash s \COL
+%% \Theta(f)\); hence, with \(\Theta(f) \le P\), we have \(\Theta;
+%% \vec{y} \vdash s \COL P\).  We then have \(\Theta; \vec{x} \vdash
+%%     [\vec{x}/\vec{y}]s \COL P\) as required.
 
 \end{itemize}
 \end{pfof}  
