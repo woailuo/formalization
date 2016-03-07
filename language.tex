@@ -1,5 +1,8 @@
 
 \section{Language \(\mathcal{L}\)}\label{sec:language}
+In this section, we provide an imperative language \(\mathcal{L}\) with memory allocation and deallocation primitives, and for simplification we only use pointers as values.
+
+The syntax of language \(\mathcal{L}\) is as follows.
 
 \begin{eqnarray*}
   x,y,z,\dots \mbox{ (variables)} &\in& \VAR\\
@@ -14,30 +17,69 @@
   E \mbox{ (context)} &::=& E;s \mid \scon\Sirx E \mid [ ] 
 \end{eqnarray*}
 
+The \(\VAR\) is a countably infinite set of \emph{variables} and every
+variable is a pointer; the statement \(\SKIP\) means "does nothing";
+the statement \(s_1;s_2\) is a sequential execution of \(s_1\) and
+\(s_2\); the statement \(*x \leftarrow y\) updates the content of cell
+which is pointed to by \(x\) with the value \(y\); the statement
+\(\Free(x)\) deallocates a memory cell which is pointed to by pointer
+\(x\); the statement \(\LET x = e\ \IN s\) evaluates the expression
+\(e\), binds \(x\) to the result, and executes \(s\); the expression
+\(\Malloc()\) allocates a new memory cell; the expression \(\NULL\)
+evaluates to the null pointer; the expression \(*y\) means
+dereferencing a memory cell pointed by \(y\); the statement
+\(\IFNULL(*x)\ \THEN\ s_1\ \ELSE\ s_2\) executes \(s_1\) if \(*x\) is
+\(\NULL\) and executes \(s_2\) otherwise; the statement \(f(\vec{x})\)
+expresses a procedure \(f\) with arguments \(\vec{x}\); the statement
+\(\scon\Sirx s\) means \(\Sirx\) is a constant in statement \(s\); the
+statement \(\Endconst\) means from this point \(\Sirx\) maybe not
+constant.
+
+The \(d\) represents a procedure definition which maps a procedure
+name \(f\) to its procedure body \((\vec{x})s\); The \(D\) represents
+a set of procedure definitions \(\langle d_1 \cup\dots d_n \rangle\),
+and each definition is distinct; The pair \(\langle D, s \rangle \)
+represents a program, where \(D\) is a set of definitions and \(s\) is
+a main statement; the \(E\) represents evaluation environment.
+
 \subsection{Operational semantics}
 \label{sec:languageSemantics}
+In this section we introduce operational semantics of language
+\(\mathcal{L}\). We assume there is a countable infinite set
+\(\mathcal{H}\) of \(\emph{heap addresses}\) ranged over by \(l\).
+
+We use a quadruple configuration \(\langle H, R, s, n \rangle\) to
+express a run-time state. Each elements in the configuration is as
+follows.
+
 \begin{itemize}
 \item \(H\), a \emph{heap}, is a finite mapping from \(\mathcal{H}\)
   to \(\mathcal{H} \cup \set{\NULL}\);
 \item \(R\), an \emph{environment}, is a finite mapping from \(\VAR\)
   to \(\mathcal{H} \cup \set{\NULL}\);
-\item \(s\) is the statement that is being executed; and
+\item \(s\) is the statement that is being executed; 
 \item \(n\) is a natural number that represents the number of memory
   cells available for allocation.
-\item \(\rho   \mbox{ (label)} ::= \Malloc \mid \Free \mid \sassx \mid \sassxn\)   \\
- \( \Rtab \mid \Startconst \mid \Endconst \)  \\
+\item \(C\) is a set of variables
 \end{itemize}
 
-The operational semantics is given by relation \(\langle H, R, s, n, C
-\rangle \xlongrightarrow{\rho}_D \langle H', R', s', n', C \rangle\)
-where \(\rho\), an \emph{action}, is \(\Malloc\), \(\Free\),
-\(\sassx\), \(\sassxn\),, \(\Startconst\), \(\Endconst \) or \(\tau\).
-The action \(\Malloc\) expresses an allocation of a memory cell;
-\(\Free\) expresses a deallocation; \(\sassx\) and \(\sassxn\) express
-the guard part of conditional are \( \xnull \) and \(\xnnull\)
+The operational semantics of language \(\mathcal{L}\) is given by
+relation \(\langle H, R, s, n, C \rangle \xlongrightarrow{\rho}_D
+\langle H', R', s', n', C \rangle\). The label \(\rho\) is as follows.
+
+\begin{eqnarray*}
+ \rho \mbox{ (label)} &::=& \Malloc \mid \Free \mid \sassx \mid \sassxn  \\
+ &&\mid \Startconst \mid \Endconst \mid \tau  \\
+\end{eqnarray*}
+
+The \(\rho\), an \emph{action}, is \(\Malloc\), \(\Free\), \(\sassx\),
+\(\sassxn\), \(\Startconst\), \(\Endconst \) or \(\tau\).  The action
+\(\Malloc\) expresses an allocation of a memory cell; \(\Free\)
+expresses a deallocation of a memory cell; \(\sassx\) and \(\sassxn\)
+express the guard part of conditional are \( \xnull \) and \(\xnnull\)
 respectively; \(\Startconst\) means \(*x\) should be constant from
-here; \(\Endconst\) means the \(*x\) will not be guaranteed a
-constant from here; \(\tau\) expresses the other actions.  We often omit
+this point; \(\Endconst\) means the \(*x\) no longer be a constant
+from this point; \(\tau\) expresses the other actions.  We often omit
 \(\tau\) in \(\xlongrightarrow{\tau}_D\).  We use a metavariable
 \(\sigma\) for a finite sequence of actions \(\rho_1\dots\rho_n\).  We
 write \(\xlongrightarrow{\rho_1\dots\rho_n}_D\) for
@@ -47,11 +89,45 @@ We write \(\xLongrightarrow{\rho}_D\) for
 We write \(\xLongrightarrow{\rho_1\dots\rho_n}_D\) for
 \(\xLongrightarrow{\rho_1}_D\dots\xLongrightarrow{\rho_n}_D\).
 
-%% \begin{figure}
-\begin{minipage}{\textwidth}
+Figure~\ref{fig:transitionRules} represents the relation \(\xlongrightarrow{\rho}_D\).
 
-\infax[Sem-ConstSkip]
-{\langle H, R, \Endconst, n, C \uplus {x} \rangle \xlongrightarrow{\Endconst}_{D} \langle H, R, \SKIP , n, C  \rangle}
+\begin{itemize}
+\item \rn{Sem-ConstSkip}: That a memory cell pointed to by \(x\) no
+  longer be a constant is expressed by doing nothing.
+\item \rn{Sem-ConstSeq}: That a memory cell pointed to by\(x\) should
+  be a constant in a stamtement \(s\) is expressed by adding a statement \(\Endconst\) at the end of statement \(s\).
+\item \rn{Sem-Free}: Deallocation of a memory cell pointed to by \(x\)
+  is expressed by deleting the entry for \(R(x)\) from the heap.  This
+  action increments the number of available cells (i.e., \(n\)) by one
+  (i.e., \(n+1\)).
+\item \rn{Sem-Malloc} and \rn{Sem-OutOfMem}: Allocation of a memory
+  cell is expressed by adding a fresh entry to the heap.  This action is
+  allowed only if the number of available cells is positive; if the
+  number is zero, then the configuration leads to an error state
+  \(\OVERFLOW\).
+\item \rn{Sem-AssignExn},\rn{Sem-FreeExn},\rn{Sem-DerefExn} and
+  \rn{Sem-FreeExn} : These rules express an illegal access to memory.
+  If such action is performed, then the configuration leads to
+  exceptional state \(\MEMEX\).  This state \(\MEMEX\) is not seen as
+  an erroneous state in the current paper, hence is not excluded by
+  the type system in Section~\ref{sec:typesystem}.  The command
+  \(\FREE(x)\), if \(x\) is a null pointer, leads to \(\MEMEX\) in the
+  current semantics, although it is equivalent to \(\SKIP\) in the C
+  language.
+\item \rn{Sem-ConstExn}: this rule express that if a constant \(*x\)
+  is changed in statement \(s\) it will raise \(\CONSTEX\) exception.
+
+  
+\end{itemize}
+
+\begin{figure}
+
+  \begin{minipage}{\textwidth}
+
+  \infax[Sem-ConstSkip]
+        {\langle H, R, \Endconst, n, C \uplus {x}
+  \rangle \xlongrightarrow{\Endconst}_{D} \langle H, R, \SKIP , n, C
+  \rangle}
 
 \vspace{2mm}
 
@@ -167,13 +243,12 @@ We write \(\xLongrightarrow{\rho_1\dots\rho_n}_D\) for
           \langle H, R, s, n, C \rangle \xlongrightarrow{\rho}_{D} \langle H', R', s', n', C \rangle}
 {\langle H, R, \scon\Sirx s, n, C \rangle \xlongrightarrow{\rho}_{D} \CONSTEX }
 
-
 \infax[Sem-OutOfMem]
 { \langle H\coma R\coma \LET x = \Malloc() \ \IN s ,  0, C  \rangle    \xlongrightarrow{\Malloc}_{D}
   \OVERFLOW}
 
 \end{minipage}
 
-%% \caption{Operational semantics of \(\mathcal{L}\).}
-%% \label{fig:transitionRules}
-%% \end{figure}
+\caption{Operational semantics of \(\mathcal{L}\).}
+\label{fig:transitionRules}
+\end{figure}

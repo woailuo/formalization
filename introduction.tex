@@ -1,0 +1,98 @@
+\section{Introduction}
+\label{sec:introduction}
+Manual allocation/deallocation primitives (e.g. \(\texttt{malloc}\)
+and \(\texttt{free}\) in C language) are a very flexible way to manage
+computer memory cells.  We can write a program which dynamically
+allocates a memory cell during running and deallocates a memory cell
+when it is no longer used. However, manual memory management often
+cause hard-to-find problems, for example, double frees (\texttt{free}
+a deallocated memory cell ), memory leaks (forget to deallocate memory
+cells) and illegal accesses to a dangling pointer. Therefore, many
+static verification methods have been proposed to guarantee safe
+memory deallocation. They prove partial memory-leak freedom: if a
+program terminates, all memory cells are safe deallocated. As we know
+that nonterminating programs are very common in real-world
+programmings such as Web servers and operating systems. To guarantee
+total memory-leak freedom, if a program does not consume unbounded
+number of memory cells during execution, is very crucial thing.
+
+\begin{exmp}\label{ex:ex1}
+\begin{figure}[h]
+1  \Rtab $h()$= \dtb \dtb\dtb\Rtab$h'()$= \\
+2  \dtb $\LET \; x = \MALLOC  \; \IN$ \dtb \Rtab$\LET \; x = \MALLOC  \; \IN$\\
+3  \dtb $\LET \; y = \MALLOC  \; \IN$ \dtb \Rtab$\LET \; y = \MALLOC  \; \IN$\\
+4  \dtb $\Free(x)$; $\Free(y) $;\;$h()$ \dtb \Rtab\ \ $h'()$; $\Free\Cirx$; \ $\Free(y)$
+\caption{Memory leaks in nonterminating programs.}
+\label{ex:np}
+\end{figure}
+Figure~\ref{ex:np} describes partial and total memory-leak freedom.
+Both \(h\) and \(h'\) are partially memory-leak free because they do
+not terminate.  The function \(h\) is totally memory-leak free since
+it consumes at most two cells\footnote{We assume that every memory
+  cell allocated by \(\Malloc\) is fixed size to simplify our type
+  system introduced in Section~\ref{sec:typesystem}.  Extension with
+  variable-length cells is one of our future work.}.  However, the
+function \(h'\), when it is invoked, consumes unbounded number of
+memory cells; hence \(h'\) is not totally memory-leak free.
+\end{exmp}
+
+In order to prove total memory deallocation, we proposed a behavioral
+type system in previous study[]. Our previous behavioral type system
+can abstract the behavior of a program by using sequential process
+whose actions represent manual memory management primitives. For
+example, the abstract behavioral type of function \(h\) in
+Figure~\ref{ex:np} is
+\(\mu\alpha.\Malloc;\Malloc;\Free;\Free;\alpha\), which represents
+function \(h\) allocates two memory cells, deallocates them, and then
+recursively call itself again; the behavioral type of function \(h'\)
+is abstracted as \(\mu\alpha.\Malloc;\Malloc;\alpha;\Free;\Free\),
+which represents \(h'\) allocates two memory cells, call itself again,
+and then deallocates those two cells. From these two examples you may
+notice that our behavior type only consider the the number and order
+of manual memory management primitives and recursively calls. That way
+we can easily estimate the upper bound of memory cells a program
+consumed.
+
+Our behavioral type system can abstract the behavior of a program and
+estimate the upper bound of memory consumption, however, verification
+on abstracted behavioral types are failed in some cases. For example,
+the extracted behavioral type of function \(foo\) in
+Figure~\ref{ex:np2} is \( \mu\alpha.\Malloc;\Malloc;\Malloc
++ \TSKIP;\Free + \TSKIP;\Free;\Free;\alpha \), which expresses that
+function \(foo\) allocates two memory cells, a choice command between
+allocating one memory cell and skipping, a choice command between
+deallocating one cell and skipping, deallocates two cells, and then
+call itself again. Due to the choice behavioral type, the above type
+may be seen as \(
+\mu\alpha.\Malloc;\Malloc;\Malloc;\TSKIP;\Free;\Free;\alpha \), which
+expresses function \(foo\) consumes three memory cells but deallocates
+two memory cells, and then iterates this behavior again. This behavior
+means function \(foo\) consumes unbounded number of memory cells,
+although it is total memory-leak freedom.
+
+\begin{exmp}\label{ex:ex2}
+\begin{figure}[h]
+1  \dtb $foo()$ =  \\
+2    \dtb \dtb  $\LET y = \MALLOC \IN $ \\
+3    \dtb \dtb  $\LET x = \MALLOC \IN $\\
+4    \dtb \dtb  $\IFNULL(*y) \ \THEN \ \LET x_1 = \MALLOC \IN  *x \leftarrow x_1 \ \ELSE \SKIP ;$ \\
+5   \dtb \dtb   $\IFNULL(*y) \ \THEN \ \Free(*x) \ \ELSE \SKIP ;$ \\
+6   \dtb \dtb   $\Free(x)$ ; $\Free(y)$ ; $foo()$
+\caption{a nonterminating program with conditionals}
+\label{ex:np2}
+\end{figure}
+Figure~\ref{ex:np2} describes 
+\end{exmp}
+
+My current idea is to extend previous behavioral type system with
+dependent types[]. The dependent types takes more precise information
+than traditional types, for example, the type
+\((*x)(\Malloc, \TSKIP)\) is a dependent type, because it dependents
+on the value \((*x)\). See the function \(foo\) again, the behavioral
+type of it is \(
+\mu\alpha.\Malloc;\Malloc;(*x)(\Malloc, \TSKIP);(*x)(\Free, \TSKIP);\Free;\Free;\alpha
+\). Therefore, the part\((*x)(\Malloc, \TSKIP);(*x)(\Free, \TSKIP)\)
+can be seen as \(\Malloc;\Free\) or \(\TSKIP;\TSKIP\) if \((*x)\) does
+not change, which expresses total memory-leak freedom.
+
+The reminder of this paper is structured as follows. Section 2 describes an imperative language with allocation and deallocation primitives and its operational semantics. Section 3 introduces the behavioral type system with dependent types. Section 4 describes ...; Section 5 describes ...; Section 6 ....; Section 7 concludes ...; 

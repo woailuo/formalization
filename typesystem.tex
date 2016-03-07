@@ -1,9 +1,7 @@
-
 \section{Type system}
 \label{sec:typesystem}
 
 \subsection{Types}
-
 The syntax of the types is as follows.
 \[
 \begin{array}{rlcl}
@@ -12,10 +10,43 @@ The syntax of the types is as follows.
   \Gamma & (\mbox{variable type environments}) &::=& \set{x_1, x_2, \dots, x_n}\\
   \Psi & (\mbox{dependent function type}) &::=& (\vec{x})P\\
   \Theta & (\mbox{function type environments}) &::=& \set{f_1\COL \Psi_1,\dots,f_n\COL \Psi_n}\\
-  k & (\mbox{ sssss }) &::=& \snull \mid \snnull \mid \scon\Sirx   \\
-  F & (\mbox{ dddddd}) &::=& \{k_1,...,k_n\} \\
+  k & (\mbox{constant values}) &::=& \snull \mid \snnull \mid \scon\Sirx   \\
+  F & (\mbox{constant value environment}) &::=& \{k_1,...,k_n\} \\
 \end{array}
 \]
+
+Behavioral types ranged over by \(P\) express the abstaction of
+behaviors of programs. The type \({\bf 0}\) represents do-nothing
+behavior; the type \(P_1;P_2\) represents the sequential execution of
+\(P_1\) and \(P_2\); The type \(\Malloc\) represents an allocation of
+a memory cell exactly once; the type \(\Free\) represents a
+deallocation; the type \(\mu \alpha.P\) represents the behavior of
+\(\alpha\) defined by the recursive equation \(\alpha = P\); the type
+\(\scon\Sirx(P_1,P_2)\) represents the choice between \(P_1\) and
+\(P_2\) is dependent on \(*x\); the type \(P_1 + P_2\) represents the
+choice between \(P_1\) and \(P_2\); the \(\alpha\) is a type variable;
+the type \(\scon\Sirx P\) represents \(*x\) is a constant in
+behavioral type \(P\) ; the type \(\Endconst\) represents \(*x\) no
+longer be a constant from this point.
+
+Type environments for variables ranged over by \(\Gamma\) are set of
+variables.  Since our interest is the behavior of a program, not the
+types of values, a variable type environment does not carry
+information on the types of variables.
+
+Dependent function types ranged over by \(\Psi\) represents the behavioral type
+\(P\) obtained is dependent on \(\vec{x}\).
+
+Function types ranged over by \(\Theta\) is a mapping from function names to dependent function types.
+
+\(k\) represents constant values. \(\snull\) represents \(\Sirx\) is a null pointer; \(\snnull\) represents 
+
+We also designate type
+environments for function names ranged over by \(\Theta\).  A function
+type environment carries information on the behavior of functions
+represented by behavioral types.  We often omit the curly braces
+around variable and function environments.
+
 
 The semantics of behavioral types are as follows.
 
@@ -73,20 +104,19 @@ The semantics of behavioral types are as follows.
 { \langle \Sirx (P_1,P_2), F \rangle \rightarrow \langle P_2, F \rangle }
 
 
-%% \paragraph{Notation} The variable \(x\) in \(\Pi_x(P_1, P_2) \) must be a free variable in \( P_1\) and \(P_2\).
-\begin{myDef}
-  \label{df:fv}
-  \mbox{The set of free variables of behavioral type \(P\) is defined as
-    follows:}
+%% \begin{myDef}
+%%   \label{df:fv}
+%%   \mbox{The set of free variables of behavioral type \(P\) is defined as
+%%     follows:}
 
-  \( \mathbf{FV}(\bf{0}) = \mathbf{FV}(\Malloc) =
-  \mathbf{FV}(\Free) = \mathbf{FV}(\alpha) = \emptyset \) 
+%%   \( \mathbf{FV}(\bf{0}) = \mathbf{FV}(\Malloc) =
+%%   \mathbf{FV}(\Free) = \mathbf{FV}(\alpha) = \emptyset \) 
 
-  \( \mathbf{FV}(P_1 + P_2) = \mathbf{FV}(P_1;P_2) = \mathbf{FV}(P_1) \cup \mathbf{FV}(P_2)\)
+%%   \( \mathbf{FV}(P_1 + P_2) = \mathbf{FV}(P_1;P_2) = \mathbf{FV}(P_1) \cup \mathbf{FV}(P_2)\)
 
-  \( \mathbf{FV}((x)(P_1,P_2)) \) = \{x\} \(\cup \ \mathbf{FV}(P_1) \cup
-  \mathbf{FV}(P_2)\)
-\end{myDef}
+%%   \( \mathbf{FV}((x)(P_1,P_2)) \) = \{x\} \(\cup \ \mathbf{FV}(P_1) \cup
+%%   \mathbf{FV}(P_2)\)
+%% \end{myDef}
 
 
 \subsection{Typing rules}
