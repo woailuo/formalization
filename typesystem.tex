@@ -39,16 +39,11 @@ Dependent function types ranged over by \(\Psi\) represents the behavioral type
 
 Function types ranged over by \(\Theta\) is a mapping from function names to dependent function types.
 
-\(k\) represents constant values. \(\snull\) represents \(\Sirx\) is a null pointer; \(\snnull\) represents 
+\(k\) represents constant values, where \(\snull\) represents \(\Sirx\) is a null pointer; \(\snnull\) represents \(\Sirx\) is not a null pointer; \(\scon\Sirx\) represents \(\Sirx\) is a constant.
 
-We also designate type
-environments for function names ranged over by \(\Theta\).  A function
-type environment carries information on the behavior of functions
-represented by behavioral types.  We often omit the curly braces
-around variable and function environments.
+Constant value environment ranged over by \(F\).
 
-
-The semantics of behavioral types are as follows.
+The semantics of behavioral types with dependent types are given by the labeled transition system as follows.
 
 \infax[Tr-Skip]
 { \langle {\bf 0};P, F \rangle \rightarrow \langle P, F \rangle }
@@ -93,7 +88,7 @@ The semantics of behavioral types are as follows.
 
 \infrule[Tr-NullNotIn]
 { \snull \notin F \andalso \scon\Sirx \in F}
-{ \langle \Sirx (P_1,P_2), F \rangle \rightarrow \langle P_2, F \rangle }
+{ \langle \Sirx (P_1,P_2), F \rangle \rightarrow \langle P_2, F\cup\{\snnull\} \rangle }
 
 \infrule[Tr-NNullIn]
 { \snnull \in F \andalso \scon\Sirx \in F}
@@ -118,11 +113,12 @@ The semantics of behavioral types are as follows.
 %%   \mathbf{FV}(P_2)\)
 %% \end{myDef}
 
-
 \subsection{Typing rules}
 
-\(\OK_n(P,F)\) means that \(P\) describes
-the behavior of a program that requires at most \(n\) memory cells.
+In order to introduce current type system, we need several
+\(\OK_n(P,F)\) means that \(P\) describes the behavior of a program
+that requires at most \(n\) memory cells under constant value
+environment \(F\).
 
 \begin{myDef}[\(\sharp_{\rho}(\sigma)\)]
 \label{df:sharf}
@@ -130,19 +126,18 @@ the behavior of a program that requires at most \(n\) memory cells.
 \(\sigma\).
 \end{myDef}
 
-
 \begin{myDef}
 \label{df:const}
 \(\sconst\) means:\\
 \( \forall \sigma',\sigma''\). \(\sigma'\) is a subsequence
-of \(\sigma\), and \(\sigma' = \Startconst;\sigma'';\Endconst\) or \(\sigma' = \sigma'';\Endconst\) is a prefix of \(\sigma\). The \(\sigma''\) does not contain \(\Startconst\) or \(\Endconst \), and it also does not contain both \(\sassx\) and \(\sassxn\) 
+of \(\sigma\), and \(\sigma' = \Startconst;\sigma'';\Endconst\) or \(\sigma' = \sigma'';\Endconst\). The \(\sigma''\) does not contain \(\Startconst\) or \(\Endconst \), and it also does not contain both \(\sassx\) and \(\sassxn\).
 \end{myDef}
 
 
 \begin{myDef}
 \label{df:okn}
 \(OK_{n}(P, F)\) holds if, (1) \( \forall P'\) and \(\sigma\). if \( \langle P, F \rangle
-\xlongrightarrow{\sigma} \langle P', F' \rangle \), then \( \sharp_m(\sigma) - \sharp_f(\sigma) \le n\) and (2) \( OK(F) \)
+\xlongrightarrow{\sigma} \langle P', F' \rangle \) and \(\sconst\), then \( \sharp_m(\sigma) - \sharp_f(\sigma) \le n\) and (2) \( OK(F) \)
 \end{myDef}
 
 \begin{myDef}
