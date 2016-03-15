@@ -1,6 +1,7 @@
-
 \section{Language \(\mathcal{L}\)}\label{sec:language}
-In this section, we provide an imperative language \(\mathcal{L}\) with memory allocation and deallocation primitives, and for simplification we only use pointers as values.
+In this section we provide an imperative language \(\mathcal{L}\) with
+memory allocation and deallocation primitives, and for simplification
+we only use pointers as values.
 
 The syntax of language \(\mathcal{L}\) is as follows.
 
@@ -17,7 +18,32 @@ The syntax of language \(\mathcal{L}\) is as follows.
   E \mbox{ (context)} &::=& E;s \mid \scon\Sirx E \mid [ ] 
 \end{eqnarray*}
 
-The \(\VAR\) is a countably infinite set of \emph{variables} and every
+\paragraph{Notation} \(\vec{x}\) is for a finite sequence \(\{x_1,...,x_n\}\),
+where we assume that each element is distinct; \([\vec{x'}/\vec{x}]s\)
+is for a term obtained by replacing each free occurrence of
+\(\vec{x}\) in s with variables \(\vec{x'}\); the \(\DOM(f)\) is a
+mapping from function name \(f\) to its domain; for a map \(f\), the
+\(f \set{x \mapsto v}\) and \( f \bs x\) are defined as follows:
+\[
+\begin{array}{rcl}
+f \set{x \mapsto v} (w) &=&
+\left\{
+\begin{array}{ll}
+v & \mbox{if \(x = w\)}\\
+f(w) & \mbox{otherwise.}
+\end{array}
+\right.\\
+(f \bs x)(w) &=&
+\left\{
+\begin{array}{ll}
+\mbox{undefined} & \mbox{if \(x = w\)}\\
+f(w) & \mbox{otherwise.}
+\end{array}
+\right.
+\end{array}
+\]
+
+The \(\VAR\) is a countably infinite set of \emph{variables} and each
 variable is a pointer; the statement \(\SKIP\) means "does nothing";
 the statement \(s_1;s_2\) is a sequential execution of \(s_1\) and
 \(s_2\); the statement \(*x \leftarrow y\) updates the content of cell
@@ -27,7 +53,7 @@ which is pointed to by \(x\) with the value \(y\); the statement
 \(e\), binds \(x\) to the result, and executes \(s\); the expression
 \(\Malloc()\) allocates a new memory cell; the expression \(\NULL\)
 evaluates to the null pointer; the expression \(*y\) means
-dereferencing a memory cell pointed by \(y\); the statement
+dereferencing a memory cell pointed to by \(y\); the statement
 \(\IFNULL(*x)\ \THEN\ s_1\ \ELSE\ s_2\) executes \(s_1\) if \(*x\) is
 \(\NULL\) and executes \(s_2\) otherwise; the statement \(f(\vec{x})\)
 expresses a procedure \(f\) with arguments \(\vec{x}\); the statement
@@ -89,13 +115,16 @@ We write \(\xLongrightarrow{\rho}_D\) for
 We write \(\xLongrightarrow{\rho_1\dots\rho_n}_D\) for
 \(\xLongrightarrow{\rho_1}_D\dots\xLongrightarrow{\rho_n}_D\).
 
-Figure~\ref{fig:transitionRules} represents the relation \(\xlongrightarrow{\rho}_D\).
+Figure~\ref{fig:transitionRules} represents the relation
+\(\xlongrightarrow{\rho}_D\). Several important rules are listed as
+follows.
 
 \begin{itemize}
 \item \rn{Sem-ConstSkip}: That a memory cell pointed to by \(x\) no
   longer be a constant is expressed by doing nothing.
-\item \rn{Sem-ConstSeq}: That a memory cell pointed to by\(x\) should
-  be a constant in a stamtement \(s\) is expressed by adding a statement \(\Endconst\) at the end of statement \(s\).
+\item \rn{Sem-ConstSeq}: That a memory cell pointed to by \(x\) should
+  be a constant in a stamtement \(s\) is expressed by adding a
+  statement \(\Endconst\) at the end of statement \(s\).
 \item \rn{Sem-Free}: Deallocation of a memory cell pointed to by \(x\)
   is expressed by deleting the entry for \(R(x)\) from the heap.  This
   action increments the number of available cells (i.e., \(n\)) by one
@@ -111,17 +140,33 @@ Figure~\ref{fig:transitionRules} represents the relation \(\xlongrightarrow{\rho
   exceptional state \(\MEMEX\).  This state \(\MEMEX\) is not seen as
   an erroneous state in the current paper, hence is not excluded by
   the type system in Section~\ref{sec:typesystem}.  The command
-  \(\FREE(x)\), if \(x\) is a null pointer, leads to \(\MEMEX\) in the
+  \(\FREE\), if \(x\) is a null pointer, leads to \(\MEMEX\) in the
   current semantics, although it is equivalent to \(\SKIP\) in the C
   language.
 \item \rn{Sem-ConstExn}: this rule express that if a constant \(*x\)
   is changed in statement \(s\) it will raise \(\CONSTEX\) exception.
-
-  
 \end{itemize}
 
-\begin{figure}
+Our goal is to guarantee \emph{total} memory-leak freedom and reject
+memory leaks. By our language \(\mathcal{L}\), they are formally
+defined as follows:
+\begin{myDef}[total memory-leak freedom]
+\label{df:ml}
+A program \(\langle D, s \rangle\) is \emph{totally memory-leak free}
+if there is a natural number \(n\) such that it does not require more
+than \(n\) cells.
+\end{myDef}
+\begin{myDef}[Memory leak]
+\label{df:ml}
+A configuration \(\langle H, R, s, n \rangle\) \emph{goes overflow} if
+there is \(\sigma\) such that \(\langle H, R, s, n \rangle
+\xLongrightarrow{\sigma} \OVERFLOW\).  A program \(\langle D, s
+\rangle\) \emph{consumes at least \(n\) cells} if \(\langle \emptyset,
+\emptyset, s, n \rangle\) goes overflow.  
+\end{myDef}
 
+
+\begin{figure}
   \begin{minipage}{\textwidth}
 
   \infax[Sem-ConstSkip]

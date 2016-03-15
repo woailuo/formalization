@@ -22,46 +22,72 @@ behavior; the type \(P_1;P_2\) represents the sequential execution of
 a memory cell exactly once; the type \(\Free\) represents a
 deallocation; the type \(\mu \alpha.P\) represents the behavior of
 \(\alpha\) defined by the recursive equation \(\alpha = P\); the type
-\(\scon\Sirx(P_1,P_2)\) represents the choice between \(P_1\) and
-\(P_2\) is dependent on \(*x\); the type \(P_1 + P_2\) represents the
-choice between \(P_1\) and \(P_2\); the \(\alpha\) is a type variable;
-the type \(\scon\Sirx P\) represents \(*x\) is a constant in
-behavioral type \(P\) ; the type \(\Endconst\) represents \(*x\) no
-longer be a constant from this point.
+\(\Sirx(P_1,P_2)\) represents that \(P_1\) or \(P_2\) is obtained
+dependent on \(*x\); the type \(P_1 + P_2\) represents the choice
+between \(P_1\) and \(P_2\); the \(\alpha\) is a type variable; the
+type \(\scon\Sirx P\) represents \(*x\) is a constant in behavioral
+type \(P\) ; the type \(\Endconst\) represents \(*x\) no longer be a
+constant from this point.
 
 Type environments for variables ranged over by \(\Gamma\) are set of
 variables.  Since our interest is the behavior of a program, not the
 types of values, a variable type environment does not carry
 information on the types of variables.
 
-Dependent function types ranged over by \(\Psi\) represents the behavioral type
-\(P\) obtained is dependent on \(\vec{x}\).
+Dependent function types ranged over by \(\Psi\) represents that the
+behavioral type \(P\) obtained is dependent on \(\vec{x}\).
 
 Function types ranged over by \(\Theta\) is a mapping from function names to dependent function types.
 
-\(k\) represents constant values, where \(\snull\) represents \(\Sirx\) is a null pointer; \(\snnull\) represents \(\Sirx\) is not a null pointer; \(\scon\Sirx\) represents \(\Sirx\) is a constant.
+\(k\) represents constant values, where \(\snull\) represents
+\(\Sirx\) is a null pointer; \(\snnull\) represents \(\Sirx\) is not a
+null pointer; \(\scon\Sirx\) represents \(\Sirx\) is a constant.
 
-Constant value environment ranged over by \(F\).
+Constant value environment ranged over by \(F\) is a set of constant
+variables.
 
-The semantics of behavioral types with dependent types are given by the labeled transition system as follows.
+Figure~\ref{fig:bdRules} represents semantics of behavioral types with
+dependent types, and they are given by the labeled transition
+system. The relation \( \langle P, F \rangle \xlongrightarrow{\rho}
+\langle P', F' \rangle \) means that \(P\) can make an action
+\(\rho\), and \(P\) turns into \(P'\) after it makes action \(\rho\);
+\(F\) and \(F'\) record constant value environment before and after
+action \(\rho\) respectively.
 
+\begin{figure}
+ \begin{minipage}{\textwidth}
+
+\begin{minipage}{0.5\textwidth}
 \infax[Tr-Skip]
 { \langle {\bf 0};P, F \rangle \rightarrow \langle P, F \rangle }
-
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
 \infax[Tr-Malloc]
-{ \langle \Malloc, F \rangle \xlongrightarrow{\Malloc} \langle {\bf 0}, F \rangle }
+ { \langle \Malloc, F \rangle \xlongrightarrow{\Malloc} \langle {\bf 0}, F \rangle }
+\end{minipage}
 
+\vspace{2mm}
+
+\begin{minipage}{0.5\textwidth}
 \infax[Tr-Free]
 { \langle \Free, F \rangle \xlongrightarrow{\Free} \langle {\bf 0}, F \rangle }
-
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
 \infax[Tr-Rec]
-{ \langle \mu\alpha.P, F \rangle \rightarrow \langle [\mu\alpha.P/\alpha]P, F \rangle }
+ { \langle \mu\alpha.P, F \rangle \rightarrow \langle
+   [\mu\alpha.P/\alpha]P, F \rangle }
+ \end{minipage}
 
+\vspace{2mm}      
+
+\begin{minipage}{0.5\textwidth}
 \infax[Tr-ChoiceL]
 { \langle P_1 + P_2, F \rangle \rightarrow \langle P_1, F \rangle }
-
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
 \infax[Tr-ChoiceR]
 { \langle P_1 + P_2, F \rangle \rightarrow \langle P_2, F \rangle }
+\end{minipage}
 
 \infrule[Tr-Seq]
 { \langle P_1, F \rangle \xlongrightarrow{\rho} \langle P_1', F' \rangle }
@@ -78,28 +104,30 @@ The semantics of behavioral types with dependent types are given by the labeled 
 { \snnull \notin F \andalso \scon\Sirx \in F}
 { \langle \Sirx (P_1,P_2), F \rangle \rightarrow \langle P_1, F\cup\{\snull\} \rangle }
 
+\begin{minipage}{0.5\textwidth}
 \infrule[Tr-NotConst1]
-{ \scon\Sirx \notin F}
+{ \scon\Sirx \notin F }
 { \langle \Sirx (P_1,P_2), F \rangle \rightarrow \langle P_1, F \rangle }
-
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
 \infrule[Tr-NullIn]
-{ \snull \in F \andalso \scon\Sirx \in F}
+{ \snull \in F \andalso \scon\Sirx \in F }
 { \langle \Sirx (P_1,P_2), F \rangle \rightarrow \langle P_1, F \rangle }
+\end{minipage}
 
 \infrule[Tr-NullNotIn]
-{ \snull \notin F \andalso \scon\Sirx \in F}
+{ \snull \notin F \andalso \scon\Sirx \in F }
 { \langle \Sirx (P_1,P_2), F \rangle \rightarrow \langle P_2, F\cup\{\snnull\} \rangle }
 
 \infrule[Tr-NNullIn]
-{ \snnull \in F \andalso \scon\Sirx \in F}
+{ \snnull \in F \andalso \scon\Sirx \in F }
 { \langle \Sirx (P_1,P_2), F \rangle \rightarrow \langle P_2, F \rangle }
 
 \infrule[Tr-NotConst2]
-{ \scon\Sirx \notin F}
+{ \scon\Sirx \notin F }
 { \langle \Sirx (P_1,P_2), F \rangle \rightarrow \langle P_2, F \rangle }
 
-
-%% \begin{myDef}
+ 
 %%   \label{df:fv}
 %%   \mbox{The set of free variables of behavioral type \(P\) is defined as
 %%     follows:}
@@ -112,6 +140,10 @@ The semantics of behavioral types with dependent types are given by the labeled 
 %%   \( \mathbf{FV}((x)(P_1,P_2)) \) = \{x\} \(\cup \ \mathbf{FV}(P_1) \cup
 %%   \mathbf{FV}(P_2)\)
 %% \end{myDef}
+\end{minipage}
+\caption{semantics of behavioral types with dependent types.}
+\label{fig:bdRules}
+\end{figure}
 
 \subsection{Typing rules}
 
@@ -154,7 +186,7 @@ exists \(P_2'\) such that \( \langle P_2, F \rangle \xLongrightarrow{\rho} \lang
 \label{df:subtype}
 \end{myDef}
 
-
+\begin{figure}
 \begin{minipage}{\textwidth}
 
 \begin{minipage}{0.5\textwidth}
@@ -239,6 +271,9 @@ exists \(P_2'\) such that \( \langle P_2, F \rangle \xLongrightarrow{\rho} \lang
 {\vdash \langle D, s \rangle : n}
 
 \end{minipage}
+\caption{typing rules}
+\label{fig:TypingRules}
+\end{figure}
 
 The type judgment for statements is of the form $\Theta ; \Gamma
 \vdash s : P$.  It expresses that, under the variable type environment
