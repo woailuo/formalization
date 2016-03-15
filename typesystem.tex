@@ -7,9 +7,9 @@ The syntax of the types is as follows.
 \begin{array}{rlcl}
   P & (\mbox{behavioral types})&::=& {\bf 0} \mid P_{1};P_{2}  \mid \Malloc \mid \Free \mid \alpha \mid \mu\alpha.P \\
   &  &  & \mid (*x)(P_1,P_2) \mid P_1 + P_2 \mid \scon\Sirx P  \mid \Endconst\\
-  \Gamma & (\mbox{variable type environments}) &::=& \set{x_1, x_2, \dots, x_n}\\
+  \Gamma & (\mbox{variable type environment}) &::=& \set{x_1, x_2, \dots, x_n}\\
   \Psi & (\mbox{dependent function type}) &::=& (\vec{x})P\\
-  \Theta & (\mbox{function type environments}) &::=& \set{f_1\COL \Psi_1,\dots,f_n\COL \Psi_n}\\
+  \Theta & (\mbox{function type environment}) &::=& \set{f_1\COL \Psi_1,\dots,f_n\COL \Psi_n}\\
   k & (\mbox{constant values}) &::=& \snull \mid \snnull \mid \scon\Sirx   \\
   F & (\mbox{constant value environment}) &::=& \{k_1,...,k_n\} \\
 \end{array}
@@ -146,11 +146,12 @@ action \(\rho\) respectively.
 \end{figure}
 
 \subsection{Typing rules}
+The type judgment for statements is of the form \(\Theta; \Gamma
+\vdash s : P \), which represents that under the function type
+environment \(\Theta\) and the variable type environment \(\Gamma\),
+the abstracted behavioral type of statement \(s\) is \(P\).
 
-In order to introduce current type system, we need several
-\(\OK_n(P,F)\) means that \(P\) describes the behavior of a program
-that requires at most \(n\) memory cells under constant value
-environment \(F\).
+Before showing typing rules for statements in Figure~\ref{fig:TypingRules}, we need explain several important definitions. 
 
 \begin{myDef}[\(\sharp_{\rho}(\sigma)\)]
 \label{df:sharf}
@@ -267,7 +268,7 @@ exists \(P_2'\) such that \( \langle P_2, F \rangle \xLongrightarrow{\rho} \lang
         {\vdash D \COL \Theta}
 % Program
 \infrule[T-Program]
-{\vdash D : \Theta \andalso \Theta; \emptyset\vdash s : P \Rtab OK_{n}(P)}
+{\vdash D : \Theta \andalso \Theta; \emptyset\vdash s : P \Rtab OK_{n}(P, F)}
 {\vdash \langle D, s \rangle : n}
 
 \end{minipage}
