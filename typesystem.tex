@@ -54,6 +54,16 @@ system. The relation \( \langle P, F \rangle \xlongrightarrow{\rho}
 \(F\) and \(F'\) record constant value environment before and after
 action \(\rho\) respectively.
 
+\paragraph{Notation}
+\(filter(F, *x)\) is defined by a pseudcode as follows:
+\[
+\begin{array}{lcl}
+  filter(F, *x) &=& let \; F' = F - \scon\Sirx \; in \\
+  & & if \; \scon\Sirx \notin \; F'\; then \; return \; (F' \backslash \{\snull,\snnull\})\\
+  & & else \; return \; F'
+\end{array}
+\]
+
 \begin{figure}
  \begin{minipage}{\textwidth}
 
@@ -151,7 +161,11 @@ The type judgment for statements is of the form \(\Theta; \Gamma
 environment \(\Theta\) and the variable type environment \(\Gamma\),
 the abstracted behavioral type of statement \(s\) is \(P\).
 
-Before showing typing rules for statements in Figure~\ref{fig:TypingRules}, we need explain several important definitions. 
+Before showing typing rules for statements in
+Figure~\ref{fig:TypingRules}, we need explain several important
+definitions. The first one is \(OK_n(P, F)\), a predicate, where \(P\)
+represents the behavior of a program which consumes at most \(n\)
+memory cells.
 
 \begin{myDef}[\(\sharp_{\rho}(\sigma)\)]
 \label{df:sharf}
@@ -275,11 +289,6 @@ exists \(P_2'\) such that \( \langle P_2, F \rangle \xLongrightarrow{\rho} \lang
 \caption{typing rules}
 \label{fig:TypingRules}
 \end{figure}
-
-The type judgment for statements is of the form $\Theta ; \Gamma
-\vdash s : P$.  It expresses that, under the variable type environment
-\(\Gamma\) and the function type environment \(\Theta\), the behavior
-of $s$ is abstracted by behavior $P$.
 
 \subsection{Type soundness}
 \begin{theorem}\label{thm1}
