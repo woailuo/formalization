@@ -16,7 +16,7 @@ The syntax of the types is as follows.
 \]
 
 Behavioral types ranged over by \(P\) express the abstaction of
-behaviors of programs. The type \({\bf 0}\) represents do-nothing
+behaviors of a program. The type \({\bf 0}\) represents the do-nothing
 behavior; the type \(P_1;P_2\) represents the sequential execution of
 \(P_1\) and \(P_2\); The type \(\Malloc\) represents an allocation of
 a memory cell exactly once; the type \(\Free\) represents a
@@ -25,17 +25,18 @@ deallocation; the type \(\mu \alpha.P\) represents the behavior of
 \(\Sirx(P_1,P_2)\) represents that \(P_1\) or \(P_2\) is obtained
 dependent on \(*x\); the type \(P_1 + P_2\) represents the choice
 between \(P_1\) and \(P_2\); the \(\alpha\) is a type variable; the
-type \(\scon\Sirx P\) represents \(*x\) is a constant in behavioral
+type \(\scon\Sirx P\) represents that \(*x\) is a constant in behavioral
 type \(P\) ; the type \(\Endconst\) represents \(*x\) no longer be a
 constant from this point.
 
-Type environments for variables ranged over by \(\Gamma\) are set of
-variables.  Since our interest is the behavior of a program, not the
-types of values, a variable type environment does not carry
+A type environments for variables ranged over by \(\Gamma\) is a set
+of variables.  Since our interest is the behavior of a program, not
+the types of values, a variable type environment does not carry
 information on the types of variables.
 
-Dependent function types ranged over by \(\Psi\) represents that the
-behavioral type \(P\) obtained is dependent on \(\vec{x}\).
+Dependent function types ranged over by \(\Psi\) represents the
+behavior of a function; \(\vec{x}\) is the formal arguments of the
+function.
 
 Function types ranged over by \(\Theta\) is a mapping from function names to dependent function types.
 
@@ -46,7 +47,7 @@ null pointer; \(\scon\Sirx\) represents \(\Sirx\) is a constant.
 Constant value environment ranged over by \(F\) is a set of constant
 variables.
 
-Figure~\ref{fig:bdRules} represents semantics of behavioral types with
+Figure~\ref{fig:bdRules} depicts semantics of behavioral types with
 dependent types, and they are given by the labeled transition
 system. The relation \( \langle P, F \rangle \xlongrightarrow{\rho}
 \langle P', F' \rangle \) means that \(P\) can make an action
@@ -301,11 +302,12 @@ immediate overflow.
 
 \begin{lemma}[Preservation]
 \label{lem:preservation}
-If \( OK_{n}(P, F)\), \(\Theta; \Gamma \vdash s : P \), \(\vdash D \COL
-\Theta\), and \( \langle H,R,s,n \rangle \xlongrightarrow{\rho} \langle
-H',R',s', n' \rangle \) , then there exists \(P'\) and \(F'\) such that (1) \( \Theta;
-\Gamma^{'} \vdash s' : P'\), (2) Rab(\(\langle P, F \rangle \xlongrightarrow{\rho} \langle P', F' \rangle\)), and (3)
-\(OK_{n'}(P', F')\).
+If \(OK_{n}(P, F)\), \(\Theta; \Gamma \vdash s : P \), \(\vdash D \COL
+\Theta\), and \( \langle H,R,s,n \rangle \xlongrightarrow{\rho}
+\langle H',R',s', n' \rangle \), then there exists \(P'\) and \(F'\)
+such that (1) \( \Theta; \Gamma^{'} \vdash s' : P'\), (2)
+Rab(\(\langle P, F \rangle \xlongrightarrow{\rho} \langle P', F'
+\rangle\)), and (3) \(OK_{n'}(P', F')\).
 \end{lemma}
 
 \begin{myDef}
