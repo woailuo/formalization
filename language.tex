@@ -42,6 +42,15 @@ f(w) & \mbox{otherwise.}
 \right.
 \end{array}
 \]
+and \(filter\_C(C, *x)\) is defined by a pseudcode as follows:
+\[
+\begin{array}{lcl}
+  filter\_C(C, *x) &=& let \; C' = C - \scon\Sirx \; in \\
+  & & if \; \scon\Sirx \in \; C'\; then \; return \; C'\\
+  & & else \; return \; C'\backslash\{\sassx,\sassxn\}
+\end{array}
+\]
+
 
 The \(\VAR\) is a countably infinite set of \emph{variables} and each
 variable is a pointer. The statement \(\SKIP\) means "does nothing".
@@ -86,17 +95,18 @@ follows.
 \item \(s\) is the statement that is being executed; 
 \item \(n\) is a natural number that represents the number of memory
   cells available for allocation.
-%% \item \(C\) is a set of variables
+\item \(C\) is a sequence of actions, which contains \(\Startconst\),
+  \(\Endconst\), \(\sassx\) and \(\sassxn\). 
 \end{itemize}
 
 The operational semantics of the language \(\mathcal{L}\) is given by
-a labeled transition relation \(\langle H, R, s, n \rangle
-\xlongrightarrow{\rho}_D \langle H', R', s', n' \rangle\). The label
+a labeled transition relation \(\langle H, R, s, n, C \rangle
+\xlongrightarrow{\rho}_D \langle H', R', s', n', C' \rangle\). The label
 \(\rho\) is as follows.
 
 \begin{eqnarray*}
- \rho \mbox{ (label)} &::=& \Malloc \mid \Free \mid \sassx \mid \sassxn  \\
- &&\mid \Startconst \mid \Endconst \mid \tau  \\
+ \rho \mbox{ (label)} &::=& \Malloc \mid \Free \mid \tau %% \mid \sassx \mid \sassxn
+ %% &&\mid \Startconst \mid \Endconst \mid \tau  \\
 \end{eqnarray*}
 
 The \(\rho\), an \emph{action}, is \(\Malloc\), \(\Free\), \(\sassx\),
@@ -158,138 +168,164 @@ than \(n\) cells.
 \end{myDef}
 \begin{myDef}[Memory leak]
 \label{df:ml}
-A configuration \(\langle H, R, s, n \rangle\) \emph{goes overflow} if
-there is \(\sigma\) such that \(\langle H, R, s, n \rangle
+A configuration \(\langle H, R, s, n, C \rangle\) \emph{goes overflow} if
+there is \(\sigma\) such that \(\langle H, R, s, n, C \rangle
 \xLongrightarrow{\sigma} \OVERFLOW\).  A program \(\langle D, s
 \rangle\) \emph{consumes at least \(n\) cells} if \(\langle \emptyset,
-\emptyset, s, n \rangle\) goes overflow.  
+\emptyset, s, n, \epsilon \rangle\) goes overflow.  
 \end{myDef}
 
 
 \begin{figure}
   \begin{minipage}{\textwidth}
 
-  \infax[Sem-ConstSkip]
-        {\langle H, R, \Endconst, n
-  \rangle \xlongrightarrow{\Endconst}_{D} \langle H, R, \SKIP , n
-  \rangle}
+ \infrule[Sem-ConstSkip]
+   {C' = filter\_C(C, *x)}
+   {\langle H, R,
+     \Endconst, n, C \rangle \rightarrow_{D} \langle
+     H, R, \SKIP , n, C' \rangle}
 
 \vspace{2mm}
 
 \infax[Sem-ConstSeq]
-{\langle H, R, \scon\Sirx s, n \rangle
-\xlongrightarrow{\Startconst}_{D}
-\langle H, R, s;\Endconst , n \rangle}
+{\langle H, R, \scon\Sirx s, n, C \rangle
+\rightarrow_{D}
+\langle H, R, s;\Endconst , n, C \cup \{\scon\Sirx\} \rangle}
 
 \vspace{2mm}  
 
 \infax[Sem-Skip]
-{\langle H, R, \SKIP;s, n \rangle
+{\langle H, R, \SKIP;s, n, C \rangle
 \longrightarrow_{D}
-\langle H, R, s, n \rangle}
+\langle H, R, s, n, C \rangle}
 
 \vspace{2mm}
 
 \infrule[Sem-Seq]
-{\langle H, R, s_1, n  \rangle \xlongrightarrow{\rho}_{D} \langle H', R', s_1', n' \rangle}
-{\langle H, R, s_1;s_2, n \rangle \xlongrightarrow{\rho}_{D} \langle H', R', s_1';s_2, n' \rangle}
+{\langle H, R, s_1, n, C  \rangle \xlongrightarrow{\rho}_{D} \langle H', R', s_1', n', C' \rangle}
+{\langle H, R, s_1;s_2, n, C \rangle \xlongrightarrow{\rho}_{D} \langle H', R', s_1';s_2, n', C' \rangle}
  
 \vspace{2mm}
 
 \infrule[Sem-LetNull]
 {x' \notin \DOM(R)}
-{\langle H\coma R\coma  \LET x = \NULL \ \IN s , n \rangle
+{\langle H\coma R\coma  \LET x = \NULL \ \IN s , n, C \rangle
   \longrightarrow_{D}
-  \langle H\coma R\Lfc x' \mapsto \NULL \Rfc \coma   \Lb x'/x \Rb s , n  \rangle }
+  \langle H\coma R\Lfc x' \mapsto \NULL \Rfc \coma   \Lb x'/x \Rb s , n, C  \rangle }
 
 \vspace{2mm}
 
 \infrule[Sem-LetEq]
 {x' \notin \DOM(R)}
-{\langle H\coma R\coma \LET x = y \; \IN s , n  \rangle
+{\langle H\coma R\coma \LET x = y \; \IN s , n, C  \rangle
   \longrightarrow_{D}
-  \langle H\coma R\Lfc x' \mapsto R(y) \Rfc \coma   \Lb x'/x \Rb s , n\rangle }
+  \langle H\coma R\Lfc x' \mapsto R(y) \Rfc \coma   \Lb x'/x \Rb s , n, C\rangle }
 
 \vspace{2mm}
 
 \infrule[Sem-IfNullT]
-{H(R(x)) = \NULL}
-{\langle H \coma R \coma \IFNULL\Sirx \ \THEN   s_{1}\ \ELSE\  s_{2} \coma  n \rangle
-  \xlongrightarrow{\sassx}_{D}
-  \langle H\coma R\coma s_{1} \coma n \rangle}
+{H(R(x)) = \NULL, \scon\Sirx \notin C}
+{\langle H \coma R \coma \IFNULL\Sirx \ \THEN   s_{1}\ \ELSE\  s_{2} \coma  n, C \rangle
+  \rightarrow_{D}
+  \langle H\coma R\coma s_{1} \coma n, C \rangle}
 
 \vspace{2mm}
 
 \infrule[Sem-IfNullF]
-{H(R(x)) \neq \NULL}
-{\langle H \coma R \coma \IFNULL\Sirx\ \THEN  s_{1}\ \ELSE  s_{2} \coma  n\rangle
-  \xlongrightarrow{\sassxn}_{D}
-  \langle H\coma R\coma s_{2} \coma  n\rangle}
+{H(R(x)) \neq \NULL, \scon\Sirx \notin C}
+{\langle H \coma R \coma \IFNULL\Sirx\ \THEN  s_{1}\ \ELSE  s_{2} \coma  n, C\rangle
+  \rightarrow_{D}
+  \langle H\coma R\coma s_{2} \coma  n, C\rangle}
+
 
 \vspace{2mm}
 
-\infrule[Sem-Call]
-{D(f) = (\vec{y})s}
-{ \langle H\coma R\coma  f(\vec{x}) , n\rangle
-  \longrightarrow_{D}
-  \langle H\coma R\coma  \Lb \vec{x}/\vec{y} \Rb s , n \rangle}
+\infrule[Sem-IfConstNullT]
+{H(R(x)) = \NULL, \scon\Sirx \in C \mbox{ and } \sassxn \notin C }
+{\langle H \coma R \coma \IFNULL\Sirx \ \THEN   s_{1}\ \ELSE\  s_{2} \coma  n, C \rangle
+  \rightarrow_{D}
+  \langle H\coma R\coma s_{1} \coma n, C\cup \{\sassx\} \rangle}
 
 \vspace{2mm}
 
-\infax[Sem-Assign]
-{ \langle H \set{R(x) \mapsto v}, R, *x \leftarrow y , n\rangle \xlongrightarrow{}_{D}
-  \langle H \Lfc R(x) \mapsto R(y) \Rfc , R, \SKIP , n \rangle }
+\infrule[Sem-IfConstNullF]
+{H(R(x)) \neq \NULL, \scon\Sirx \in C \mbox{ and } \sassx \notin C}
+{\langle H \coma R \coma \IFNULL\Sirx\ \THEN  s_{1}\ \ELSE  s_{2} \coma  n, C\rangle
+  \rightarrow_{D}
+  \langle H\coma R\coma s_{2} \coma  n, C\cup \{\sassxn\} \rangle}
+
+\vspace{2mm}
+
+\infrule[Sem-Assign]
+{\scon\Sirx \notin C}
+{ \langle H \set{R(x) \mapsto v}, R, *x \leftarrow y , n, C\rangle \xlongrightarrow{}_{D}
+  \langle H \Lfc R(x) \mapsto R(y) \Rfc , R, \SKIP , n, C \rangle }
 
 \vspace{2mm}
 
 \infrule[Sem-LetDeref]
 {x' \notin \DOM(R) \andalso R(y) \in \DOM(H)}
-{\langle H\coma R\coma  \LET x = *y \; \IN s , n \rangle
+{\langle H\coma R\coma  \LET x = *y \; \IN s , n, C \rangle
   \longrightarrow_{D}
-  \langle H\coma R\Lfc x' \mapsto H(R(y)) \Rfc \coma   \Lb x'/x \Rb s , n\rangle }
+  \langle H\coma R\Lfc x' \mapsto H(R(y)) \Rfc \coma   \Lb x'/x \Rb s , n, C\rangle }
 
 \vspace{2mm}
 
 \infrule[Sem-Free]
 {R(x) \neq \NULL \mbox{ and } R(x) \in \DOM(H)}
-{\langle H\set{R(x) \mapsto v}\coma R\coma \Free(x) , n \rangle \xlongrightarrow{\Free}_{D}
-  \langle H\backslash R(x) \coma R \coma \SKIP , n+1 \rangle}
+{\langle H\set{R(x) \mapsto v}\coma R\coma \Free(x) , n, C \rangle \xlongrightarrow{\Free}_{D}
+  \langle H\backslash R(x) \coma R \coma \SKIP , n+1, C \rangle}
 
 \vspace{2mm}
 
 \infrule[Sem-Malloc]
 {l \notin \DOM(H) \andalso n > 0}
-{\langle H\coma R\coma  \LET x = \Malloc() \; \IN s , n\rangle
+{\langle H\coma R\coma  \LET x = \Malloc() \; \IN s , n, C\rangle
   \xlongrightarrow{\Malloc}_{D}
-  \langle H \Lfc l \mapsto v\Rfc \coma R\Lfc x' \mapsto l \Rfc \coma   \Lb x'/x \Rb s , n-1  \rangle }
+  \langle H \Lfc l \mapsto v\Rfc \coma R\Lfc x' \mapsto l \Rfc \coma   \Lb x'/x \Rb s , n-1, C  \rangle }
 
+\vspace{2mm}
+\begin{minipage}{0.5\textwidth}
+\infrule[Sem-Call]
+{D(f) = (\vec{y})s}
+{ \langle H\coma R\coma  f(\vec{x}) , n, C\rangle
+  \longrightarrow_{D}
+  \langle H\coma R\coma  \Lb \vec{x}/\vec{y} \Rb s , n, C \rangle}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+\infrule[Sem-FreeExn]
+{R(x) = \NULL \mbox{ or } R(x) \notin \DOM(H)}
+{\langle H\coma R\coma \Free(x) , n, C\rangle \xlongrightarrow{\Free}_{D} \MEMEX}
+\end{minipage}
 \vspace{2mm}
 
 \begin{minipage}{0.5\textwidth}
 \infrule[Sem-AssignExn]
 {R(x) = \NULL \mbox{ or } R(x) \notin \DOM(H)}
-{\langle H\coma R\coma  *x \leftarrow y , n\rangle
+{\langle H\coma R\coma  *x \leftarrow y , n, C\rangle
   \longrightarrow_{D} \MEMEX }
 \end{minipage}
 \begin{minipage}{0.5\textwidth}
 \infrule[Sem-DerefExn]
 {R(y) = \NULL \mbox{ or } R(y) \notin \DOM(H)}
-{\langle H\coma R\coma  \LET x = *y \; \IN s, n\rangle
+{\langle H\coma R\coma  \LET x = *y \; \IN s, n, C\rangle
     \longrightarrow_{D} \MEMEX}
 \end{minipage}
 
-\infrule[Sem-FreeExn]
-{R(x) = \NULL \mbox{ or } R(x) \notin \DOM(H)}
-{\langle H\coma R\coma \Free(x) , n\rangle \xlongrightarrow{\Free}_{D} \MEMEX}
+
+\infrule[Sem-AssignExn]
+{\scon\Sirx \in C}
+{ \langle H \set{R(x) \mapsto v}, R, *x \leftarrow y , n, C\rangle \xlongrightarrow{}_{D}
+  \langle H \Lfc R(x) \mapsto R(y) \Rfc , R, \SKIP , n, C \rangle }
 
 \infrule[Sem-ConstExn]
         { H(R(x)) \neq H'(R'(x))
           \Rtab
-          \langle H, R, s, n \rangle \xlongrightarrow{\rho}_{D} \langle H', R', s', n' \rangle}
-{\langle H, R, \scon\Sirx s, n \rangle \xlongrightarrow{\rho}_{D} \CONSTEX }
+          \langle H, R, s, n, C \rangle \xlongrightarrow{\rho}_{D} \langle H', R', s', n', C \rangle}
+{\langle H, R, \scon\Sirx s, n, C \rangle \xlongrightarrow{\rho}_{D} \CONSTEX }
 
 \infax[Sem-OutOfMem]
-{ \langle H\coma R\coma \LET x = \Malloc() \ \IN s ,  0  \rangle    \xlongrightarrow{\Malloc}_{D}
+{ \langle H\coma R\coma \LET x = \Malloc() \ \IN s ,  0, C  \rangle    \xlongrightarrow{\Malloc}_{D}
   \OVERFLOW}
 
 \end{minipage}

@@ -56,10 +56,10 @@ system. The relation \( \langle P, F \rangle \xlongrightarrow{\rho}
 action \(\rho\) respectively.
 
 \paragraph{Notation}
-\(filter(F, *x)\) is defined by a pseudcode as follows:
+\(filter\_T(F, *x)\) is defined by a pseudcode as follows:
 \[
 \begin{array}{lcl}
-  filter(F, *x) &=& let \; F' = F - \scon\Sirx \; in \\
+  filter\_T(F, *x) &=& let \; F' = F - \scon\Sirx \; in \\
   & & if \; \scon\Sirx \notin \; F'\; then \; return \; (F' \backslash \{\snull,\snnull\})\\
   & & else \; return \; F'
 \end{array}
@@ -108,7 +108,7 @@ action \(\rho\) respectively.
 { \langle \scon\Sirx P, F \rangle \rightarrow \langle P;\Endconst, F\cup \{\scon\Sirx\} \rangle }
 
 \infrule[Tr-Endconst]
-{F' = filter(F, *x)}
+{F' = filter\_T(F, *x)}
 { \langle \Endconst, F \rangle \rightarrow \langle {\bf 0}, F' \rangle }
 
 \infrule[Tr-NNullNotIn]
@@ -174,18 +174,18 @@ memory cells.
 \(\sigma\).
 \end{myDef}
 
-\begin{myDef}
-\label{df:const}
-\(\sconst\) means:\\
-\( \forall \sigma',\sigma''\). \(\sigma'\) is a subsequence
-of \(\sigma\), and \(\sigma' = \Startconst;\sigma'';\Endconst\) or \(\sigma' = \sigma'';\Endconst\). The \(\sigma''\) does not contain \(\Startconst\) or \(\Endconst \), and it also does not contain both \(\sassx\) and \(\sassxn\).
-\end{myDef}
+%% \begin{myDef}
+%% \label{df:const}
+%% \(\sconst\) means:\\
+%% \( \forall \sigma',\sigma''\). \(\sigma'\) is a subsequence
+%% of \(\sigma\), and \(\sigma' = \Startconst;\sigma'';\Endconst\) or \(\sigma' = \sigma'';\Endconst\). The \(\sigma''\) does not contain \(\Startconst\) or \(\Endconst \), and it also does not contain both \(\sassx\) and \(\sassxn\).
+%% \end{myDef}
 
 
 \begin{myDef}
 \label{df:okn}
 \(OK_{n}(P, F)\) holds if, (1) \( \forall P'\) and \(\sigma\). if \( \langle P, F \rangle
-\xlongrightarrow{\sigma} \langle P', F' \rangle \) and \(\sconst\), then \( \sharp_m(\sigma) - \sharp_f(\sigma) \le n\) and (2) \( OK(F) \)
+\xlongrightarrow{\sigma} \langle P', F' \rangle \), then \( \sharp_m(\sigma) - \sharp_f(\sigma) \le n\) and (2) \( OK(F) \)
 \end{myDef}
 
 \begin{myDef}
@@ -300,16 +300,6 @@ s \rangle\) is totally memory-leak free.
 The proof is based on the following lemmas: preservation and lack of
 immediate overflow.
 
-\begin{lemma}[Preservation]
-\label{lem:preservation}
-If \(OK_{n}(P, F)\), \(\Theta; \Gamma \vdash s : P \), \(\vdash D \COL
-\Theta\), and \( \langle H,R,s,n \rangle \xlongrightarrow{\rho}
-\langle H',R',s', n' \rangle \), then there exists \(P'\) and \(F'\)
-such that (1) \( \Theta; \Gamma^{'} \vdash s' : P'\), (2)
-Rab(\(\langle P, F \rangle \xlongrightarrow{\rho} \langle P', F'
-\rangle\)), and (3) \(OK_{n'}(P', F')\).
-\end{lemma}
-
 \begin{myDef}
   \label{df:Rab}
   Rab(\(\langle P, F \rangle \xlongrightarrow{\rho} \langle P', F' \rangle\)) should be
@@ -321,13 +311,45 @@ Rab(\(\langle P, F \rangle \xlongrightarrow{\rho} \langle P', F'
    \end{array}
    \right.
 \]
-
 \end{myDef}
 
+%% \begin{myDef}
+%%   \label{df:Rdu}
+%%  we write \( \Theta; \Gamma \vdash \langle H, R, s, n, C \rangle : \langle P,
+%%   F \rangle\), if \(\Theta; \Gamma \vdash s : P\) and \(OK_n(P, F)\) with \(C \thickapprox F\).  
+%% \end{myDef}
+
+%% \begin{lemma}[Preservation]
+%% \label{lem:preservation}
+%% If \(OK_{n}(P, F)\), \(\Theta; \Gamma \vdash s : P \), \(\vdash D \COL
+%% \Theta\), and \( \langle H, R, s, n, C \rangle \xlongrightarrow{\rho}
+%% \langle H, R', s', n', C' \rangle \), then there exists \(P'\) and \(F'\)
+%% such that (1) \( \Theta; \Gamma^{'} \vdash s' : P'\), (2)
+%% Rab(\(\langle P, F \rangle \xlongrightarrow{\rho} \langle P', F'
+%% \rangle\)), and (3) \(OK_{n'}(P', F')\).
+%% \end{lemma}
+ 
+\begin{lemma}[Preservation]
+\label{lem:preservation}
+suppose that \( \Theta; \Gamma \vdash \langle H, R, s, n, C \rangle :
+\langle P, F \rangle\). If \( \langle H, R, s, n, C \rangle
+\xlongrightarrow{\rho} \langle H', R', s', n', C' \rangle\) then
+\(\exists P', F'\) s.t. (1) \( \Theta; \Gamma \vdash \langle H', R',
+s', n', C' \rangle : \langle P', F' \rangle\) and (2) \(\langle P, F
+\rangle \xLongrightarrow{\rho} \langle P', F'\rangle \).
+\end{lemma}
+
+
+%% \begin{lemma}[Lack of immediate overflow]
+%% \label{lem:immediateSafety}
+%% If \(\Theta; \Gamma \vdash s \COL P \), \(\vdash D \COL \Theta\), and
+%% \(\OK_n(P)\), then \(\langle H, R, s, n \rangle
+%% \not\xlongrightarrow{\Malloc} \OVERFLOW \).
+%% \end{lemma}
 
 \begin{lemma}[Lack of immediate overflow]
 \label{lem:immediateSafety}
-If \(\Theta; \Gamma \vdash s \COL P \), \(\vdash D \COL \Theta\), and
-\(\OK_n(P)\), then \(\langle H, R, s, n \rangle
+If \( \Theta; \Gamma \vdash \langle H, R, s, n, C \rangle :
+\langle P, F \rangle\), then \(\langle H, R, s, n, C \rangle
 \not\xlongrightarrow{\Malloc} \OVERFLOW \).
 \end{lemma}
