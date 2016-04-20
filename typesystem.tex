@@ -300,24 +300,24 @@ s \rangle\) is totally memory-leak free.
 The proof is based on the following lemmas: preservation and lack of
 immediate overflow.
 
-\begin{myDef}
-  \label{df:Rab}
-  Rab(\(\langle P, F \rangle \xlongrightarrow{\rho} \langle P', F' \rangle\)) should be
-  \[
-    \left\{
-   \begin{array}{ll}
-     \langle P, F \rangle \xlongrightarrow{\rho} \langle P', F' \rangle & \rho = \{\Free, \Malloc\}\\
-     \langle P, F \rangle \rightarrow \langle P', F' \rangle & \mbox{Otherwise.}
-   \end{array}
-   \right.
-\]
-\end{myDef}
-
 %% \begin{myDef}
-%%   \label{df:Rdu}
-%%  we write \( \Theta; \Gamma \vdash \langle H, R, s, n, C \rangle : \langle P,
-%%   F \rangle\), if \(\Theta; \Gamma \vdash s : P\) and \(OK_n(P, F)\) with \(C \thickapprox F\).  
+%%   \label{df:Rab}
+%%   Rab(\(\langle P, F \rangle \xlongrightarrow{\rho} \langle P', F' \rangle\)) should be
+%%   \[
+%%     \left\{
+%%    \begin{array}{ll}
+%%      \langle P, F \rangle \xlongrightarrow{\rho} \langle P', F' \rangle & \rho = \{\Free, \Malloc\}\\
+%%      \langle P, F \rangle \rightarrow \langle P', F' \rangle & \mbox{Otherwise.}
+%%    \end{array}
+%%    \right.
+%% \]
 %% \end{myDef}
+
+\begin{myDef}
+  \label{df:Rdu}
+ we write \( \Theta; \Gamma \vdash \langle H, R, s, n, C \rangle : \langle P,
+  F \rangle\), if \(\Theta; \Gamma \vdash s : P\) and \(OK_n(P, F)\) with \(C \thickapprox F\).  
+\end{myDef}
 
 %% \begin{lemma}[Preservation]
 %% \label{lem:preservation}

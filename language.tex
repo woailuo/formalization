@@ -15,7 +15,7 @@ The syntax of the language \(\mathcal{L}\) is as follows.
   d \mbox{ (proc. defs.)} & ::= & \set{f \mapsto (x_1,\dots,x_n)s}\\
   D \mbox{ (definitions) } &::=& \langle d_1 \cup \dots \cup d_n \rangle\\
   P \mbox{ (programs)} &::=& \langle D, s \rangle\\
-  E \mbox{ (context)} &::=& E;s \mid \scon\Sirx E \mid [ ] 
+  E \mbox{ (context)} &::=& E;s \mid [ ] 
 \end{eqnarray*}
 
 \paragraph{Notation} \(\vec{x}\) is for a finite sequence \(\{x_1,...,x_n\}\),
@@ -51,7 +51,6 @@ and \(filter\_C(C, *x)\) is defined by a pseudcode as follows:
 \end{array}
 \]
 
-
 The \(\VAR\) is a countably infinite set of \emph{variables} and each
 variable is a pointer. The statement \(\SKIP\) means "does nothing".
 The statement \(s_1;s_2\) is a sequential execution of \(s_1\) and
@@ -83,7 +82,7 @@ In this section we introduce operational semantics of language
 \(\mathcal{L}\). We assume there is a countable infinite set
 \(\mathcal{H}\) of \(\emph{heap addresses}\) ranged over by \(l\).
 
-We use a quadruple configuration \(\langle H, R, s, n \rangle\) to
+We use a configuration \(\langle H, R, s, n, C \rangle\) to
 express a run-time state. Each elements in the configuration is as
 follows.
 
@@ -109,17 +108,13 @@ a labeled transition relation \(\langle H, R, s, n, C \rangle
  %% &&\mid \Startconst \mid \Endconst \mid \tau  \\
 \end{eqnarray*}
 
-The \(\rho\), an \emph{action}, is \(\Malloc\), \(\Free\), \(\sassx\),
-\(\sassxn\), \(\Startconst\), \(\Endconst \) or \(\tau\).  The action
-\(\Malloc\) expresses an allocation of a memory cell; \(\Free\)
-expresses a deallocation of a memory cell; \(\sassx\) and \(\sassxn\)
-express the guard part of conditional are \( \xnull \) and \(\xnnull\)
-respectively; \(\Startconst\) means \(*x\) should be constant from
-this point; \(\Endconst\) means the \(*x\) no longer be a constant
-from this point; \(\tau\) expresses the other actions.  We often omit
-\(\tau\) in \(\xlongrightarrow{\tau}_D\).  We use a metavariable
-\(\sigma\) for a finite sequence of actions \(\rho_1\dots\rho_n\).  We
-write \(\xlongrightarrow{\rho_1\dots\rho_n}_D\) for
+The \(\rho\), an \emph{action}, is \(\Malloc\), \(\Free\), or
+\(\tau\).  The action \(\Malloc\) expresses an allocation of a memory
+cell; \(\Free\) expresses a deallocation of a memory cell; \(\tau\)
+expresses the other actions.  We often omit \(\tau\) in
+\(\xlongrightarrow{\tau}_D\).  We use a metavariable \(\sigma\) for a
+finite sequence of actions \(\rho_1\dots\rho_n\).  We write
+\(\xlongrightarrow{\rho_1\dots\rho_n}_D\) for
 \(\xlongrightarrow{\rho_1}_D\xlongrightarrow{\rho_2}_D\dots\xlongrightarrow{\rho_n}_D\).
 We write \(\xLongrightarrow{\rho}_D\) for
 \(\xlongrightarrow{}_D^*\xlongrightarrow{\rho}_D\xlongrightarrow{}_D^*\).
@@ -313,10 +308,10 @@ there is \(\sigma\) such that \(\langle H, R, s, n, C \rangle
 \end{minipage}
 
 
-\infrule[Sem-AssignExn]
+\infrule[Sem-AssignConstExn]
 {\scon\Sirx \in C}
 { \langle H \set{R(x) \mapsto v}, R, *x \leftarrow y , n, C\rangle \xlongrightarrow{}_{D}
-  \langle H \Lfc R(x) \mapsto R(y) \Rfc , R, \SKIP , n, C \rangle }
+  \CONSTEX}
 
 \infrule[Sem-ConstExn]
         { H(R(x)) \neq H'(R'(x))
