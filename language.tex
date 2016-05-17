@@ -47,7 +47,7 @@ and \(filter\_C(C, *x)\) is defined by a pseudcode as follows:
 \begin{array}{lcl}
   filter\_C(C, *x) &=& let \; C' = C - \scon\Sirx \; in \\
   & & if \; \scon\Sirx \in \; C'\; then \; return \; C'\\
-  & & else \; return \; C'\backslash\{\sassx,\sassxn\}
+  & & else \; return \; C'\backslash\{\snull,\snnull \}
 \end{array}
 \]
 
@@ -95,7 +95,7 @@ follows.
 \item \(n\) is a natural number that represents the number of memory
   cells available for allocation.
 \item \(C\) is a set of actions, which contains \(\scon\Sirx\),
-  \(\sassx\) and \(\sassxn\).
+  \(\snull\) and \(\snnull\).
 \end{itemize}
 
 The operational semantics of the language \(\mathcal{L}\) is given by
@@ -104,7 +104,7 @@ a labeled transition relation \(\langle H, R, s, n, C \rangle
 \(\rho\) is as follows.
 
 \begin{eqnarray*}
- \rho \mbox{ (label)} &::=& \Malloc \mid \Free \mid \tau %% \mid \sassx \mid \sassxn
+ \rho \mbox{ (label)} &::=& \Malloc(x') \mid \Free \mid \tau %% \mid \sassx \mid \sassxn
  %% &&\mid \Startconst \mid \Endconst \mid \tau  \\
 \end{eqnarray*}
 
@@ -167,7 +167,7 @@ A configuration \(\langle H, R, s, n, C \rangle\) \emph{goes overflow} if
 there is \(\sigma\) such that \(\langle H, R, s, n, C \rangle
 \xLongrightarrow{\sigma} \OVERFLOW\).  A program \(\langle D, s
 \rangle\) \emph{consumes at least \(n\) cells} if \(\langle \emptyset,
-\emptyset, s, n, \epsilon \rangle\) goes overflow.  
+\emptyset, s, n, \emptyset \rangle\) goes overflow.  
 \end{myDef}
 
 
@@ -236,18 +236,18 @@ there is \(\sigma\) such that \(\langle H, R, s, n, C \rangle
 \vspace{2mm}
 
 \infrule[Sem-IfConstNullT]
-{H(R(x)) = \NULL, \scon\Sirx \in C \mbox{ and } \sassxn \notin C }
+{H(R(x)) = \NULL, \scon\Sirx \in C }
 {\langle H \coma R \coma \IFNULL\Sirx \ \THEN   s_{1}\ \ELSE\  s_{2} \coma  n, C \rangle
   \rightarrow_{D}
-  \langle H\coma R\coma s_{1} \coma n, C\cup \{\sassx\} \rangle}
+  \langle H\coma R\coma s_{1} \coma n, C\cup \{\snull\} \rangle}
 
 \vspace{2mm}
 
 \infrule[Sem-IfConstNullF]
-{H(R(x)) \neq \NULL, \scon\Sirx \in C \mbox{ and } \sassx \notin C}
+{H(R(x)) \neq \NULL, \scon\Sirx \in C }
 {\langle H \coma R \coma \IFNULL\Sirx\ \THEN  s_{1}\ \ELSE  s_{2} \coma  n, C\rangle
   \rightarrow_{D}
-  \langle H\coma R\coma s_{2} \coma  n, C\cup \{\sassxn\} \rangle}
+  \langle H\coma R\coma s_{2} \coma  n, C\cup \{\snnull\} \rangle}
 
 \vspace{2mm}
 
@@ -276,7 +276,7 @@ there is \(\sigma\) such that \(\langle H, R, s, n, C \rangle
 \infrule[Sem-Malloc]
 {l \notin \DOM(H) \andalso n > 0}
 {\langle H\coma R\coma  \LET x = \Malloc() \; \IN s , n, C\rangle
-  \xlongrightarrow{\Malloc}_{D}
+  \xlongrightarrow{\Malloc{(x')}}_{D}
   \langle H \Lfc l \mapsto v\Rfc \coma R\Lfc x' \mapsto l \Rfc \coma   \Lb x'/x \Rb s , n-1, C  \rangle }
 
 \vspace{2mm}
@@ -306,21 +306,21 @@ there is \(\sigma\) such that \(\langle H, R, s, n, C \rangle
 {\langle H\coma R\coma  \LET x = *y \; \IN s, n, C\rangle
     \longrightarrow_{D} \MEMEX}
 \end{minipage}
-
+\vspace{2mm}
 
 \infrule[Sem-AssignConstExn]
-{\scon\Sirx \in C}
+{ \forall z.\scon(*z) \in C \mbox{ and } R(x) = R(z)}
 { \langle H \set{R(x) \mapsto v}, R, *x \leftarrow y , n, C\rangle \xlongrightarrow{}_{D}
   \CONSTEX}
 
-\infrule[Sem-ConstExn]
-        { H(R(x)) \neq H'(R'(x))
-          \Rtab
-          \langle H, R, s, n, C \rangle \xlongrightarrow{\rho}_{D} \langle H', R', s', n', C \rangle}
-{\langle H, R, \scon\Sirx s, n, C \rangle \xlongrightarrow{\rho}_{D} \CONSTEX }
+%% \infrule[Sem-ConstExn]
+%%         { H(R(x)) \neq H'(R'(x))
+%%           \Rtab
+%%           \langle H, R, s, n, C \rangle \xlongrightarrow{\rho}_{D} \langle H', R', s', n', C \rangle}
+%% {\langle H, R, \scon\Sirx s, n, C \rangle \xlongrightarrow{\rho}_{D} \CONSTEX }
 
 \infax[Sem-OutOfMem]
-{ \langle H\coma R\coma \LET x = \Malloc() \ \IN s ,  0, C  \rangle    \xlongrightarrow{\Malloc}_{D}
+{ \langle H\coma R\coma \LET x = \Malloc() \ \IN s ,  0, C  \rangle    \xlongrightarrow{\Malloc{(x')}}_{D}
   \OVERFLOW}
 
 \end{minipage}

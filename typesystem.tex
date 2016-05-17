@@ -5,8 +5,10 @@
 The syntax of the types is as follows.
 \[
 \begin{array}{rlcl}
-  P & (\mbox{behavioral types})&::=& {\bf 0} \mid P_{1};P_{2}  \mid \Malloc \mid \Free \mid \alpha \mid \mu\alpha.P \\
-  &  &  & \mid (*x)(P_1,P_2) \mid P_1 + P_2 \mid \scon\Sirx P  \mid \Endconst\\
+  P & (\mbox{behavioral types})&::=& {\bf 0} \mid P_{1};P_{2} \mid \Free \mid \alpha \mid \mu\alpha.P \\
+  &  &  & \mid \LET x = y \; \IN P \mid \LET x = \Malloc \; \IN P \\
+   &  &  & \mid \LET x = \NULL \; \IN P \mid \LET x = *y \; \IN P \\
+  &  &  & \mid (*x)(P_1,P_2) \mid \scon\Sirx P  \mid \Endconst\\
   \Gamma & (\mbox{variable type environment}) &::=& \set{x_1, x_2, \dots, x_n}\\
   \Psi & (\mbox{dependent function type}) &::=& (\vec{x})P\\
   \Theta & (\mbox{function type environment}) &::=& \set{f_1\COL \Psi_1,\dots,f_n\COL \Psi_n}\\
@@ -68,14 +70,14 @@ action \(\rho\) respectively.
 \begin{figure}
  \begin{minipage}{\textwidth}
 
-\begin{minipage}{0.5\textwidth}
+
 \infax[Tr-Skip]
 { \langle {\bf 0};P, F \rangle \rightarrow \langle P, F \rangle }
-\end{minipage}
-\begin{minipage}{0.5\textwidth}
-\infax[Tr-Malloc]
- { \langle \Malloc, F \rangle \xlongrightarrow{\Malloc} \langle {\bf 0}, F \rangle }
-\end{minipage}
+
+%% \begin{minipage}{0.5\textwidth}
+%% \infax[Tr-Malloc]
+%%  { \langle \Malloc, F \rangle \xlongrightarrow{\Malloc} \langle {\bf 0}, F \rangle }
+%% \end{minipage}
 
 \vspace{2mm}
 
@@ -104,6 +106,19 @@ action \(\rho\) respectively.
 { \langle P_1, F \rangle \xlongrightarrow{\rho} \langle P_1', F' \rangle }
 { \langle P_1;P_2, F \rangle \xlongrightarrow{\rho} \langle P_1';P_2, F' \rangle }
 
+\infax[Tr-LetMalloc]
+{ \langle \LET x = \Malloc \; \IN P, F \rangle \xlongrightarrow{\Malloc(x')} \langle [x'/x]P, F \rangle }
+
+\infax[Tr-LetXY]
+{ \langle \LET x = y \; \IN P, F \rangle \rightarrow \langle [x'/x]P, F \rangle }
+
+\infax[Tr-LetX*Y]
+{ \langle \LET x = *y \; \IN P, F \rangle \rightarrow \langle [x'/x]P, F \rangle }
+
+\infax[Tr-LetX]
+{ \langle \LET x = \NULL \; \IN P, F \rangle \rightarrow \langle [x'/x]P, F \rangle }
+
+
 \infax[Tr-Const]
 { \langle \scon\Sirx P, F \rangle \rightarrow \langle P;\Endconst, F\cup \{\scon\Sirx\} \rangle }
 
@@ -111,9 +126,9 @@ action \(\rho\) respectively.
 {F' = filter\_T(F, *x)}
 { \langle \Endconst, F \rangle \rightarrow \langle {\bf 0}, F' \rangle }
 
-\infrule[Tr-NNullNotIn]
-{ \snnull \notin F \andalso \scon\Sirx \in F}
-{ \langle \Sirx (P_1,P_2), F \rangle \rightarrow \langle P_1, F\cup\{\snull\} \rangle }
+%% \infrule[Tr-NNullNotIn]
+%% { \snnull \notin F \andalso \scon\Sirx \in F}
+%% { \langle \Sirx (P_1,P_2), F \rangle \rightarrow \langle P_1, F\cup\{\snull\} \rangle }
 
 \begin{minipage}{0.5\textwidth}
 \infrule[Tr-NotConst1]
@@ -121,22 +136,34 @@ action \(\rho\) respectively.
 { \langle \Sirx (P_1,P_2), F \rangle \rightarrow \langle P_1, F \rangle }
 \end{minipage}
 \begin{minipage}{0.5\textwidth}
+\infrule[Tr-NotConst2]
+{ \scon\Sirx \notin F }
+{ \langle \Sirx (P_1,P_2), F \rangle \rightarrow \langle P_2, F \rangle }
+\end{minipage}
+\vspace{2mm}
+%% \infrule[Tr-NullNotIn]
+%% { \snull \notin F \andalso \scon\Sirx \in F }
+%% { \langle \Sirx (P_1,P_2), F \rangle \rightarrow \langle P_2, F\cup\{\snnull\} \rangle }
+
+\begin{minipage}{0.5\textwidth}
 \infrule[Tr-NullIn]
 { \snull \in F \andalso \scon\Sirx \in F }
 { \langle \Sirx (P_1,P_2), F \rangle \rightarrow \langle P_1, F \rangle }
 \end{minipage}
-
-\infrule[Tr-NullNotIn]
-{ \snull \notin F \andalso \scon\Sirx \in F }
-{ \langle \Sirx (P_1,P_2), F \rangle \rightarrow \langle P_2, F\cup\{\snnull\} \rangle }
-
+\begin{minipage}{0.5\textwidth}
 \infrule[Tr-NNullIn]
 { \snnull \in F \andalso \scon\Sirx \in F }
 { \langle \Sirx (P_1,P_2), F \rangle \rightarrow \langle P_2, F \rangle }
+\end{minipage}
 
-\infrule[Tr-NotConst2]
-{ \scon\Sirx \notin F }
-{ \langle \Sirx (P_1,P_2), F \rangle \rightarrow \langle P_2, F \rangle }
+
+\infrule[Tr-NNullNotIn1]
+{ \snull, \snnull \notin F \andalso \scon\Sirx \in F }
+{ \langle \Sirx (P_1,P_2), F \rangle \rightarrow \langle P_1, F\cup{\snull} \rangle }
+
+\infrule[Tr-NNullNotIn2]
+{ \snull, \snnull \notin F \andalso \scon\Sirx \in F }
+{ \langle \Sirx (P_1,P_2), F \rangle \rightarrow \langle P_2, F\cup{\snnull} \rangle }
 
  
 %%   \label{df:fv}
@@ -231,12 +258,12 @@ exists \(P_2'\) such that \( \langle P_2, F \rangle \xLongrightarrow{\rho} \lang
 \begin{minipage}{0.5\textwidth}
 \infrule[T-Malloc]
 {\Theta ; \Gamma,x \vdash s : P  \Rtab}
-{\Theta ; \Gamma \vdash \LET x = \MALLOC \; \IN s  : \Malloc;P}
+{\Theta ; \Gamma \vdash \LET x = \MALLOC \; \IN s :\LET x = \Malloc \; \IN P}
 \end{minipage}
 \begin{minipage}{0.5\textwidth}
 \infrule[T-LetEq]
 {\Theta ; \Gamma , x, y  \vdash s : P}
-{\Theta ; \Gamma, y \vdash \LET x = y \; \IN s : P}
+{\Theta ; \Gamma, y \vdash \LET x = y \; \IN s : \LET x = y \; \IN P}
 \end{minipage}
 
 \vspace{2mm}
@@ -244,12 +271,12 @@ exists \(P_2'\) such that \( \langle P_2, F \rangle \xLongrightarrow{\rho} \lang
 \begin{minipage}{0.5\textwidth}
 \infrule[T-LetDeref]
 {\Theta ; \Gamma , x, y  \vdash s : P  \Rtab}
-{\Theta ; \Gamma, y \vdash \LET x = *y \; \IN s : P}
+{\Theta ; \Gamma, y \vdash \LET x = *y \; \IN s : \LET x = *y \; \IN P}
 \end{minipage}
 \begin{minipage}{0.5\textwidth}
 \infrule[T-LetNull]
 {\Theta ; \Gamma, x  \vdash s : P  \Rtab}
-{\Theta ; \Gamma \vdash \LET x = \mathbf{null} \; \IN s : P}
+{\Theta ; \Gamma \vdash \LET x = \NULL \; \IN s : \LET x = \NULL \; \IN P}
 \end{minipage}
 
 \infax[T-Endconst] 
