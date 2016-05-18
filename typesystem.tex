@@ -222,10 +222,12 @@ memory cells.
 
 
 \begin{myDef}[Subtyping]
-\(P_1 \le P_2\) is the largest relation such that, for any \(P_1'\), \(F'\)
-and \(\rho\), if \( \langle P_1, F \rangle \xlongrightarrow{\rho} \langle P_1', F' \rangle \), then there
-exists \(P_2'\) such that \( \langle P_2, F \rangle \xLongrightarrow{\rho} \langle P_2', F' \rangle \) and
-\(P_1' \le P_2'\).
+\( F\vdash P_1 \le P_2\) is the largest relation such that, for any
+\(P_1'\), \(F'\) and \(\rho\), if \( \langle P_1, F \rangle
+\xlongrightarrow{\rho} \langle P_1', F' \rangle \), then there exists
+\(P_2'\) such that \( \langle P_2, F \rangle \xLongrightarrow{\rho}
+\langle P_2', F' \rangle \) and \( F'\vdash P_1' \le P_2'\).  We write
+\( P_1 \le P_2\) if \(F\vdash P_1 \le P_2\) for any F.
 \label{df:subtype}
 \end{myDef}
 
