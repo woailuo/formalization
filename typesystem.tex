@@ -133,12 +133,12 @@ action \(\rho\) respectively.
 \begin{minipage}{0.5\textwidth}
 \infrule[Tr-NotConst1]
 { \scon\Sirx \notin F }
-{ \langle \Sirx (P_1,P_2), F \rangle \rightarrow \langle P_1, F \rangle }
+{ \langle \Sirx (P_1,P_2), F \rangle \xlongrightarrow{\snull} \langle P_1, F \rangle }
 \end{minipage}
 \begin{minipage}{0.5\textwidth}
 \infrule[Tr-NotConst2]
 { \scon\Sirx \notin F }
-{ \langle \Sirx (P_1,P_2), F \rangle \rightarrow \langle P_2, F \rangle }
+{ \langle \Sirx (P_1,P_2), F \rangle \xlongrightarrow{\snnull} \langle P_2, F \rangle }
 \end{minipage}
 \vspace{2mm}
 %% \infrule[Tr-NullNotIn]
@@ -159,11 +159,11 @@ action \(\rho\) respectively.
 
 \infrule[Tr-NNullNotIn1]
 { \snull, \snnull \notin F \andalso \scon\Sirx \in F }
-{ \langle \Sirx (P_1,P_2), F \rangle \rightarrow \langle P_1, F\cup{\snull} \rangle }
+{ \langle \Sirx (P_1,P_2), F \rangle \xlongrightarrow{\snull} \langle P_1, F\cup{\snull} \rangle }
 
 \infrule[Tr-NNullNotIn2]
 { \snull, \snnull \notin F \andalso \scon\Sirx \in F }
-{ \langle \Sirx (P_1,P_2), F \rangle \rightarrow \langle P_2, F\cup{\snnull} \rangle }
+{ \langle \Sirx (P_1,P_2), F \rangle \xlongrightarrow{\snnull} \langle P_2, F\cup{\snnull} \rangle }
 
  
 %%   \label{df:fv}

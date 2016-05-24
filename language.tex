@@ -2,7 +2,7 @@
 In this section we define an imperative language \(\mathcal{L}\) with
 memory allocation and deallocation primitives, and for simplification
 we only use pointers as values.
-
+ 
 The syntax of the language \(\mathcal{L}\) is as follows.
 
 \begin{eqnarray*}
@@ -104,7 +104,7 @@ a labeled transition relation \(\langle H, R, s, n, C \rangle
 \(\rho\) is as follows.
 
 \begin{eqnarray*}
- \rho \mbox{ (label)} &::=& \Malloc(x') \mid \Free \mid \tau %% \mid \sassx \mid \sassxn
+ \rho \mbox{ (label)} &::=& \Malloc(x') \mid \Free \mid \snull \mid \snnull \mid \tau %% \mid \sassx \mid \sassxn
  %% &&\mid \Startconst \mid \Endconst \mid \tau  \\
 \end{eqnarray*}
 
@@ -221,7 +221,7 @@ there is \(\sigma\) such that \(\langle H, R, s, n, C \rangle
 \infrule[Sem-IfNullT]
 {H(R(x)) = \NULL, \scon\Sirx \notin C}
 {\langle H \coma R \coma \IFNULL\Sirx \ \THEN   s_{1}\ \ELSE\  s_{2} \coma  n, C \rangle
-  \rightarrow_{D}
+  \xlongrightarrow{\snull}_D
   \langle H\coma R\coma s_{1} \coma n, C \rangle}
 
 \vspace{2mm}
@@ -229,7 +229,7 @@ there is \(\sigma\) such that \(\langle H, R, s, n, C \rangle
 \infrule[Sem-IfNullF]
 {H(R(x)) \neq \NULL, \scon\Sirx \notin C}
 {\langle H \coma R \coma \IFNULL\Sirx\ \THEN  s_{1}\ \ELSE  s_{2} \coma  n, C\rangle
-  \rightarrow_{D}
+  \xlongrightarrow{\snnull}_D
   \langle H\coma R\coma s_{2} \coma  n, C\rangle}
 
 
@@ -238,7 +238,7 @@ there is \(\sigma\) such that \(\langle H, R, s, n, C \rangle
 \infrule[Sem-IfConstNullT]
 {H(R(x)) = \NULL, \scon\Sirx \in C }
 {\langle H \coma R \coma \IFNULL\Sirx \ \THEN   s_{1}\ \ELSE\  s_{2} \coma  n, C \rangle
-  \rightarrow_{D}
+  \xlongrightarrow{\snull}_D
   \langle H\coma R\coma s_{1} \coma n, C\cup \{\snull\} \rangle}
 
 \vspace{2mm}
@@ -246,7 +246,7 @@ there is \(\sigma\) such that \(\langle H, R, s, n, C \rangle
 \infrule[Sem-IfConstNullF]
 {H(R(x)) \neq \NULL, \scon\Sirx \in C }
 {\langle H \coma R \coma \IFNULL\Sirx\ \THEN  s_{1}\ \ELSE  s_{2} \coma  n, C\rangle
-  \rightarrow_{D}
+  \xlongrightarrow{\snnull}_D
   \langle H\coma R\coma s_{2} \coma  n, C\cup \{\snnull\} \rangle}
 
 \vspace{2mm}
