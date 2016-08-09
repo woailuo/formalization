@@ -68,7 +68,7 @@ may be seen as \(
 expresses function \(foo\) consumes three memory cells but deallocates
 two memory cells, and then iterates this behavior again. This behavior
 means function \(foo\) consumes unbounded number of memory cells,
-although it is \emph{total} memory-leak freedom.
+although the original program is \emph{total} memory-leak freedom.
 
 \begin{exmp}\label{ex:ex2}
 \begin{figure}[h]
@@ -100,8 +100,13 @@ can be seen as \(\Malloc;\Free\) or \(\TSKIP;\TSKIP\) if \((*x)\) does
 not change between these two choices, which expresses total
 memory-leak freedom.
 
-[TODO] The reminder of this paper is structured as follows. Section 2
-describes an imperative language with allocation and deallocation
-primitives and its operational semantics. Section 3 introduces the
-behavioral type system with dependent types. Section 4 describes ...;
-Section 5 describes ...; Section 6 ....; Section 7 concludes ...;
+The reminder of this paper is structured as
+follows. Section~\ref{sec:language} describes an imperative language
+with allocation and deallocation primitives and its operational
+semantics. Section~\ref{sec:typesystem} introduces the extended
+behavioral type system with dependent
+types. Section~\ref{sec:reconstruction} describes the type
+reconstruction procedure; Section~\ref{sec:experiments} shows some
+experiments and give a discussion; Section~\ref{sec:relatedwork}
+describes the related works; Section~\ref{sec:conclusion} concludes
+this paper.
