@@ -40,18 +40,17 @@ memory cells; hence \(h'\) is not totally memory-leak free.
 In order to prove \emph{total} memory deallocation, we proposed a
 behavioral type system in previous study[]. It can abstract the
 behavior of a program by using sequential process whose actions
-represent manual memory management primitives. For example, the
-abstract behavioral type of function \(h\) in Figure~\ref{ex:np} is
+represent manual memory management primitives, and our behavior type
+only consider the the number and order of manual memory management
+primitives and recursively calls. For example, the abstract behavioral
+type of function \(h\) in Figure~\ref{ex:np} is
 \(\mu\alpha.\Malloc;\Malloc;\Free;\Free;\alpha\), which represents
 function \(h\) allocates two memory cells, deallocates them, and then
 recursively call itself again; the behavioral type of function \(h'\)
 is abstracted as \(\mu\alpha.\Malloc;\Malloc;\alpha;\Free;\Free\),
 which represents \(h'\) allocates two memory cells, call itself again,
-and then deallocates those two cells. From these two examples you may
-notice that our behavior type only consider the the number and order
-of manual memory management primitives and recursively calls. That way
-we can easily estimate the upper bound of memory cells a program
-consumed.
+and then deallocates those two cells. That way we can easily estimate
+the upper bound of memory cells a program consumed.
 
 Although our previours behavioral type system can abstract the
 behavior of a program and estimate the upper bound of memory
