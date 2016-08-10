@@ -325,7 +325,7 @@ of memory cells the program requires.
 \end{figure}
 
 Figure~\ref{fig:TypingRules} shows the typing rules. For example, the
-rule \(T-Malloc\)
+rule \(T-Malloc\) 
 
 
 \subsection{Type soundness}
