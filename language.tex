@@ -54,7 +54,7 @@ and \(filter\_C(C, *x)\) is defined by a pseudcode as follows:
 The \(\VAR\) is a countably infinite set of \emph{variables} and each
 variable is a pointer. The statement \(\SKIP\) means "does nothing".
 The statement \(s_1;s_2\) is a sequential execution of \(s_1\) and
-\(s_2\). The statement \(*x \leftarrow y\) updates the content of cell
+\(s_2\). The statement \(*x \leftarrow y\) changes the content of cell
 which is pointed to by \(x\) with the value \(y\). The statement
 \(\Free(x)\) deallocates a memory cell which is pointed to by pointer
 \(x\). The statement \(\LET x = e\ \IN s\) evaluates the expression
@@ -65,8 +65,8 @@ dereferencing a memory cell pointed to by \(y\). The statement
 \(\IFNULL(*x) \THEN s_1 \ELSE s_2\) executes \(s_1\) if \(*x\) is
 \(\NULL\) and executes \(s_2\) otherwise. The statement \(f(\vec{x})\)
 expresses a procedure \(f\) with arguments \(\vec{x}\). The statement
-\(\scon\Sirx s\) means \(\Sirx\) is a constant in statement \(s\); the
-statement \(\Endconst\) means from this point \(\Sirx\) maybe not
+\(\scon\Sirx s\) means \(\Sirx\) is a constant in statement \(s\). The
+statement \(\Endconst\) means from this point \(\Sirx\) maybe not a
 constant.
 
 The \(d\) represents a procedure definition which maps a procedure
@@ -93,30 +93,30 @@ follows.
   to \(\mathcal{H} \cup \set{\NULL}\);
 \item \(s\) is the statement that is being executed; 
 \item \(n\) is a natural number that represents the number of memory
-  cells available for allocation.
-\item \(C\) is a set of actions, which contains \(\scon\Sirx\),
-  \(\snull\) and \(\snnull\).
+  cells available for allocation, which can be formalized to check
+  memory leaks even for nonterminating programs;
+\item \(C\) is a set related to current constant pointers, which
+  contains \(\scon\Sirx\), \(\snull\) and \(\snnull\).
 \end{itemize}
 
 The operational semantics of the language \(\mathcal{L}\) is given by
 a labeled transition relation \(\langle H, R, s, n, C \rangle
 \xlongrightarrow{\rho}_D \langle H', R', s', n', C' \rangle\). The label
-\(\rho\) is as follows.
-
+\(\rho\) is an action, which is as follows.
 \begin{eqnarray*}
  \rho \mbox{ (label)} &::=& \Malloc(x') \mid \Free \mid \snull \mid \snnull \mid \tau %% \mid \sassx \mid \sassxn
  %% &&\mid \Startconst \mid \Endconst \mid \tau  \\
 \end{eqnarray*}
-
-The \(\rho\), an \emph{action}, is \(\Malloc\), \(\Free\), or
-\(\tau\).  The action \(\Malloc\) expresses an allocation of a memory
-cell; \(\Free\) expresses a deallocation of a memory cell; \(\tau\)
-expresses the other actions.  We often omit \(\tau\) in
-\(\xlongrightarrow{\tau}_D\).  We use a metavariable \(\sigma\) for a
-finite sequence of actions \(\rho_1\dots\rho_n\).  We write
-\(\xlongrightarrow{\rho_1\dots\rho_n}_D\) for
-\(\xlongrightarrow{\rho_1}_D\xlongrightarrow{\rho_2}_D\dots\xlongrightarrow{\rho_n}_D\).
-We write \(\xLongrightarrow{\rho}_D\) for
+The action \(\Malloc(x')\) expresses an allocation of a new memory
+cell, and the new cell binds to a fresh variable \(x'\); \(\Free\)
+expresses a deallocation of a memory cell; \(\snull\) means \(*x\) is
+a null pointer, and \(\snnull\) not; \(\tau\) expresses the other
+internal actions. For the operational semantics, we often omit
+\(\tau\) in \(\xlongrightarrow{\tau}_D\).  The metavariable \(\sigma\)
+is used for a finite sequence of actions \(\rho_1\dots\rho_n\). The
+\(\xlongrightarrow{\rho_1\dots\rho_n}_D\) is short for
+\(\xlongrightarrow{\rho_1}_D\xlongrightarrow{\rho_2}_D\dots\xlongrightarrow{\rho_n}_D\). The
+\(\xLongrightarrow{\rho}_D\) means
 \(\xlongrightarrow{}_D^*\xlongrightarrow{\rho}_D\xlongrightarrow{}_D^*\).
 We write \(\xLongrightarrow{\rho_1\dots\rho_n}_D\) for
 \(\xLongrightarrow{\rho_1}_D\dots\xLongrightarrow{\rho_n}_D\).
@@ -126,11 +126,17 @@ Figure~\ref{fig:transitionRules} depicts the relation
 follows.
 
 \begin{itemize}
-\item \rn{Sem-ConstSkip}: That a memory cell pointed to by \(x\)is no
-  longer a constant is expressed by doing nothing.
-\item \rn{Sem-ConstSeq}: That a memory cell pointed to by \(x\) should
-  be a constant in a stamtement \(s\) is expressed by adding a
-  statement \(\Endconst\) at the end of statement \(s\).
+%% \item \rn{Sem-ConstSkip}: That a memory cell pointed to by \(x\)is no
+%%   longer a constant is expressed by doing nothing.
+\item \rn{Sem-ConstSeq}: \(\scon\Sirx\) and \(\Endconst\) together
+  guarantees a pointer pointed to by \(*x\) cannot be changed in
+  statement \(s\). The set \(C\) with added \(\scon\Sirx\) describes
+  this status.
+\item \rn{Sem-IfConstNullT}: under the environment, i.e., \(*x\) cannot be
+  changed and \(*x\) is a null pointer, 
+
+
+  
 \item \rn{Sem-Free}: Deallocation of a memory cell pointed to by \(x\)
   is expressed by deleting the entry for \(R(x)\) from the heap.  This
   action increments the number of available cells (i.e., \(n\)) by one
@@ -152,8 +158,7 @@ follows.
   is changed in \(s\) it will raise \(\CONSTEX\) exception.
 \end{itemize}
 
-Our goal is to guarantee \emph{total} memory-leak freedom and reject
-memory leaks. By our language \(\mathcal{L}\), they are formally
+In order to deal with a path-sensitive program to guarantee \emph{total} memory-leak freedom, we redefined the several definitions as follows.
 defined as follows:
 \begin{myDef}[total memory-leak freedom]
 \label{df:ml}
