@@ -87,7 +87,7 @@ is not a null pointer, it will allocates one cell at first conditional
 and deallocates that cell at second conditional, otherwise skips.
 \end{exmp}
 
-My current idea is to extend previous behavioral type system with
+Our current idea is to extend previous behavioral type system with
 dependent types[]. The dependent types takes more precise information
 than traditional types, for example, the type
 \((*x)(\Malloc, \TSKIP)\) is a dependent type, because it dependents
@@ -96,8 +96,8 @@ behavioral type of it is \(
 \mu\alpha.\Malloc;\Malloc;(*x)(\Malloc, \TSKIP);(*x)(\Free, \TSKIP);\Free;\Free;\alpha
 \). Therefore, the part\((*x)(\Malloc, \TSKIP);(*x)(\Free, \TSKIP)\)
 can be seen as \(\Malloc;\Free\) or \(\TSKIP;\TSKIP\) if \((*x)\) does
-not change between these two choices, which expresses total
-memory-leak freedom.
+not change between these two choices, which we can definitely judge it
+is a total memory-leak free program.
 
 The reminder of this paper is structured as
 follows. Section~\ref{sec:language} describes an imperative language

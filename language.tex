@@ -21,35 +21,8 @@ The syntax of the language \(\mathcal{L}\) is as follows.
 \paragraph{Notation} \(\vec{x}\) is for a finite sequence \(\{x_1,...,x_n\}\),
 where we assume that each element is distinct; \([\vec{x'}/\vec{x}]s\)
 is for a term obtained by replacing each free occurrence of
-\(\vec{x}\) in s with variables \(\vec{x'}\); the \(\DOM(f)\) is a
-mapping from function name \(f\) to its domain; for a map \(f\), the
-\(f \set{x \mapsto v}\) and \( f \bs x\) are defined as follows:
-\[
-\begin{array}{rcl}
-f \set{x \mapsto v} (w) &=&
-\left\{
-\begin{array}{ll}
-v & \mbox{if \(x = w\)}\\
-f(w) & \mbox{otherwise.}
-\end{array}
-\right.\\
-(f \bs x)(w) &=&
-\left\{
-\begin{array}{ll}
-\mbox{undefined} & \mbox{if \(x = w\)}\\
-f(w) & \mbox{otherwise.}
-\end{array}
-\right.
-\end{array}
-\]
-and \(filter\_C(C, *x)\) is defined by a pseudcode as follows:
-\[
-\begin{array}{lcl}
-  filter\_C(C, *x) &=& let \; C' = C - \scon\Sirx \; in \\
-  & & if \; \scon\Sirx \in \; C'\; then \; return \; C'\\
-  & & else \; return \; C'\backslash\{\snull,\snnull \}
-\end{array}
-\]
+\(\vec{x}\) in s with variables \(\vec{x'}\).\\
+
 
 The \(\VAR\) is a countably infinite set of \emph{variables} and each
 variable is a pointer. The statement \(\SKIP\) means "does nothing".
@@ -121,45 +94,84 @@ is used for a finite sequence of actions \(\rho_1\dots\rho_n\). The
 We write \(\xLongrightarrow{\rho_1\dots\rho_n}_D\) for
 \(\xLongrightarrow{\rho_1}_D\dots\xLongrightarrow{\rho_n}_D\).
 
+\paragraph{Notation} the \(\DOM(f)\) is a
+mapping from function name \(f\) to its domain; for a map \(f\), the
+\(f \set{x \mapsto v}\) and \( f \bs x\) are defined as follows:
+\[
+\begin{array}{rcl}
+f \set{x \mapsto v} (w) &=&
+\left\{
+\begin{array}{ll}
+v & \mbox{if \(x = w\)}\\
+f(w) & \mbox{otherwise.}
+\end{array}
+\right.\\
+(f \bs x)(w) &=&
+\left\{
+\begin{array}{ll}
+\mbox{undefined} & \mbox{if \(x = w\)}\\
+f(w) & \mbox{otherwise.}
+\end{array}
+\right.
+\end{array}
+\]
+and \(filter\_C(C, *x)\) is defined by a pseudcode as follows:
+\[
+\begin{array}{lcl}
+  filter\_C(C, *x) &=& let \; C' = C - \scon\Sirx \; in \\
+  & & if \; \scon\Sirx \in \; C'\; then \; return \; C'\\
+  & & else \; return \; C'\backslash\{\snull,\snnull \}
+\end{array}
+\]
+
+
 Figure~\ref{fig:transitionRules} depicts the relation
 \(\xlongrightarrow{\rho}_D\). Several important rules are listed as
 follows.
 
 \begin{itemize}
-%% \item \rn{Sem-ConstSkip}: That a memory cell pointed to by \(x\)is no
-%%   longer a constant is expressed by doing nothing.
 \item \rn{Sem-ConstSeq}: \(\scon\Sirx\) and \(\Endconst\) together
-  guarantees a pointer pointed to by \(*x\) cannot be changed in
-  statement \(s\). The set \(C\) with added \(\scon\Sirx\) describes
-  this status.
-\item \rn{Sem-IfConstNullT}: under the environment, i.e., \(*x\) cannot be
-  changed and \(*x\) is a null pointer, 
+  guarantees a pointer pointed to by \(*x\) cannot be changed in the
+  statement \(s\). The set \(C\) with the new added \(\scon\Sirx\)
+  describes this status.
 
+\item \rn{Sem-IfNullT} and \rn{Sem-IfConstNullT}: these two rules
+  represents if \(\Sirx\) is a null pointer, the statement \(s_1\)
+  will be executed. the difference of the two is if the \(\scon\Sirx\)
+  is in set \(C\) then\(\snull\) is added to \(C\), which means
+  \(\Sirx\) is a null pointer and cannot be updated from now on;
+  otherwise \(\Sirx\) can be changed, like \rn{Sem-IfNullT}.
 
+\item \rn{Sem-Free}: deallocating one memory cell pointed by \(x\) is
+  to remove linkage of pointer variable \(x\) to heap; this action
+  will release one memory cell space, which increments the number of
+  available memory cells \(n\) by one. 
+
+\item \rn{Sem-Malloc} and \rn{Sem-OutOfMem}: allocating one memory
+  cell is described as updating the heap by adding a fresh heap
+  variable \(l\) to anywhere \(v\) of the heap and adding the linkage
+  of a fresh register variable \(x'\) to that \(l\); This action is
+  allowed only if the number of available memory cells is positive;
+  otherwise \(\OVERFLOW\).
   
-\item \rn{Sem-Free}: Deallocation of a memory cell pointed to by \(x\)
-  is expressed by deleting the entry for \(R(x)\) from the heap.  This
-  action increments the number of available cells (i.e., \(n\)) by one
-  (i.e., \(n+1\)).
-\item \rn{Sem-Malloc} and \rn{Sem-OutOfMem}: Allocation of a memory
-  cell is expressed by adding a fresh entry to the heap.  This action is
-  allowed only if the number of available cells is positive; if the
-  number is zero, then the configuration leads to an error state
-  \(\OVERFLOW\).
-\item \rn{Sem-AssignExn},\rn{Sem-FreeExn},\rn{Sem-DerefExn} and
-  \rn{Sem-FreeExn} : These rules express an illegal access to memory.
-  If such action is performed, then the configuration leads to
-  exceptional state \(\MEMEX\).  This state \(\MEMEX\) is not seen as
-  an erroneous state in the current paper, hence a well-typed program
-  may lead to these states.  The command \(\FREE\), if \(x\) is a null
-  pointer, leads to \(\MEMEX\) in the current semantics, although it
-  is equivalent to \(\SKIP\) in the C language.
-\item \rn{Sem-ConstExn}:  expresses that if a constant \(*x\)
-  is changed in \(s\) it will raise \(\CONSTEX\) exception.
+\item \rn{Sem-AssignExn}, \rn{Sem-FreeExn} and \rn{Sem-DerefExn}: these
+  rules express that accessing a null pointer or a dangling pointer
+  will give raise to an exceptional state \(\MEMEX\).  However, in
+  this paper we do not see the state \(\MEMEX\) is an erroneous state,
+  hence a well-typed program may lead to these states. One thing we
+  should notice the command \(\FREE\), if \(x\) is a null pointer,
+  raises state \(\MEMEX\) in the current semantics, although it is
+  equivalent to \(\SKIP\) in the C language.
+  
+\item \rn{Sem-AssignConstExn}: expressing that if a constant memory
+  cell pointed to by \(x\) or its aliases are changed it will raise
+  exceptional state \(\CONSTEX\).
+
 \end{itemize}
 
-In order to deal with a path-sensitive program to guarantee \emph{total} memory-leak freedom, we redefined the several definitions as follows.
-defined as follows:
+In order to deal with a path-sensitive program to guarantee
+\emph{total} memory-leak freedom, we redefined the several definitions
+as follows.  defined as follows:
 \begin{myDef}[total memory-leak freedom]
 \label{df:ml}
 A program \(\langle D, s \rangle\) is \emph{totally memory-leak free}

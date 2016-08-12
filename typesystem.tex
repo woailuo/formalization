@@ -50,14 +50,6 @@ null pointer; \(\scon\Sirx\) represents \(\Sirx\) should be a constant.
 Constant value environment ranged over by \(F\) is a set of constant
 values information.
 
-Figure~\ref{fig:bdRules} depicts semantics of behavioral types with
-dependent types, and they are given by the labeled transition
-system. The relation \( \langle P, F \rangle \xlongrightarrow{\rho}
-\langle P', F' \rangle \) means that \(P\) can make an action
-\(\rho\), and \(P\) turns into \(P'\) after it makes action \(\rho\);
-\(F\) and \(F'\) record constant value environment before and after
-making action \(\rho\) respectively.
-
 \paragraph{Notation}
 \(filter\_T(F, *x)\) is defined by a pseudcode as follows:
 \[
@@ -67,6 +59,16 @@ making action \(\rho\) respectively.
   & & else \; return \; F'
 \end{array}
 \]
+
+
+Figure~\ref{fig:bdRules} depicts semantics of behavioral types with
+dependent types, and they are given by the labeled transition
+system. The relation \( \langle P, F \rangle \xlongrightarrow{\rho}
+\langle P', F' \rangle \) means that \(P\) can make an action
+\(\rho\), and \(P\) turns into \(P'\) after it makes action \(\rho\);
+\(F\) and \(F'\) record constant value environment before and after
+making action \(\rho\) respectively.
+
 
 \begin{figure}
  \begin{minipage}{\textwidth}
@@ -325,7 +327,14 @@ of memory cells the program requires.
 \end{figure}
 
 Figure~\ref{fig:TypingRules} shows the typing rules. For example, the
-rule \(T-Malloc\)
+rule \rn{T-IfNull} represents the behavior of \(\IFNULL\Sirx \; \THEN
+s_{1}\; \ELSE s_{2}\) is abstracted as \(\Sirx(P_1, P_2)\) where
+\(P_1\) and \(P_2\) are the behavior of \(s_1\) and \(s_2\)
+respectively; this conditional statement means that executing \(s_1\)
+if \(\Sirx\) is a null pointer, otherwise \(s_2\).  The typing rule
+\rn{T-Program} represents a program requires at most \(n\) memory
+cells during running under the predication \(OK_n(P, F)\), where \(P\)
+is behavioral type of statement \(s\).
 
 
 \subsection{Type soundness}
