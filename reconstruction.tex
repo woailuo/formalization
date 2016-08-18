@@ -19,11 +19,12 @@ subtyping constraint \(\alpha \ge P\) can be resolved by setting
 can be reduced to a single constraint \(\OK_{\nu}(P', F)\) for some
 behavioral type \(P'\).
 
-By definition, \(\OK_{\nu}(P, F)\) holds if there is a natural number
-\(n\) such that, for all \(\sigma\) and \(P'\), \(P
-\xlongrightarrow{\sigma} P'\) implies \(\sharp_{\Malloc}(\sigma) -
-\sharp_{\Free}(\sigma) \le n\).  In order to check this condition
-soundly, we fix the upper bound of \(\nu\) to be checked.  Then,
-\(\OK_{\nu}(P, F)\) can be checked by model-checking a system with
-finitely many states; hence, model checkers like
-CPAChecker~\cite{beyer2011cpachecker} can be applicable.
+By definition, \(\OK_{\nu}(P, F)\) holds if (1) for any \(\sigma\) and
+\(P'\), if \(\langle P, F \rangle \xlongrightarrow{\sigma} \langle P',
+F'\rangle \), then there exists a natural number \(n\) such that
+\(\sharp_{\Malloc}(\sigma) - \sharp_{\Free}(\sigma) \le n\) and (2)
+\(OK(F)\). To prove this predication, we first fix an upper bound for
+\(\nu\) and encoding \(F\) by hand.  Then, \(\OK_{\nu}(P, F)\) can be
+checked, by using some mode checkers like
+CPAChecker~\cite{beyer2011cpachecker}, in finitely many states.
+
