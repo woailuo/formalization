@@ -11,12 +11,13 @@ number of available memory cells. The predication \(OK_n(P, F)\) only
 appears in the rule \(\rn{T-Program}\), therefore only one constraint of
 \(OK_\nu(\alpha, F)\) is included in the constraints set.
 
-By using the result obtained by Kobayashi et al.~\cite[Lemma
-  3.8]{DBLP:journals/lmcs/KobayashiSW06}, a subtyping constraint
-\(\alpha \ge P\) can be resolved by setting \(\alpha = \mu
-\alpha. P\), which is the least solution of the constraint.  Hence,
-the generated constraint set is reduced to a single constraint
-\(\OK_{\nu}(P', F)\) for some behavioral type \(P'\).
+To solve the constraint \(OK_\nu(\alpha, F)\), we used several
+definitions proposed by Kobayashi et al.~\cite[Lemma
+  3.8]{DBLP:journals/lmcs/KobayashiSW06} which describe that a
+subtyping constraint \(\alpha \ge P\) can be resolved by setting
+\(\alpha = \mu \alpha. P\).  Therefore, the generated constraints set
+can be reduced to a single constraint \(\OK_{\nu}(P', F)\) for some
+behavioral type \(P'\).
 
 By definition, \(\OK_{\nu}(P, F)\) holds if there is a natural number
 \(n\) such that, for all \(\sigma\) and \(P'\), \(P
