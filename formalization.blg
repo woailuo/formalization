@@ -1,0 +1,48 @@
+This is BibTeX, Version 0.99d (TeX Live 2013)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: formalization.aux
+The style file: abbrv.bst
+Database file #1: tan.bib
+Warning--I didn't find a database entry for ""
+You've used 11 entries,
+            2118 wiz_defined-function locations,
+            602 strings with 7111 characters,
+and the built_in function-call counts, 5143 in all, are:
+= -- 520
+> -- 221
+< -- 11
++ -- 79
+- -- 67
+* -- 333
+:= -- 781
+add.period$ -- 42
+call.type$ -- 11
+change.case$ -- 59
+chr.to.int$ -- 0
+cite$ -- 11
+duplicate$ -- 226
+empty$ -- 419
+format.name$ -- 67
+if$ -- 1172
+int.to.chr$ -- 0
+int.to.str$ -- 11
+missing$ -- 11
+newline$ -- 58
+num.names$ -- 38
+pop$ -- 72
+preamble$ -- 1
+purify$ -- 48
+quote$ -- 0
+skip$ -- 190
+stack$ -- 0
+substring$ -- 337
+swap$ -- 101
+text.length$ -- 11
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 44
+warning$ -- 0
+while$ -- 55
+width$ -- 13
+write$ -- 134
+(There was 1 warning)
