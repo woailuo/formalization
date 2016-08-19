@@ -4,14 +4,16 @@ Memory usage is a crucial issue for real-world program, so lots of
 static verification method for memory usage have been
 proposed~\cite{DBLP:conf/aplas/SuenagaK09,DBLP:conf/pldi/HeineL03,DBLP:conf/sigsoft/XieA05,DBLP:journals/scp/SwamyHMGJ06,DBLP:conf/sas/OrlovichR06,DBLP:conf/issta/SuiYX12}. However,
 these static methods only guaranteed partial memory-leak freedom and
-lack of illegal accessing of dangling pointer.  In our previous
-work~\cite{}, we proposed a behavioral type system, inspired by
-Kobayashi et al.~\cite{DBLP:journals/lmcs/KobayashiSW06} which
-guarantees safety properties of resources usage for concurrent
-programs, to estimate the upper bound number of memory cells a program
-consumes and even guarantee memory-leak freedome for nonterminationg
-programs with other static methods. But verification failed for
-path-sensitive programs, therefore we extend previous behavioral type
-system with dependent type system.
+lack of illegal accessing of some pointers like null pointers or
+dangling pointers.  In our previous work~\cite{}, we proposed a
+behavioral type system, inspired by Kobayashi et
+al.~\cite{DBLP:journals/lmcs/KobayashiSW06} which guarantees safety
+properties of resources usage for concurrent programs, to estimate the
+upper bound number of memory cells a program consumes.  By using our
+behavioral type system with other static methods mentioned above, we
+can guarantee memory-leak freedom even for nonterminationg
+programs. But verification failed for path-sensitive programs,
+therefore we need to extend previous behavioral type system with
+dependent type system.
 
-The dependent types...
+The dependent types~\cite{DBLP:conf/popl/XiP99,DBLP:conf/pldi/XiP98} 
