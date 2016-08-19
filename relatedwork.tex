@@ -13,9 +13,11 @@ upper bound number of memory cells a program consumes.  By using our
 behavioral type system with other static methods mentioned above, we
 can guarantee memory-leak freedom even for nonterminating
 programs. But verification failed for path-sensitive programs,
-therefore we need to extend previous behavioral type system with
-dependent type system.
+therefore we need to assign more information on behavioral type to
+deal with this problem. Our idea is to extend our previous type system
+with dependent types.
 
-The dependent
-type~\cite{DBLP:conf/popl/XiP99,DBLP:conf/pldi/XiP98,DBLP:conf/tldi/Norell09,}
-takes more precise information than traditional type
+The dependent type~\cite{DBLP:conf/popl/XiP99,DBLP:conf/pldi/XiP98}
+takes more precise information than traditional type, and it can
+contain any values in types and appear as arguments and results of
+functions~\cite{DBLP:conf/tldi/Norell09}. By using this 
