@@ -15,7 +15,7 @@ The syntax of the language \(\mathcal{L}\) is as follows.
   d \mbox{ (proc. defs.)} & ::= & \set{f \mapsto (x_1,\dots,x_n)s}\\
   D \mbox{ (definitions) } &::=& \langle d_1 \cup \dots \cup d_n \rangle\\
   P \mbox{ (programs)} &::=& \langle D, s \rangle\\
-  E \mbox{ (context)} &::=& E;s \mid [ ] 
+  %% E \mbox{ (context)} &::=& E;s \mid [ ] 
 \end{eqnarray*}
 
 \paragraph{Notation} \(\vec{x}\) is for a finite sequence \(\{x_1,...,x_n\}\),
@@ -77,7 +77,7 @@ a labeled transition relation \(\langle H, R, s, n, C \rangle
 \xlongrightarrow{\rho}_D \langle H', R', s', n', C' \rangle\). The label
 \(\rho\) is an action, which is as follows.
 \begin{eqnarray*}
- \rho \mbox{ (label)} &::=& \Malloc(x') \mid \Free \mid \snull \mid \snnull \mid \tau %% \mid \sassx \mid \sassxn
+ \rho \mbox{ (label)} &::=& \Malloc \mid \Free \mid \snull \mid \snnull \mid \tau %% \mid \sassx \mid \sassxn
  %% &&\mid \Startconst \mid \Endconst \mid \tau  \\
 \end{eqnarray*}
 The action \(\Malloc(x')\) expresses an allocation of a new memory
@@ -115,10 +115,10 @@ f(w) & \mbox{otherwise.}
 \right.
 \end{array}
 \]
-and \(filter\_C(C, *x)\) is defined by a pseudcode as follows:
+and \(filter(C, *x)\) is defined by a pseudcode as follows:
 \[
 \begin{array}{lcl}
-  filter\_C(C, *x) &=& let \; C' = C - \scon\Sirx \; in \\
+  filter(C, *x) &=& let \; C' = C - \scon\Sirx \; in \\
   & & if \; \scon\Sirx \in \; C'\; then \; return \; C'\\
   & & else \; return \; C'\backslash\{\snull,\snnull \}
 \end{array}
@@ -192,7 +192,7 @@ there is \(\sigma\) such that \(\langle H, R, s, n, C \rangle
   \begin{minipage}{\textwidth}
 
  \infrule[Sem-ConstSkip]
-   {C' = filter\_C(C, *x)}
+   {C' = filter(C, *x)}
    {\langle H, R,
      \Endconst, n, C \rangle \rightarrow_{D} \langle
      H, R, \SKIP , n, C' \rangle}
@@ -269,7 +269,7 @@ there is \(\sigma\) such that \(\langle H, R, s, n, C \rangle
 \vspace{2mm}
 
 \infrule[Sem-Assign]
-{\scon\Sirx \notin C}
+{\forall z. R(x) = R(z) \Rightarrow \scon\Sirx \notin C}
 { \langle H \set{R(x) \mapsto v}, R, *x \leftarrow y , n, C\rangle \xlongrightarrow{}_{D}
   \langle H \Lfc R(x) \mapsto R(y) \Rfc , R, \SKIP , n, C \rangle }
 
@@ -293,7 +293,7 @@ there is \(\sigma\) such that \(\langle H, R, s, n, C \rangle
 \infrule[Sem-Malloc]
 {l \notin \DOM(H) \andalso n > 0}
 {\langle H\coma R\coma  \LET x = \Malloc() \; \IN s , n, C\rangle
-  \xlongrightarrow{\Malloc{(x')}}_{D}
+  \xlongrightarrow{\Malloc}_{D}
   \langle H \Lfc l \mapsto v\Rfc \coma R\Lfc x' \mapsto l \Rfc \coma   \Lb x'/x \Rb s , n-1, C  \rangle }
 
 \vspace{2mm}
@@ -326,7 +326,7 @@ there is \(\sigma\) such that \(\langle H, R, s, n, C \rangle
 \vspace{2mm}
 
 \infrule[Sem-AssignConstExn]
-{ \forall z.\scon(*z) \in C \mbox{ and } R(x) = R(z)}
+{ \exists z.\scon(*z) \in C \mbox{ and } R(x) = R(z)}
 { \langle H \set{R(x) \mapsto v}, R, *x \leftarrow y , n, C\rangle \xlongrightarrow{}_{D}
   \CONSTEX}
 
@@ -337,7 +337,7 @@ there is \(\sigma\) such that \(\langle H, R, s, n, C \rangle
 %% {\langle H, R, \scon\Sirx s, n, C \rangle \xlongrightarrow{\rho}_{D} \CONSTEX }
 
 \infax[Sem-OutOfMem]
-{ \langle H\coma R\coma \LET x = \Malloc() \ \IN s ,  0, C  \rangle    \xlongrightarrow{\Malloc{(x')}}_{D}
+{ \langle H\coma R\coma \LET x = \Malloc() \ \IN s ,  0, C  \rangle    \xlongrightarrow{\Malloc}_{D}
   \OVERFLOW}
 
 \end{minipage}
