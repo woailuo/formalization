@@ -40,17 +40,18 @@ memory cells; hence \(h'\) is not totally memory-leak free.
 In order to prove \emph{total} memory deallocation, we proposed a
 behavioral type system in previous study[]. It can abstract the
 behavior of a program by using sequential process whose actions
-represent manual memory management primitives, and our behavior type
-only consider the the number and order of manual memory management
-primitives and recursively calls. For example, the abstract behavioral
-type of function \(h\) in Figure~\ref{ex:np} is
+represent manual memory management primitives. For example, the
+abstract behavioral type of function \(h\) in Figure~\ref{ex:np} is
 \(\mu\alpha.\Malloc;\Malloc;\Free;\Free;\alpha\), which represents
 function \(h\) allocates two memory cells, deallocates them, and then
 recursively call itself again; the behavioral type of function \(h'\)
 is abstracted as \(\mu\alpha.\Malloc;\Malloc;\alpha;\Free;\Free\),
 which represents \(h'\) allocates two memory cells, call itself again,
-and then deallocates those two cells. That way we can easily estimate
-the upper bound of memory cells a program consumed.
+and then deallocates those two cells. From these two examples you may
+notice that our behavior type only consider the the number and order
+of manual memory management primitives and recursively calls. That way
+we can easily estimate the upper bound of memory cells a program
+consumed.
 
 Although our previours behavioral type system can abstract the
 behavior of a program and estimate the upper bound of memory
@@ -67,7 +68,7 @@ may be seen as \(
 expresses function \(foo\) consumes three memory cells but deallocates
 two memory cells, and then iterates this behavior again. This behavior
 means function \(foo\) consumes unbounded number of memory cells,
-although the original program is \emph{total} memory-leak freedom.
+although it is \emph{total} memory-leak freedom.
 
 \begin{exmp}\label{ex:ex2}
 \begin{figure}[h]
@@ -87,7 +88,7 @@ is not a null pointer, it will allocates one cell at first conditional
 and deallocates that cell at second conditional, otherwise skips.
 \end{exmp}
 
-Our current idea is to extend previous behavioral type system with
+My current idea is to extend previous behavioral type system with
 dependent types[]. The dependent types takes more precise information
 than traditional types, for example, the type
 \((*x)(\Malloc, \TSKIP)\) is a dependent type, because it dependents
@@ -96,16 +97,11 @@ behavioral type of it is \(
 \mu\alpha.\Malloc;\Malloc;(*x)(\Malloc, \TSKIP);(*x)(\Free, \TSKIP);\Free;\Free;\alpha
 \). Therefore, the part\((*x)(\Malloc, \TSKIP);(*x)(\Free, \TSKIP)\)
 can be seen as \(\Malloc;\Free\) or \(\TSKIP;\TSKIP\) if \((*x)\) does
-not change between these two choices, which we can definitely judge it
-is a total memory-leak free program.
+not change between these two choices, which expresses total
+memory-leak freedom.
 
-The reminder of this paper is structured as
-follows. Section~\ref{sec:language} describes an imperative language
-with allocation and deallocation primitives and its operational
-semantics. Section~\ref{sec:typesystem} introduces the extended
-behavioral type system with dependent
-types. Section~\ref{sec:reconstruction} describes the type
-reconstruction procedure; Section~\ref{sec:experiments} shows some
-experiments and give a discussion; Section~\ref{sec:relatedwork}
-describes the related works; Section~\ref{sec:conclusion} concludes
-this paper.
+[TODO] The reminder of this paper is structured as follows. Section 2
+describes an imperative language with allocation and deallocation
+primitives and its operational semantics. Section 3 introduces the
+behavioral type system with dependent types. Section 4 describes ...;
+Section 5 describes ...; Section 6 ....; Section 7 concludes ...;

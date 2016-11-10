@@ -1,7 +1,6 @@
 \section{Syntax Directed Typing Rules}
 
 \begin{minipage}{\textwidth}
-
 $$
      \frac{ C = \emptyset}
            {\Theta; \Gamma; C \vdash \SKIP : \mathbf{0}}
@@ -18,20 +17,6 @@ $$
       \Rtab \mbox{(ST-Assign)}
 $$
 $$
-\frac {\Theta;\Gamma;C_1 \vdash x \andalso C = C_1}
-      { \Theta; \Gamma; C \vdash \Endconst:\Endconst }
-      \Rtab \mbox{(ST-EndConst)}
-      $$
-
-$$
- \frac{ \Theta; \Gamma; C_1 \vdash x \andalso
-     \Theta; \Gamma; C_2 \vdash s:P_1 \andalso C =
-    C_1 \cup C_2 \cup \{ P_1 \le P \} }
-  {\Theta; \Gamma; C \vdash
-   \scon\Sirx s : \scon\Sirx P}
- \mbox{(ST-Const)}
-$$
-$$
       \frac
       {\Theta;\Gamma; C_1 \vdash x \andalso C = C_1}
       {\Gamma ; C \vdash \Free (x) : \Free}
@@ -39,17 +24,17 @@ $$
 $$
 $$
      \frac{\Theta;\Gamma, x ; C_{1} \vdash s : P_{1} \Rtab C = C_{1} \cup\{P_{1}\le P\}}
-     {\Theta;\Gamma; C \vdash \LET x = \Malloc() \; \IN s : \LET x = \Malloc \; \IN P}
+     {\Theta;\Gamma; C \vdash \LET x = \Malloc() \; \IN s : \Malloc ; P}
      \Rtab \mbox{(ST-Malloc)}
 $$
 $$
      \frac{\Theta;\Gamma; C_{1} \vdash y \Rtab \Theta;\Gamma, x ; C_{2} \vdash s : P_{1} \Rtab C = C_{1}\cup C_{2} \cup \{P_{1} \le P \}}
-     {\Theta;\Gamma ; C \vdash \LET x = y \;  \IN s : \LET x = y \; \IN  P}
+     {\Theta;\Gamma ; C \vdash \LET x = y \;  \IN s : P}
      \Rtab \mbox{(ST-LetEq)}
 $$
 $$
      \frac{\Theta;\Gamma ; C_{1} \vdash y \Rtab \Theta;\Gamma, x ; C_{2} \vdash s : P_{1} \Rtab C = C_{1}\cup C_{2}\cup\{P_{1} \le P\}}
-     {\Theta;\Gamma ; C \vdash \LET x = *y \; \IN s : \LET x = *y \; \IN P}
+     {\Theta;\Gamma ; C \vdash \LET x = *y \; \IN s : P}
      \Rtab \mbox{(ST-LetDref)}
 $$
 $$
@@ -63,11 +48,19 @@ $$
      \Rtab \mbox{(ST-Call)}
 $$
 $$
-     \frac{\Theta \vdash D : \Theta \Rtab \Theta ; \emptyset ; C_{1} \vdash s : P \Rtab C = C_{1}\cup\{OK_{n}(P, F)\}}
+     \frac{\Theta \vdash D : \Theta \Rtab \Theta ; \emptyset ; C_{1} \vdash s : P \Rtab C = C_{1}\cup\{OK_{n}(P)\}}
      {C \vdash (D , s) }
      \Rtab \mbox{(ST-Program)}
 $$
+\infrule[ST-EndConst]
+ {\Theta;\Gamma;C_1 \vdash x \andalso C = C_1}
+ { \Theta; \Gamma; C \vdash \Endconst:\Endconst }
 
-
+ \infrule[ST-Const]
+   { \Theta; \Gamma; C_1 \vdash x \andalso
+     \Theta; \Gamma; C_2 \vdash s:P_1 \andalso C =
+    C_1 \cup C_2 \cup \{ P_1 \le P \} }
+  {\Theta; \Gamma; C \vdash
+   \scon\Sirx s : \scon\Sirx P}
 \end{minipage}
 

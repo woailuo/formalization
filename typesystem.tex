@@ -18,31 +18,31 @@ The syntax of the types is as follows.
 \]
 
 Behavioral types ranged over by \(P\) express the abstaction of
-behaviors of a program. The type \({\bf 0}\) represents the “does
-nothing” behavior; the type \(P_1;P_2\) describes a sequential
-execution of behavioral type \(P_1\) and \(P_2\); The type \(\Malloc\)
-expresses an allocation of a memory cell; the type \(\Free\)
-represents a deallocation of a pointer; the type \(\mu \alpha.P\)
-represents a recursive substitution of \(\alpha\) in \(P\) ; the type
+behaviors of a program. The type \({\bf 0}\) represents the do-nothing
+behavior; the type \(P_1;P_2\) represents the sequential execution of
+\(P_1\) and \(P_2\); The type \(\Malloc\) represents an allocation of
+a memory cell exactly once; the type \(\Free\) represents a
+deallocation; the type \(\mu \alpha.P\) represents the behavior of
+\(\alpha\) defined by the recursive equation \(\alpha = P\); the type
 \(\Sirx(P_1,P_2)\) represents that \(P_1\) or \(P_2\) is obtained
-dependent on \(*x\), e.g., \(P_1\) is obtained if \(*x\) is not a null
-pointer, otherwise \(P_2\); the type \(P_1 + P_2\) represents the
-choice between \(P_1\) and \(P_2\); the \(\alpha\) is a type variable;
-the type \(\scon\Sirx P\) represents that \(*x\) is a constant value
-in type \(P\) ; the type \(\Endconst\) represents \(*x\) no longer be
-a constant from this point.
+dependent on \(*x\); the type \(P_1 + P_2\) represents the choice
+between \(P_1\) and \(P_2\); the \(\alpha\) is a type variable; the
+type \(\scon\Sirx P\) represents that \(*x\) is a constant in behavioral
+type \(P\) ; the type \(\Endconst\) represents \(*x\) no longer be a
+constant from this point.
 
 A type environments for variables ranged over by \(\Gamma\) is a set
-of variables without information about their types, because our
-focus is the behavior of a program.
+of variables.  Since our interest is the behavior of a program, not
+the types of values, a variable type environment does not carry
+information on the types of variables.
 
 Dependent function types ranged over by \(\Psi\) represents the
-behavior of a function. \(\vec{x}\) is the formal arguments of the
-function, and the behavioral type \(P\) obtained dependent on
-\(\vec{x}\).
+behavior of a function; \(\vec{x}\) is the formal arguments of the
+function.
 
 Function types ranged over by \(\Theta\) is a mapping from function names to dependent function types.
 
+<<<<<<< HEAD
 %% \(k\) represents constant values information, where \(\snull\) represents
 %% \(\Sirx\) is a null pointer; \(\snnull\) represents \(\Sirx\) is not a
 %% null pointer; \(\scon\Sirx\) represents \(\Sirx\) should be a constant.
@@ -70,6 +70,33 @@ system. The relation \( \langle P, C \rangle \xlongrightarrow{\rho}
 making action \(\rho\) respectively.
 
 
+=======
+\(k\) represents constant values, where \(\snull\) represents
+\(\Sirx\) is a null pointer; \(\snnull\) represents \(\Sirx\) is not a
+null pointer; \(\scon\Sirx\) represents \(\Sirx\) is a constant.
+
+Constant value environment ranged over by \(F\) is a set of constant
+variables.
+
+Figure~\ref{fig:bdRules} depicts semantics of behavioral types with
+dependent types, and they are given by the labeled transition
+system. The relation \( \langle P, F \rangle \xlongrightarrow{\rho}
+\langle P', F' \rangle \) means that \(P\) can make an action
+\(\rho\), and \(P\) turns into \(P'\) after it makes action \(\rho\);
+\(F\) and \(F'\) record constant value environment before and after
+action \(\rho\) respectively.
+
+\paragraph{Notation}
+\(filter\_T(F, *x)\) is defined by a pseudcode as follows:
+\[
+\begin{array}{lcl}
+  filter\_T(F, *x) &=& let \; F' = F - \scon\Sirx \; in \\
+  & & if \; \scon\Sirx \notin \; F'\; then \; return \; (F' \backslash \{\snull,\snnull\})\\
+  & & else \; return \; F'
+\end{array}
+\]
+
+>>>>>>> cbf9f98628ddf24a08c69bd0bc0f8a8c90557969
 \begin{figure}
  \begin{minipage}{\textwidth}
 
@@ -204,7 +231,11 @@ Before showing typing rules for statements in
 Figure~\ref{fig:TypingRules}, we need explain several important
 definitions. The first one is \(OK_n(P, C)\), a predicate, where \(P\)
 represents the behavior of a program which consumes at most \(n\)
+<<<<<<< HEAD
 memory cells under constant value environment \(C\).
+=======
+memory cells.
+>>>>>>> cbf9f98628ddf24a08c69bd0bc0f8a8c90557969
 
 \begin{myDef}[\(\sharp_{\rho}(\sigma)\)]
 \label{df:sharf}
@@ -231,9 +262,12 @@ memory cells under constant value environment \(C\).
 %% \(OK(C)\) holds, if \(\scon\Sirx \in C \), then \(C\) does not contain both \( \snull \) and \( \snnull \).
 %% \end{myDef}
 
+<<<<<<< HEAD
 Intuitively, \(OK_n(P, C)\) represents at very running steps, the
 number of memory cells a program consumed will not exceed the number
 of memory cells the program requires.
+=======
+>>>>>>> cbf9f98628ddf24a08c69bd0bc0f8a8c90557969
 
 \begin{myDef}[Subtyping]
 \( C\vdash P_1 \le P_2\) is the largest relation such that, for any
@@ -334,6 +368,7 @@ of memory cells the program requires.
 \label{fig:TypingRules}
 \end{figure}
 
+<<<<<<< HEAD
 Figure~\ref{fig:TypingRules} shows the typing rules. For example, the
 rule \rn{T-IfNull} represents the behavior of \(\IFNULL\Sirx \; \THEN
 s_{1}\; \ELSE s_{2}\) is abstracted as \(\Sirx(P_1, P_2)\) where
@@ -345,6 +380,8 @@ cells during running under the predication \(OK_n(P, C)\), where \(P\)
 is behavioral type of statement \(s\).
 
 
+=======
+>>>>>>> cbf9f98628ddf24a08c69bd0bc0f8a8c90557969
 \subsection{Type soundness}
 \begin{theorem}\label{thm1}
 If $\vdash \langle D, s \rangle : n$ for some \(n\), then \(\langle D,
