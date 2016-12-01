@@ -396,19 +396,23 @@ If \(consistency(H, R, C)\) and \(\langle H, R, s, n, C \rangle
   \item Case: \(\langle H, R, \scon(*y) s, n, C \rangle \rightarrow
     \langle H, R, s;\EndConst(*y), n', C \cup {\scon(*y)} \rangle \).
 
-    We need to prove \(consistency(H, R, C \cup {\scon(*y)})\). From
-    assumption \(consistency(H, R, C)\), we have for all \(x\) (1)
-    \(C\) does not contain both \(\snull\) and \(\snnull\), therefore
-    \(C \cup {\scon(*y)}\) does not contain both \(\snull\) and
-    \(\snnull\). (2) if \(\scon\Sirx \in C\) and \(\snull \in C\),
-    then \(H(R(x)) = null\). Assume that \(\scon\Sirx \in C\) and
-    \(\snull \in C\), then we have \(H(R(x)) = null\). Therefore,
-    \(\scon\Sirx \in C \cup {\scon(*y)}\) and \(\snull \in C \cup
-                 {\scon(*y)}\), then \(H(R(x)) = null\). \(H\) and
-                 \(R\) do not change, so \(H(R(x)) = null\). Then we
-                 get for all \(x\), if \(\scon\Sirx \in C \cup
-                 {\scon(*y)}\) and \(\snull \in C \cup {\scon(*y)}\),
-                 then \(H(R(x)) = null\). (3) similar to (2).
+    We need to prove \(consistency(H, R, C \cup {\scon(*y)})\). We
+    should prove for all \(x\) (1) if \(\snull \in C\cup\scon(*y)\),
+    then \(\scon\Sirx \in C\cup\scon(*y)\) and \(H(R(x)) = null\) if
+    \(H(R(x)\) is defined and (2) if \(\snnull \in C\cup\scon(*y)\),
+    then \(\scon\Sirx \in C\cup\scon(*y)\) and \(H(R(x)) \ne
+    null\). By case analysis, let \(\scon(*y) \in C\), so
+    \(C\cup\scon(*y)\) is C. Assuming \(\snull \in C\). By
+    hyphothesis, we have \(\scon\Sirx \in C\) and \(H(R(x)) = null\)
+    if \(H(R(x))\) is defined. Therefore we got if \(\snull \in
+    C\cup\scon(*y)\), then \(\scon\Sirx \in C\cup\scon(*y)\) and
+    \(H(R(x)) = null\) if \(H(R(x))\) is defined. Let \(\scon(*y)
+    \notin C\), and assume \(\snull \in C\cup\scon(*y)\). By
+    hypothesis, we have \(\scon\Sirx \in C\) and \(H(R(x)) = null\) if
+    \(H(R(x)\) is defined. Because \(C\) is subset of \(C \cup
+    \scon(*y)\), therefore we got if \(\snull \in C\cup\scon(*y)\),
+    then \(\scon\Sirx \in C\cup\scon(*y)\) and \(H(R(x)) = null\) if
+    \(H(R(x)\) is defined. So (1) holds. Similar to (1), (2) holds. 
                  
     Therefore, \(consistency(H, R, C \cup {\scon(*y)})\) holds.
 
@@ -728,10 +732,12 @@ By induction on the derivation of \(\langle H, R, s, n, C \rangle
   s_{1} \ \ELSE \ s_{2} \COL P \), \(OK_n(P, C)\) and \(consistency(H,
   R, C)\). From the inversion of typing rules, we have \(\Theta;
   \Gamma \vdash s_{1} \COL P_1\), \(\Theta; \Gamma \vdash s_{2} \COL
-  P_2\) and \((*x)(P_1, P_2) \le P\). By subtyping and \(\scon\Sirx
-  \notin C\), which means \(\scon\Sirx \notin C\), we get \(\langle P,
-  C \rangle \xLongrightarrow{\snull} \langle Q, C \rangle \) and \(P_1
-  \le Q\) for some \(Q\).
+  P_2\) and \((*x)(P_1, P_2) \le P\). According to the rule
+  Tr-NotConst1 and \(\scon\Sirx \notin C\), we have \(\langle
+  (*x)(P_1, P_2) \rangle \xlongrightarrow{\snull} \langle P_1,
+  C\rangle \), and then by definition of subtyping, we get \(\langle
+  P, C \rangle \xLongrightarrow{\snull} \langle Q, C \rangle \) and
+  \(P_1 \le Q\) for some \(Q\).
 
   We need to find \(P'\) and \(C'\) such that \(\Theta;\Gamma \vdash
   s_1\COL P'\), \( \langle P, C \rangle \xLongrightarrow{\snull}
@@ -759,8 +765,9 @@ By induction on the derivation of \(\langle H, R, s, n, C \rangle
   s_{1} \ \ELSE \ s_{2} \COL P \), \(OK_n(P, C)\) and \(consistency(H,
   R, C)\). From the inversion of typing rules, we have \(\Theta;
   \Gamma \vdash s_{1} \COL P_1\), \(\Theta; \Gamma \vdash s_{2} \COL
-  P_2\) and \((*x)(P_1, P_2) \le P\). By subtyping and \(\scon\Sirx
-  \in C\), we get \(\langle P, C \rangle \xLongrightarrow{\snull}
+  P_2\) and \((*x)(P_1, P_2) \le P\). According to rule Tr-NNullNotIn1, \(\scon\Sirx \in C\) and \(C' = C \cup \snull\), we have \(\langle
+  (*x)(P_1, P_2) \rangle \xlongrightarrow{\snull} \langle P_1,
+  C \cup \snull \rangle \), and then by the definition of subtyping, we get \(\langle P, C \rangle \xLongrightarrow{\snull}
   \langle Q, C\cup \{\snull\} \rangle \) and \(P_1 \le Q\) for some
   \(Q\).
   

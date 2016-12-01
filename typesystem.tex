@@ -42,7 +42,6 @@ function.
 
 Function types ranged over by \(\Theta\) is a mapping from function names to dependent function types.
 
-<<<<<<< HEAD
 %% \(k\) represents constant values information, where \(\snull\) represents
 %% \(\Sirx\) is a null pointer; \(\snnull\) represents \(\Sirx\) is not a
 %% null pointer; \(\scon\Sirx\) represents \(\Sirx\) should be a constant.
@@ -69,34 +68,6 @@ system. The relation \( \langle P, C \rangle \xlongrightarrow{\rho}
 \(C\) and \(C'\) record constant value environment before and after
 making action \(\rho\) respectively.
 
-
-=======
-\(k\) represents constant values, where \(\snull\) represents
-\(\Sirx\) is a null pointer; \(\snnull\) represents \(\Sirx\) is not a
-null pointer; \(\scon\Sirx\) represents \(\Sirx\) is a constant.
-
-Constant value environment ranged over by \(F\) is a set of constant
-variables.
-
-Figure~\ref{fig:bdRules} depicts semantics of behavioral types with
-dependent types, and they are given by the labeled transition
-system. The relation \( \langle P, F \rangle \xlongrightarrow{\rho}
-\langle P', F' \rangle \) means that \(P\) can make an action
-\(\rho\), and \(P\) turns into \(P'\) after it makes action \(\rho\);
-\(F\) and \(F'\) record constant value environment before and after
-action \(\rho\) respectively.
-
-\paragraph{Notation}
-\(filter\_T(F, *x)\) is defined by a pseudcode as follows:
-\[
-\begin{array}{lcl}
-  filter\_T(F, *x) &=& let \; F' = F - \scon\Sirx \; in \\
-  & & if \; \scon\Sirx \notin \; F'\; then \; return \; (F' \backslash \{\snull,\snnull\})\\
-  & & else \; return \; F'
-\end{array}
-\]
-
->>>>>>> cbf9f98628ddf24a08c69bd0bc0f8a8c90557969
 \begin{figure}
  \begin{minipage}{\textwidth}
 
@@ -175,8 +146,8 @@ action \(\rho\) respectively.
 \end{minipage}
 \begin{minipage}{0.5\textwidth}
 \infrule[Tr-NotConst2]
-{ \scon\Sirx \notin  }
-{ \langle \Sirx (P_1,P_2), C \rangle \xlongrightarrow{\snnull} \langle P_2,  \rangle }
+{ \scon\Sirx \notin C }
+{ \langle \Sirx (P_1,P_2), C \rangle \xlongrightarrow{\snnull} \langle P_2, C\rangle }
 \end{minipage}
 \vspace{2mm}
 %% \infrule[Tr-NullNotIn]
@@ -196,7 +167,7 @@ action \(\rho\) respectively.
 
 
 \infrule[Tr-NNullNotIn1]
-{ \snull, \snnull \notin C \andalso \scon\Sirx \in  }
+{ \snull, \snnull \notin C \andalso \scon\Sirx \in C}
 { \langle \Sirx (P_1,P_2), C \rangle \xlongrightarrow{\snull} \langle P_1, C\cup{\snull} \rangle }
 
 \infrule[Tr-NNullNotIn2]
@@ -231,11 +202,7 @@ Before showing typing rules for statements in
 Figure~\ref{fig:TypingRules}, we need explain several important
 definitions. The first one is \(OK_n(P, C)\), a predicate, where \(P\)
 represents the behavior of a program which consumes at most \(n\)
-<<<<<<< HEAD
 memory cells under constant value environment \(C\).
-=======
-memory cells.
->>>>>>> cbf9f98628ddf24a08c69bd0bc0f8a8c90557969
 
 \begin{myDef}[\(\sharp_{\rho}(\sigma)\)]
 \label{df:sharf}
@@ -262,12 +229,10 @@ memory cells.
 %% \(OK(C)\) holds, if \(\scon\Sirx \in C \), then \(C\) does not contain both \( \snull \) and \( \snnull \).
 %% \end{myDef}
 
-<<<<<<< HEAD
+
 Intuitively, \(OK_n(P, C)\) represents at very running steps, the
 number of memory cells a program consumed will not exceed the number
 of memory cells the program requires.
-=======
->>>>>>> cbf9f98628ddf24a08c69bd0bc0f8a8c90557969
 
 \begin{myDef}[Subtyping]
 \( C\vdash P_1 \le P_2\) is the largest relation such that, for any
@@ -308,7 +273,7 @@ of memory cells the program requires.
 \begin{minipage}{0.5\textwidth}
 \infrule[T-Malloc]
 {\Theta ; \Gamma,x \vdash s : P  \Rtab}
-{\Theta ; \Gamma \vdash \LET x = \MALLOC \; \IN s :\Malloc \;(x)P}
+{\Theta ; \Gamma \vdash \LET x = \MALLOC \; \IN s :\Malloc ; (x)P}
 \end{minipage}
 \begin{minipage}{0.5\textwidth}
 \infrule[T-LetEq]
@@ -368,7 +333,6 @@ of memory cells the program requires.
 \label{fig:TypingRules}
 \end{figure}
 
-<<<<<<< HEAD
 Figure~\ref{fig:TypingRules} shows the typing rules. For example, the
 rule \rn{T-IfNull} represents the behavior of \(\IFNULL\Sirx \; \THEN
 s_{1}\; \ELSE s_{2}\) is abstracted as \(\Sirx(P_1, P_2)\) where
@@ -380,8 +344,6 @@ cells during running under the predication \(OK_n(P, C)\), where \(P\)
 is behavioral type of statement \(s\).
 
 
-=======
->>>>>>> cbf9f98628ddf24a08c69bd0bc0f8a8c90557969
 \subsection{Type soundness}
 \begin{theorem}\label{thm1}
 If $\vdash \langle D, s \rangle : n$ for some \(n\), then \(\langle D,
@@ -405,10 +367,7 @@ immediate overflow.
 %% \end{myDef}
 \begin{myDef}
 \label{df:Rdu}
-\(consistency(H, R, C)\): for all \(x\) such that (1) \(C\) does not contain
-both \(\snnull\) and \(\snull\). (2) if \(\scon\Sirx \in C \) and
-\(\snull \in C\), then \(H(R(x)) = null\). (3) if \(\scon\Sirx \in C
-\) and \(\snnull \in C\), then \(H(R(x)) \neq null\).
+\(consistency(H, R, C)\): for all \(x\). (1) if \(\snull \in C\), then \(\scon\Sirx \in C \) and \(H(R(x)) = null\) if \(H(R(x))\) is defined (3) if \(\snnull \in C\), then \(\scon\Sirx \in C\) and \(H(R(x)) \neq null\) if \(H(R(x))\) is defined .
 \end{myDef}
 
 \begin{myDef}
