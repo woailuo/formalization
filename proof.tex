@@ -388,6 +388,7 @@ If \(consistency(H, R, C)\) and \(\langle H, R, s, n, C \rangle
 \(consistency(H', R', C')\).
 \end{lemma}
 
+    %% \(\textcircled{1}\)
 \begin{proof}
   By induction on \(\langle H, R, s, n, C \rangle
   \xlongrightarrow{\rho} \langle H', R', s', n', C'\rangle \)
@@ -396,130 +397,166 @@ If \(consistency(H, R, C)\) and \(\langle H, R, s, n, C \rangle
   \item Case: \(\langle H, R, \scon(*y) s, n, C \rangle \rightarrow
     \langle H, R, s;\EndConst(*y), n', C \cup {\scon(*y)} \rangle \).
 
-    We need to prove \(consistency(H, R, C \cup {\scon(*y)})\). We
-    should prove for all \(x\) (1) if \(\snull \in C\cup\scon(*y)\),
-    then \(\scon\Sirx \in C\cup\scon(*y)\) and \(H(R(x)) = null\) if
-    \(H(R(x)\) is defined and (2) if \(\snnull \in C\cup\scon(*y)\),
-    then \(\scon\Sirx \in C\cup\scon(*y)\) and \(H(R(x)) \ne
-    null\). By case analysis, let \(\scon(*y) \in C\), so
-    \(C\cup\scon(*y)\) is C. Assuming \(\snull \in C\). By
-    hyphothesis, we have \(\scon\Sirx \in C\) and \(H(R(x)) = null\)
-    if \(H(R(x))\) is defined. Therefore we got if \(\snull \in
-    C\cup\scon(*y)\), then \(\scon\Sirx \in C\cup\scon(*y)\) and
-    \(H(R(x)) = null\) if \(H(R(x))\) is defined. Let \(\scon(*y)
-    \notin C\), and assume \(\snull \in C\cup\scon(*y)\). By
-    hypothesis, we have \(\scon\Sirx \in C\) and \(H(R(x)) = null\) if
-    \(H(R(x)\) is defined. Because \(C\) is subset of \(C \cup
-    \scon(*y)\), therefore we got if \(\snull \in C\cup\scon(*y)\),
-    then \(\scon\Sirx \in C\cup\scon(*y)\) and \(H(R(x)) = null\) if
-    \(H(R(x)\) is defined. So (1) holds. Similar to (1), (2) holds. 
-                 
+    We need to prove \(consistency(H, R, C \cup {\scon(*y)})\). Form
+    assumption \(consistency(H, R, C)\), we have (1) \(\forall x\).if
+    \(\snull \in C\), then \(\scon\Sirx \in C\) and if \(H(R(x))\) is
+    defined then \(H(R(x)) = null\) and (2) \(\forall x\).if
+    \(\snnull \in C\), then \(\scon\Sirx \in C\) and if \(H(R(x))\) is
+    defined then \(H(R(x)) \ne null\).
+
+    To prove \(consistency(H, R, C \cup {\scon(*y)})\), we chose \(z\)
+    arbitrarily. (3) Assuming \(\NULL(*z) \in C\cup{\scon(*y)}\). This
+    implies \(\NULL(*z) \in C\). By using (1), we have \(\scon(*z) \in
+    C\), and this implies \(\scon(*z) \in C \cup
+    \scon(*y)\). Assuming \(H(R(z))\) is defined, then \(H(R(z)) =
+    null\) from (1). (4) Assuming \(\neg\NULL(*z) \in C\cup{\scon(*y)}\). This
+    implies \(\neg\NULL(*z) \in C\). By using (2), we have \(\scon(*z) \in
+    C\). This implies \(\scon(*z) \in C \cup
+    \scon(*y)\). Assuming \(H(R(z))\) is defined, then \(H(R(z)) \ne
+    null\) from (2). 
+    
     Therefore, \(consistency(H, R, C \cup {\scon(*y)})\) holds.
 
 \item Case: \(\langle H, R, \EndConst(*y), n, C \rangle \rightarrow
     \langle H, R, skip, n, C'\rangle \) where \(C' = filter(C, *y)\).
 
-    We need to prove \(consistency(H, R, C'\) where \(C' = filter(C,
-    *y)\). From assumption \(consistency(H, R, C)\), we have for all
-    \(x\) (1) \(C\) does not contain both \(\snull\) and
-    \(\snnull\). From definition of function \(filter(C, *y)\), we
-    know for all x \(C'\) does not contain both \(\snull\) and
-    \(\snnull\). (2) if \(\scon\Sirx \in C\) and \(\snull \in C\),
-    then \(H(R(x)) = null\). Assume that \(\scon\Sirx \in C\) and
-    \(\snull \in C\), then from the definition of \(filter(C, *y)\),
-    we know \(\scon\Sirx \in C'\) and \(\snull \in C'\), and \(H\) and
-    \(R\) do not change, so \(H(R(x)) = null\). Therefore, for all
-    \(x\) if \(\scon\Sirx \in C'\) and \(\snull \in C'\), then
-    \(H(R(x)) = null\). (3) similar to (2).
-                 
-    Therefore, \(consistency(H, R, C'\) holds.
+    We need to prove \(consistency(H, R, C')\) where \(C' = filter(C,
+    *y)\). From assumption \(consistency(H, R, C)\), we have (1)
+    \(\forall x\).if \(\snull \in C\), then \(\scon\Sirx \in C\) and
+    if \(H(R(x))\) is defined then \(H(R(x)) = null\) and (2)
+    \(\forall x\).if \(\snnull \in C\), then \(\scon\Sirx \in C\) and
+    if \(H(R(x))\) is defined then \(H(R(x)) \ne null\).
+
+    To prove \(consistency(H, R, C')\), we chose \(z\)
+    arbitrarily. From the definition of function \(filter(C, *y)\), we
+    know (3) if \(\scon(*y) \in (C - \scon(*y))\) then we have \(C' =
+    C - \scon(*y)\), otherwise we have \(C' = (C -
+    \scon(*y))\backslash\{\snull, \snnull\}\). From (3) we have \(C'
+    \in C\). (4) Assuming \(\NULL(*z) \in C'\), this implies
+    \(\NULL(*z) \in C\). From (1) we have \(\scon(*z) \in C\). Now we
+    want to get \(\scon(*z) \in C'\). We should consider two cases:
+    \(z \ne y\) and \(z = y\). If \(z \ne y\) then we have \(\scon(*z)
+    \in C'\) from (3); if \(z = y\), and because \(\NULL(*z) \in C'\),
+    then we have \(\scon(*z) \in C'\). Assuming \(H(R(z))\) is
+    defined, then we have \(H(R(z)) = null\) from (1). (5) Assuming
+    \(\neg\NULL(*z) \in C'\). The similar to (4).
+
+    Therefore, \(consistency(H, R, C')\) holds.
 
   \item Case: \(\langle H, R, \Free(y), n, C \rangle \xlongrightarrow{\Free}
     \langle H\backslash R(y), R, skip, n+1, C  \rangle \).
 
     We need to prove \(consistency(H\backslash R(y), R, C\). From
-    assumption \(consistency(H, R, C)\), we have for all \(x\) (1)
-    \(C\) does not contain both \(\snull\) and \(\snnull\). (2) if
-    \(\scon\Sirx \in C\) and \(\snull \in C\), then \(H(R(x)) =
-    null\). Assume that \(\scon\Sirx \in C\) and \(\snull \in C\), and
-    we know \((H\backslash R(y))(R(x)) = null\). Therefore, for all
-    \(x\), if \(\scon\Sirx \in Cc\) and \(\snull \in C\), then
-    \((H\backslash R(y))(R(x)) = null\). (3) similar to (2).
+    assumption \(consistency(H, R, C)\), we have (1) \(\forall x\).if
+    \(\snull \in C\), then \(\scon\Sirx \in C\) and if \(H(R(x))\) is
+    defined then \(H(R(x)) = null\) and (2) \(\forall x\).if
+    \(\snnull \in C\), then \(\scon\Sirx \in C\) and if \(H(R(x))\) is
+    defined then \(H(R(x)) \ne null\).
+
+    To prove \(consistency(H\backslash R(y), R, C\), we chose \(z\)
+    arbitrarily. (3) Assuming \(\NULL(*z) \in C\). By using (1), we
+    have \(\scon(*z) \in C\). Assuming \(H(R(z))\) is defined, we have
+    \(H(R(z)) = null\) from (1). We know that \(y\) has been
+    deallocated from \(H\), so if \( z = y \) then \(H\backslash
+    R(y)(R(z))\) is not defined, otherwise \(H\backslash R(y)(R(z))\)
+    is defined and \(H\backslash R(y)(R(z)) = H(R(z)) = null\). (4)
+    Assuming \(\NULL(*z) \in C\), By using (2), we have \(\scon(*z)
+    \in C\). Assuming \(H(R(z))\) is defined, we have \(H(R(z)) \ne
+    null\) from (2). We know that \(y\) has been deallocated from
+    \(H\), so if \( z = y \) then \(H\backslash R(y)(R(z))\) is not
+    defined, otherwise \(H\backslash R(y)(R(z))\) is defined and
+    \(H\backslash R(y)(R(z)) = H(R(z)) \ne null\).
 
     Therefore, \(consistency(H\backslash R(y), R, C\) holds.
-    
-    
-\item Case: \(\langle H, R, \LET y = \Malloc \IN s, n, C \rangle
+        
+\item Case: \(\langle H, R, \LET y = \Malloc \; \IN s, n, C \rangle
   \xlongrightarrow{\Malloc} \langle H\set{l \mapsto v}, R\set{x'
-    \mapsto l}, [x'/y]s, n', C \rangle \).
+    \mapsto l}, [x'/y]s, n', C \rangle \) where \(x' \notin
+  \DOM(H)\cup\DOM(R)\cup fv(C) \)
 
     We need to prove \(consistency(H\set{l \mapsto v}, R\set{x'
       \mapsto l}, C )\). From assumption \(consistency(H, R, C)\), we
-    have for all \(x\) (1) \(C\) does not contain both \(\snull\) and
-    \(\snnull\). (2) if \(\scon\Sirx \in C\) and \(\snull \in C\),
-    then \(H(R(x)) = null\). Assume that \(\scon\Sirx \in C\) and
-    \(\snull \in C\), then we have \(H(R(x)) = null\), and we know
-    \(H\set{l \mapsto v}(R{x' \mapsto v}(x)) = null \). Therefore, we
-    get for all \(x\), if \(\scon\Sirx \in C \) and
-    \(\snull \in C \), then \(H\set{l \mapsto v}(R{x'
-      \mapsto v}(x)) = null \). (3) similar to (2).
-                 
+    have (1) \(\forall x\).if \(\snull \in C\), then \(\scon\Sirx \in
+    C\) and if \(H(R(x))\) is defined then \(H(R(x)) = null\) and (2)
+    \(\forall x\).if \(\snnull \in C\), then \(\scon\Sirx \in C\) and
+    if \(H(R(x))\) is defined then \(H(R(x)) \ne null\).
+
+    To prove \(consistency(H\set{l \mapsto v}, R\set{x' \mapsto l}, C
+    )\), we chose \(z\) arbitrarily. (3) Assuming \(\NULL(*z) \in
+    C\). From (1) we have \(\scon(*z) \in C\). Assuming \(H(R(z))\) is
+    defined, we have \(H(R(z)) = null \) from (1). We have \(x' \notin
+    \DOM(H)\cup\DOM(R)\cup fv(C) \), so \(z \ne x'\). Therefore we get
+    \(H\set{l \mapsto v}(R\set{x' \mapsto l}z) = H(R(z)) = null\). (4)
+    Assuming \(\neg\NULL(*z) \in C\). similar to (3).
+    
     Therefore, \(consistency(H\set{l \mapsto v}, R\set{x' \mapsto l},
     C )\) holds.
 
 \item Case: \(\langle H, R, skip;s, n, C \rangle \rightarrow
     \langle H, R, s, n', C \rangle \).
 
-    We need to prove \(consistency(H, R, C) \). Obviously, from
-    assumption \(consistency(H, R, C) \).
+    Obviously, \(consistency(H, R, C) \) holds form assumption.
 
 \item Case: \(\langle H\set{R(w) \mapsto v}, R, *w \leftarrow y, n, C
   \rangle \rightarrow \langle H\set{R(w) \mapsto R(y)}, R, skip, n, C
   \rangle \) where \( \forall z. R(w) = R(z) \Rightarrow \scon(*z)
   \notin C \)
 
-    We need to prove \(consistency(H\set{R(w) \mapsto R(y)}, R, C \). From assumption \(consistency(H, R, C)\), we have
-    for all \(x\) (1) \(C\) does not contain both \(\snull\) and
-    \(\snnull\) (2) if \(\scon\Sirx \in C\) and \(\snull \in C\), then
-    \(H\set{R(w) \mapsto v}(R(x)) = null\). Assume that \(\scon\Sirx
-    \in C\) and \(\snull \in C\), then we have \(H\set{R(w) \mapsto
-      v}(R(x)) = null\), and we know \(H\set{R(w) \mapsto R(y)}(R(x))
-    = null\). Therefore, for all x, if \(\scon\Sirx \in C \) and
-    \(\snull \in C \), then \(H\set{R(w) \mapsto R(y)}(R(x)) =
-    null\). (3) similar to (2).
-                 
+    We need to prove \(consistency(H\set{R(w) \mapsto R(y)}, R, C)
+    \). From assumption \(consistency(H, R, C)\), we have (1)
+    \(\forall x\).if \(\snull \in C\), then \(\scon\Sirx \in C\) and
+    if \(H\set{R(w)\mapsto v}(R(x))\) is defined then \(H\set{R(w) \mapsto
+      v}(R(x)) = null\) and (2) \(\forall x\).if \(\snnull \in C\),
+    then \(\scon\Sirx \in C\) and if \(H\set{R(w)\mapsto v}(R(x))\) is
+    defined then \(H\set{R(w) \mapsto v}(R(x)) = null\).
+
+    To prove \(consistency(H\set{R(w) \mapsto R(y)}, R, C) \), we chose
+    \(m\) arbitrarily. (3) Assuming \(\NULL(*m) \in C\). By using (1),
+    we have \(\scon(*m) \in C\). Then assuming \(H\set{R(w)\mapsto
+      v}(R(m))\) is defined, we have \(H\set{R(w)\mapsto v}(R(m)) = null\)
+    from (1). Because we know \( \forall z. R(w) = R(z) \Rightarrow
+    \scon(*z) \notin C \) and \(\scon(*m) \in C\), we have \(m \ne
+    w\), then we have \(H\set{R(w)\mapsto R(y)}(R(m)) = H\set{R(w) \mapsto
+      v}(R(m)) = null\) . (4) Assuming \(\neg\NULL(*m) \in C\). Similar to (3).
+    
     Therefore, \(consistency(H\set{R(w) \mapsto R(y)}, R, C)\) holds.
 
-
-\item Case: \(\langle H, R, \LET z = y \IN s, n, C
-  \rangle \rightarrow \langle H, R\set{z' \mapsto R(y)}, [z'/z], n, C
-  \rangle \)
+\item Case: \(\langle H, R, \LET z = y \; \IN s, n, C
+  \rangle \rightarrow \langle H, R\set{z' \mapsto R(y)}, [z'/z]s, n, C
+  \rangle \) where \(z' \notin \DOM(H)\cup\DOM(R)\cup fv(C) \)
   
-  We need to prove \(consistency(H, R\set{z' \mapsto R(y)}, C \). From
-  assumption \(consistency(H, R, C)\), we have for all \(x\) (1) \(C\)
-  does not contain both \(\snull\) and \(\snnull\) (2) if \(\scon\Sirx
-  \in C\) and \(\snull \in C\), then \(H(R(x)) = null\). Assume that
-  \(\scon\Sirx \in C\) and \(\snull \in C\), then we have \(H(R(x)) =
-  null\), and we get \(H(R\set{z' \mapsto R(y)}) = null\). Therefore,
-  for all x, if \(\scon\Sirx \in C \) and \(\snull \in C \), then
-  \(H(R\set{z' \mapsto R(y)}) = null\) . (3) similar to (2).
-                 
-    Therefore, \(consistency(H, R\set{z' \mapsto R(y)}, C)\) holds.
+  We need to prove \(consistency(H, R\set{z'\mapsto R(y)}, C \). From
+  assumption \(consistency(H, R, C)\), we have (1) \(\forall x\).if
+  \(\snull \in C\), then \(\scon\Sirx \in C\) and if \(H(R(x))\) is
+  defined then \(H(R(x)) = null\) and (2) \(\forall x\).if \(\snnull
+  \in C\), then \(\scon\Sirx \in C\) and if \(H(R(x))\) is defined
+  then \(H(R(x)) \ne null\).
 
+  To prove \(consistency(H, R\set{z'\mapsto R(y)}, C \), we chose
+  \(m\) arbitrarily. (3) Assuming \(\NULL(*m) \in C\). By using (1),
+  we have \(\scon(*m) \in C\). Then assuming \(H(R(m))\) is defined,
+  we have \(H(R(m)) = null\) from (1). Because we have \(z' \notin
+  \DOM(H)\cup\DOM(R)\cup fv(C) \), we have \(m \ne z'\), then we have
+  \( H(R\set{z' \mapsto R(y)}(m)) = H(R(m)) = null\). (4) Assuming
+  \(\neg\NULL(*m) \in C\). By using (2), we have \(\scon(*m) \in C\). Then
+  assuming \(H(R(m))\) is defined, we have \(H(R(m)) \ne null\) from
+  (2). Because we have \(z' \notin \DOM(H)\cup\DOM(R)\cup fv(C) \), we
+  have \(m \ne z'\), then we have \( H(R\set{z' \mapsto R(y)}(m)) =
+  H(R(m)) \ne null\).
+  
+  Therefore, \(consistency(H, R\set{z' \mapsto R(y)}, C)\) holds.
 
 \item Case: \(\langle H, R, \IFNULL(*y) \ \THEN s_1\ \ELSE\ s_2, n, C
   \rangle \xlongrightarrow{\NULL(*y)} \langle H, R, s_1, n, C \rangle \)
   where \( H(R(y)) = null \) and \(\scon(*y) \notin C\)
 
-  We need to prove \(consistency(H, R, C) \). Obviously,
-  \(consistency(H, R, C) \) holds from assumption.
+  Obviously, \(consistency(H, R, C) \) holds from assumption.
 
 \item Case: \(\langle H, R, \IFNULL(*y) \ \THEN s_1\ \ELSE\ s_2, n, C
   \rangle \xlongrightarrow{\neg\NULL(*y)} \langle H, R, s_2, n, C \rangle \)
   where \( H(R(y)) \ne null \) and \(\scon(*y) \notin C\)
 
-  We need to prove \(consistency(H, R, C) \). Obviously,
-  \(consistency(H, R, C) \) holds from assumption.
+ Obviously, \(consistency(H, R, C) \) holds from assumption.
 
 
 \item Case: \(\langle H, R, \IFNULL(*y) \ \THEN s_1\ \ELSE\ s_2, n, C
@@ -527,23 +564,23 @@ If \(consistency(H, R, C)\) and \(\langle H, R, s, n, C \rangle
   \rangle \) where \( H(R(y)) =  null \) and \(\scon(*y) \in C\)
   
   We need to prove \(consistency(H, R, C\cup{\NULL(*y)} \). From
-  assumption \(consistency(H, R, C)\), we have for all \(x\) (1) \(C\)
-  does not contain both \(\snull\) and \(\snnull\). Assume that
-  \(\neg\NULL(*y) \in C\), and because we know \(\scon(*y) \in C\),
-  then \(H(R(y)) \ne null\). Then we get the contradiction \(H(R(y))\)
-  should be null. Therefore \(\neg\NULL(*y) \notin C\). Then we get
-  for all \(x\), \(C \cup{\NULL(*y)}\) does not contain both
-  \(\snull\) and \(\snnull\).  (2) if \(\scon\Sirx \in C\) and
-  \(\snull \in C\), then \(H(R(x)) = null\). Assume that \(\scon\Sirx
-  \in C\) and \(\snull \in C\), then we have \(H(R(x)) = null\),
-  therefore\(\scon\Sirx \in C\cup{\NULL(*y)}\) and \(\snull \in
-  C\cup{\NULL(*y)}\). \(H\) and \(R\) do not change, so \(H(R(x)) =
-  null\). Therefore, we get for all \(x\), if \(\scon\Sirx \in C\cup{\NULL(*y)} \)
-  and \(\snull \in C\cup{\NULL(*y)} \), then \(H(R(x)) = null\)
-  . (3) similar to (2).
+  assumption \(consistency(H, R, C)\), we have (1) \(\forall x\).if
+  \(\snull \in C\), then \(\scon\Sirx \in C\) and if \(H(R(x))\) is
+  defined then \(H(R(x)) = null\) and (2) \(\forall x\).if \(\snnull
+  \in C\), then \(\scon\Sirx \in C\) and if \(H(R(x))\) is defined
+  then \(H(R(x)) \ne null\).
+
+  To prove \(consistency(H, R, C\cup{\NULL(*y)} \), we chose \(z\)
+  arbitrarily. (3) Assuming \(\NULL(*z) \in C\cup\NULL(*y)\). This
+  implies \(\NULL(*z) \in C\). By using (1), we have \(\scon(*z) \in
+  C\). This implies \(\scon(*z) \in C\cup\NULL(*y)\). Assuming
+  \(H(R(z))\) is defined, then we have \(H(R(z)) = null\) from
+  (1). (4) Assuming \(\neg\NULL(*z) \in C\cup\NULL(*y)\). This implies
+  \(\neg\NULL(*z) \in C\). By using (2), we have \(\scon(*z) \in C\). This
+  implies \(\scon(*z) \in C\cup\NULL(*y)\). Assuming \(H(R(z))\) is
+  defined, then we have \(H(R(z)) \ne null\) from (2). 
                  
-  Therefore, \(consistency(H, R, C\cup{*y})\) holds.
-  
+  Therefore, \(consistency(H, R, C\cup{\NULL(*y)})\) holds.
 
  \end{itemize}
 \end{proof}
