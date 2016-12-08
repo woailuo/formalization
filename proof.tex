@@ -262,17 +262,17 @@ By induction on \(\langle P, C \rangle \xlongrightarrow{\rho} \langle P', C' \ra
 \begin{lemma}
 \label{lem:consistency}
 If \(consistency(H, R, C)\) and \(\langle H, R, s, n, C \rangle
-\xlongrightarrow{\rho} \langle H', R', s', n', C'\rangle \), then
+\xlongrightarrow{\rho}_D \langle H', R', s', n', C'\rangle \), then
 \(consistency(H', R', C')\).
 \end{lemma}
 
     %% \(\textcircled{1}\)
 \begin{proof}
   By induction on \(\langle H, R, s, n, C \rangle
-  \xlongrightarrow{\rho} \langle H', R', s', n', C'\rangle \)
+  \xlongrightarrow{\rho}_D \langle H', R', s', n', C'\rangle \)
  \begin{itemize}
     
-  \item Case: \(\langle H, R, \scon(*y) s, n, C \rangle \rightarrow
+  \item Case: \(\langle H, R, \scon(*y) s, n, C \rangle \rightarrow_D
     \langle H, R, s;\EndConst(*y), n', C \cup {\scon(*y)} \rangle \).
 
     We need to prove \(consistency(H, R, C \cup {\scon(*y)})\). Form
@@ -295,7 +295,7 @@ If \(consistency(H, R, C)\) and \(\langle H, R, s, n, C \rangle
     
     Therefore, \(consistency(H, R, C \cup {\scon(*y)})\) holds.
 
-\item Case: \(\langle H, R, \EndConst(*y), n, C \rangle \rightarrow
+\item Case: \(\langle H, R, \EndConst(*y), n, C \rangle \rightarrow_D
     \langle H, R, skip, n, C'\rangle \) where \(C' = filter(C, *y)\).
 
     We need to prove \(consistency(H, R, C')\) where \(C' = filter(C,
@@ -309,8 +309,8 @@ If \(consistency(H, R, C)\) and \(\langle H, R, s, n, C \rangle
     arbitrarily. From the definition of function \(filter(C, *y)\), we
     know (3) if \(\scon(*y) \in (C - \scon(*y))\) then we have \(C' =
     C - \scon(*y)\), otherwise we have \(C' = (C -
-    \scon(*y))\backslash\{\snull, \snnull\}\). From (3) we have \(C'
-    \in C\). (4) Assuming \(\NULL(*z) \in C'\), this implies
+    \scon(*y))\backslash\{\NULL(*y), \neg\NULL(*y)\}\). From (3) we have \(C'
+    \subseteq C\). (4) Assuming \(\NULL(*z) \in C'\), this implies
     \(\NULL(*z) \in C\). From (1) we have \(\scon(*z) \in C\). Now we
     want to get \(\scon(*z) \in C'\). We should consider two cases:
     \(z \ne y\) and \(z = y\). If \(z \ne y\) then we have \(\scon(*z)
@@ -321,34 +321,34 @@ If \(consistency(H, R, C)\) and \(\langle H, R, s, n, C \rangle
 
     Therefore, \(consistency(H, R, C')\) holds.
 
-  \item Case: \(\langle H, R, \Free(y), n, C \rangle \xlongrightarrow{\Free}
+  \item Case: \(\langle H, R, \Free(y), n, C \rangle \xlongrightarrow{\Free}_D
     \langle H\backslash R(y), R, skip, n+1, C  \rangle \).
 
-    We need to prove \(consistency(H\backslash R(y), R, C\). From
+    We need to prove \(consistency(H\backslash R(y), R, C)\). From
     assumption \(consistency(H, R, C)\), we have (1) \(\forall x\).if
     \(\snull \in C\), then \(\scon\Sirx \in C\) and if \(H(R(x))\) is
     defined then \(H(R(x)) = null\) and (2) \(\forall x\).if
     \(\snnull \in C\), then \(\scon\Sirx \in C\) and if \(H(R(x))\) is
     defined then \(H(R(x)) \ne null\).
 
-    To prove \(consistency(H\backslash R(y), R, C\), we chose \(z\)
+    To prove \(consistency(H\backslash R(y), R, C)\), we chose \(z\)
     arbitrarily. (3) Assuming \(\NULL(*z) \in C\). By using (1), we
     have \(\scon(*z) \in C\). Assuming \(H(R(z))\) is defined, we have
-    \(H(R(z)) = null\) from (1). We know that \(y\) has been
-    deallocated from \(H\), so if \( z = y \) then \(H\backslash
-    R(y)(R(z))\) is not defined, otherwise \(H\backslash R(y)(R(z))\)
-    is defined and \(H\backslash R(y)(R(z)) = H(R(z)) = null\). (4)
+    \(H(R(z)) = null\) from (1). We know that \(R(y)\) has been
+    deallocated from \(H\), so if \( z = y \) then \((H\backslash
+    R(y))(R(z))\) is not defined, otherwise \((H\backslash R(y))(R(z))\)
+    is defined and \((H\backslash R(y))(R(z)) = H(R(z)) = null\). (4)
     Assuming \(\NULL(*z) \in C\), By using (2), we have \(\scon(*z)
     \in C\). Assuming \(H(R(z))\) is defined, we have \(H(R(z)) \ne
     null\) from (2). We know that \(y\) has been deallocated from
-    \(H\), so if \( z = y \) then \(H\backslash R(y)(R(z))\) is not
-    defined, otherwise \(H\backslash R(y)(R(z))\) is defined and
-    \(H\backslash R(y)(R(z)) = H(R(z)) \ne null\).
+    \(H\), so if \( z = y \) then \((H\backslash R(y))(R(z))\) is not
+    defined, otherwise \((H\backslash R(y))(R(z))\) is defined and
+    \((H\backslash R(y))(R(z)) = H(R(z)) \ne null\).
 
-    Therefore, \(consistency(H\backslash R(y), R, C\) holds.
+    Therefore, \(consistency(H\backslash R(y), R, C)\) holds.
         
 \item Case: \(\langle H, R, \LET y = \Malloc \; \IN s, n, C \rangle
-  \xlongrightarrow{\Malloc} \langle H\set{l \mapsto v}, R\set{x'
+  \xlongrightarrow{\Malloc}_D \langle H\set{l \mapsto v}, R\set{x'
     \mapsto l}, [x'/y]s, n', C \rangle \) where \(x' \notin
   \DOM(H)\cup\DOM(R)\cup fv(C) \)
 
@@ -370,13 +370,13 @@ If \(consistency(H, R, C)\) and \(\langle H, R, s, n, C \rangle
     Therefore, \(consistency(H\set{l \mapsto v}, R\set{x' \mapsto l},
     C )\) holds.
 
-\item Case: \(\langle H, R, skip;s, n, C \rangle \rightarrow
+\item Case: \(\langle H, R, skip;s, n, C \rangle \rightarrow_D
     \langle H, R, s, n', C \rangle \).
 
     Obviously, \(consistency(H, R, C) \) holds form assumption.
 
 \item Case: \(\langle H\set{R(w) \mapsto v}, R, *w \leftarrow y, n, C
-  \rangle \rightarrow \langle H\set{R(w) \mapsto R(y)}, R, skip, n, C
+  \rangle \rightarrow_D \langle H\set{R(w) \mapsto R(y)}, R, skip, n, C
   \rangle \) where \( \forall z. R(w) = R(z) \Rightarrow \scon(*z)
   \notin C \)
 
@@ -386,24 +386,24 @@ If \(consistency(H, R, C)\) and \(\langle H, R, s, n, C \rangle
     if \(H\set{R(w)\mapsto v}(R(x))\) is defined then \(H\set{R(w) \mapsto
       v}(R(x)) = null\) and (2) \(\forall x\).if \(\snnull \in C\),
     then \(\scon\Sirx \in C\) and if \(H\set{R(w)\mapsto v}(R(x))\) is
-    defined then \(H\set{R(w) \mapsto v}(R(x)) = null\).
+    defined then \(H\set{R(w) \mapsto v}(R(x)) \ne null\).
 
-    To prove \(consistency(H\set{R(w) \mapsto R(y)}, R, C) \), we chose
-    \(m\) arbitrarily. (3) Assuming \(\NULL(*m) \in C\). By using (1),
-    we have \(\scon(*m) \in C\). Then assuming \(H\set{R(w)\mapsto
-      v}(R(m))\) is defined, we have \(H\set{R(w)\mapsto v}(R(m)) = null\)
-    from (1). Because we know \( \forall z. R(w) = R(z) \Rightarrow
-    \scon(*z) \notin C \) and \(\scon(*m) \in C\), we have \(m \ne
-    w\), then we have \(H\set{R(w)\mapsto R(y)}(R(m)) = H\set{R(w) \mapsto
-      v}(R(m)) = null\) . (4) Assuming \(\neg\NULL(*m) \in C\). Similar to (3).
+    To prove \(consistency(H\set{R(w) \mapsto R(y)}, R, C) \), we
+    chose \(m\) arbitrarily. (3) Assuming \(\NULL(*m) \in C\). By
+    using (1), we have \(\scon(*m) \in C\). Because we know \( \forall
+    z. R(w) = R(z) \Rightarrow \scon(*z) \notin C \), we have \(m \ne
+    w\). Then assuming \(H\set{R(w)\mapsto v}(R(m))\) is defined, we
+    have \(H\set{R(w)\mapsto v}(R(m)) = null\) from (1). Then we
+    get \(H\set{R(w)\mapsto R(y)}(R(m)) = H\set{R(w) \mapsto v}(R(m))
+    = null\) . (4) Assuming \(\neg\NULL(*m) \in C\). Similar to (3).
     
     Therefore, \(consistency(H\set{R(w) \mapsto R(y)}, R, C)\) holds.
 
 \item Case: \(\langle H, R, \LET z = y \; \IN s, n, C
-  \rangle \rightarrow \langle H, R\set{z' \mapsto R(y)}, [z'/z]s, n, C
+  \rangle \rightarrow_D \langle H, R\set{z' \mapsto R(y)}, [z'/z]s, n, C
   \rangle \) where \(z' \notin \DOM(H)\cup\DOM(R)\cup fv(C) \)
   
-  We need to prove \(consistency(H, R\set{z'\mapsto R(y)}, C \). From
+  We need to prove \(consistency(H, R\set{z'\mapsto R(y)}, C) \). From
   assumption \(consistency(H, R, C)\), we have (1) \(\forall x\).if
   \(\snull \in C\), then \(\scon\Sirx \in C\) and if \(H(R(x))\) is
   defined then \(H(R(x)) = null\) and (2) \(\forall x\).if \(\snnull
@@ -424,31 +424,42 @@ If \(consistency(H, R, C)\) and \(\langle H, R, s, n, C \rangle
   
   Therefore, \(consistency(H, R\set{z' \mapsto R(y)}, C)\) holds.
 
+\item Case: \(\langle H, R, \LET z = *y \; \IN s, n, C
+  \rangle \rightarrow_D \langle H, R\set{z' \mapsto H(R(y))}, [z'/z]s, n, C
+  \rangle \) where \(R(y) \notin \DOM(H)\) and \(z' \notin \DOM(H)\cup\DOM(R)\cup fv(C) \)
+
+  Similar to above.
+
+\item Case: \(\langle H, R, \LET z = \NULL \; \IN s, n, C
+  \rangle \rightarrow _D \langle H, R\set{z' \mapsto \NULL}, [z'/z]s, n, C
+  \rangle \) where \(z' \notin \DOM(H)\cup\DOM(R)\cup fv(C) \)
+
+  Similar to above.
+
 \item Case: \(\langle H, R, \IFNULL(*y) \ \THEN s_1\ \ELSE\ s_2, n, C
-  \rangle \xlongrightarrow{\NULL(*y)} \langle H, R, s_1, n, C \rangle \)
+  \rangle \xlongrightarrow{\NULL(*y)}_D \langle H, R, s_1, n, C \rangle \)
   where \( H(R(y)) = null \) and \(\scon(*y) \notin C\)
 
   Obviously, \(consistency(H, R, C) \) holds from assumption.
 
 \item Case: \(\langle H, R, \IFNULL(*y) \ \THEN s_1\ \ELSE\ s_2, n, C
-  \rangle \xlongrightarrow{\neg\NULL(*y)} \langle H, R, s_2, n, C \rangle \)
+  \rangle \xlongrightarrow{\neg\NULL(*y)}_D \langle H, R, s_2, n, C \rangle \)
   where \( H(R(y)) \ne null \) and \(\scon(*y) \notin C\)
 
  Obviously, \(consistency(H, R, C) \) holds from assumption.
 
-
 \item Case: \(\langle H, R, \IFNULL(*y) \ \THEN s_1\ \ELSE\ s_2, n, C
-  \rangle \xlongrightarrow{\NULL(*y)} \langle H, R, s_1, n, C \cup{\NULL(*y)}
+  \rangle \xlongrightarrow{\NULL(*y)}_D \langle H, R, s_1, n, C \cup{\NULL(*y)}
   \rangle \) where \( H(R(y)) =  null \) and \(\scon(*y) \in C\)
   
-  We need to prove \(consistency(H, R, C\cup{\NULL(*y)} \). From
+  We need to prove \(consistency(H, R, C\cup{\NULL(*y)}) \). From
   assumption \(consistency(H, R, C)\), we have (1) \(\forall x\).if
   \(\snull \in C\), then \(\scon\Sirx \in C\) and if \(H(R(x))\) is
   defined then \(H(R(x)) = null\) and (2) \(\forall x\).if \(\snnull
   \in C\), then \(\scon\Sirx \in C\) and if \(H(R(x))\) is defined
   then \(H(R(x)) \ne null\).
 
-  To prove \(consistency(H, R, C\cup{\NULL(*y)} \), we chose \(z\)
+  To prove \(consistency(H, R, C\cup{\NULL(*y)}) \), we chose \(z\)
   arbitrarily. (3) Assuming \(\NULL(*z) \in C\cup\NULL(*y)\). This
   implies \(\NULL(*z) \in C\). By using (1), we have \(\scon(*z) \in
   C\). This implies \(\scon(*z) \in C\cup\NULL(*y)\). Assuming
@@ -457,9 +468,29 @@ If \(consistency(H, R, C)\) and \(\langle H, R, s, n, C \rangle
   \(\neg\NULL(*z) \in C\). By using (2), we have \(\scon(*z) \in C\). This
   implies \(\scon(*z) \in C\cup\NULL(*y)\). Assuming \(H(R(z))\) is
   defined, then we have \(H(R(z)) \ne null\) from (2). 
-                 
+
   Therefore, \(consistency(H, R, C\cup{\NULL(*y)})\) holds.
 
+\item Case: \(\langle H, R, \IFNULL(*y) \ \THEN s_1\ \ELSE\ s_2, n, C
+  \rangle \xlongrightarrow{\neg\NULL(*y)}_D \langle H, R, s_2, n, C \cup{\neg\NULL(*y)}
+  \rangle \) where \( H(R(y)) \ne  null \) and \(\scon(*y) \in C\)
+
+  Similar to above.  
+
+\item Case: \(\langle H, R, f(\vec{x}), n, C \rangle \rightarrow_D
+  \langle H, R, [\vec{x}/\vec{y}]s, n, C \rangle \) where \( D(f) = (\vec{y})s\)
+
+  Obviously, \(consistency(H, R, C) \) holds from assumption.
+
+\item Case: \(\langle H, R, s_1;s_2, n, C \rangle
+  \xlongrightarrow{\rho}_{D} \langle H', R', s_1';s_2, n', C' \rangle
+  \) if \(\langle H, R, s_1, n, C \rangle \xlongrightarrow{\rho}_{D}
+  \langle H', R', s_1', n', C' \rangle\)
+
+  We need to prove \(consistency(H', R', C')\). We have the assumption
+  \(consistency(H, R, C)\). \(consistency(H', R', C')\) holds
+  obviously by induction hypothesis.
+  
  \end{itemize}
 \end{proof}
 
@@ -474,22 +505,24 @@ By induction on the derivation of \(\langle H, R, s, n, C \rangle
   \rightarrow \langle H, R, s;\Endconst, n, C\cup
   \{\scon\Sirx\} \rangle \)
 
-  From the assumption \( \Theta; \Gamma \vdash \langle H, R,
-  \scon\Sirx s, n, C \rangle : \langle P, C \rangle\), we have \(
-  \Theta; \Gamma \vdash \scon\Sirx s: P \), \( OK_n(P, C) \) and
-  \(consistency(H, R, C)\). From the inversion of typing rules, we get
-  \( \Theta; \Gamma \vdash s:P'' \) and \( \scon\Sirx P'' \le P \) for
-  some \( P'' \). By subtyping, we have \( P'';\Endconst \le Q \) and
-  \( \langle P, C \rangle \Longrightarrow \langle Q, C\cup
-  \{\scon\Sirx\} \rangle \) for some \( Q \).
+  From the assumption \( \Theta \vdash \langle H, R, \scon\Sirx s, n,
+  C \rangle : \langle P, C \rangle\), we have \( \exists \Gamma\) s.t.
+  \(\Theta; \Gamma \vdash \scon\Sirx s: P \), \( OK_n(P, C) \),
+  \(consistency(H, R, C)\) and \(\Gamma \subseteq \DOM(R)\). From the
+  inversion of typing rules, we get \( \Theta; \Gamma \vdash s:P'' \)
+  and \( \scon\Sirx P'' \le P \) for some \( P'' \). By subtyping, we
+  have \( P'';\Endconst \le Q \) and \( \langle P, C \rangle
+  \Longrightarrow \langle Q, C\cup \{\scon\Sirx\} \rangle \) for some
+  \( Q \).
 
-  we need to find \(P'\) and \(C'\) s.t. \( \Theta; \Gamma \vdash
-  s;\Endconst:P'\), \( OK_n(P', C')\), \( \langle P, C' \rangle
-  \Longrightarrow \langle P', C' \rangle \) and \(consistency(H, R,
-  C')\). Taking \( Q \) as \( P'\) and \( C \cup \{\scon\Sirx\} \) as
-  \(C'\). Therefore \( \langle P, C \rangle \rightarrow \langle P', C'
-  \rangle\) holds, and then \( OK_n(P', C')\) and \(consistency(H, R,
-  C')\) hold from Lemma~\ref{lem:okPreserved} and
+  we need to find \(P'\) and \(C'\) s.t. \( \exists \Gamma' \Theta;
+  \Gamma' \vdash s;\Endconst:P'\), \( OK_n(P', C')\), \( \langle P, C'
+  \rangle \Longrightarrow \langle P', C' \rangle \) and
+  \(consistency(H, R, C')\). Taking \( Q \) as \( P'\), \( C \cup
+  \{\scon\Sirx\} \) as \(C'\) and \(\Gamma\) as \(\Gamma'\). Therefore \(
+  \langle P, C \rangle \rightarrow \langle P', C' \rangle\) and
+  \(\Gamma \subseteq \DOM(R)\) hold, and then \( OK_n(P', C')\) and
+  \(consistency(H, R, C')\) hold from Lemma~\ref{lem:okPreserved} and
   Lemma~\ref{lem:consistency}. From \( \Theta; \Gamma \vdash
   s;\Endconst:P'';\Endconst \), \( P'';\Endconst \le Q \) and
   \rn{T-Sub}, \( \Theta; \Gamma \vdash s;\Endconst:P'\) holds.
@@ -498,72 +531,84 @@ By induction on the derivation of \(\langle H, R, s, n, C \rangle
   \langle H, R, \SKIP, n, C' \rangle \) where \(C'\) = \(filter(C,
   *x)\)
 
-   From the assumption \( \Theta; \Gamma \vdash \langle H, R,
-   \Endconst, n, C \rangle : \langle P, C \rangle\), we have \(
-   \Theta; \Gamma \vdash \Endconst \COL P\), \( OK_n(P, C) \) and
-   \(consistency(H, R, C)\) . From the inversion of typing rules, we
-   get \( \Theta; \Gamma \vdash \Endconst:\Endconst \) and \(
-   \Endconst \le P \). By subtyping , we get \( 0 \le Q \) and \(
-   \langle P, C \rangle \rightarrow \langle Q, C \rangle\) for some
-   \( Q \).
+   From the assumption \( \Theta \vdash \langle H, R, \Endconst, n, C
+   \rangle : \langle P, C \rangle\), we have \(\exists \Gamma\)
+   s.t. \( \Theta; \Gamma \vdash \Endconst \COL P\), \( OK_n(P, C) \)
+   \(consistency(H, R, C)\) and \(\Gamma \subseteq \DOM(R)\). From the
+   inversion of typing rules, we get \( \Theta; \Gamma \vdash
+   \Endconst:\Endconst \) and \( \Endconst \le P \). By subtyping , we
+   get \( 0 \le Q \) and \( \langle P, C \rangle \rightarrow \langle
+   Q, C \rangle\) for some \( Q \).
 
-   we need to find \(P'\) and \(C'\) s.t. \( \Theta; \Gamma \vdash
+   we need to find \(P'\) and \(C'\) s.t. \(\exists \Gamma'\) s.t. \(
+   \Theta; \Gamma' \vdash
   \SKIP:P'\), \( OK_n(P', C')\), \( \langle P, C \rangle
-  \Longrightarrow P', C' \rangle \) and \(consistency(H, R,
-  C')\). Taking \( Q \) as \( P'\) and \(C\) as \(C'\), then \(
-  \langle P, C \rangle \rightarrow \langle P', C' \rangle\) holds, and
-  then \( OK_n(P', C')\) and \(consistency(H, R, C')\) hold from
-  Lemma~\ref{lem:okPreserved} and Lemma~\ref{lem:consistency} . From
-  \rn{T-Skip}, \rn{T-Sub} and \( 0 \le Q\), then \( \Theta; \Gamma
-  \vdash \SKIP:P'\) holds.
+  \Longrightarrow P', C' \rangle \), \(consistency(H, R, C')\) and
+  \(\Gamma' \subseteq \DOM(R)\). Taking \( Q \) as \( P'\), \(C\) as
+  \(C'\) and \(\Gamma\) as \(\Gamma'\), then \( \langle P, C \rangle
+  \rightarrow \langle P', C' \rangle\) and \(\Gamma' \subseteq
+  \DOM(R)\) hold, and then \( OK_n(P', C')\) and \(consistency(H, R,
+  C')\) hold from Lemma~\ref{lem:okPreserved} and
+  Lemma~\ref{lem:consistency} . From \rn{T-Skip}, \rn{T-Sub} and \( 0
+  \le Q\), then \( \Theta; \Gamma \vdash \SKIP:P'\) holds.
 
 \item Case: \(\langle H, R, \FREE, n, C\rangle \xlongrightarrow{\Free}
   \langle H', R, \SKIP, n + 1, C \rangle \)
 
-  From the assumption \( \Theta; \Gamma \vdash \langle H, R, \FREE, n,
-  C \rangle : \langle P, C \rangle\), we have \(\OK_n(P, C)\),
-  \(consistency(H, R, C)\) and \(\Theta; \Gamma \vdash \Free(x) \COL P\).
-  From inversion of the typing rules, we have \(\Theta; \Gamma \vdash
+  From the assumption \( \Theta \vdash \langle H, R, \FREE, n, C
+  \rangle : \langle P, C \rangle\), we have \(\exists \Gamma\)
+  s.t. \(\OK_n(P, C)\), \(consistency(H, R, C)\), \(\Theta; \Gamma
+  \vdash \Free(x) \COL P\) and \(\Gamma \subseteq \DOM(R)\).  From
+  inversion of the typing rules, we have \(\Theta; \Gamma \vdash
   \Free(x) \COL \Free\) and \(\Free \le P\). By the subtyping, we have
   \( \langle P, F \rangle \xLongrightarrow{\Free} \langle Q, C
   \rangle\) and \(\TSKIP \le Q \) for some \(Q\).
 
-  We need to find \(P'\) and \(C'\) such that \( \langle P, C \rangle
-  \xLongrightarrow{\Free} \langle P', C' \rangle \), \(\Theta; \Gamma
-  \vdash \SKIP \COL P'\), and \(\OK_{n+1}(P', C')\).  Take \(Q\) as
-  \(P'\) and \(C\) as \(C'\).  Then, \( \langle P, C \rangle
-  \xLongrightarrow{\Free} \langle P', C' \rangle \) holds, and
-  \(OK_{n+1}(P', C')\) holds from Lemma~\ref{lem:okPreserved}.  We
-  also have \(\Theta; \Gamma \vdash \SKIP \COL P'\) from \rn{T-Skip},
-  \(\TSKIP \le Q\) and \rn{T-Sub}.
+  We need to find \(P'\) and \(C'\) such that \(\exists \Gamma'\)
+  s.t. \( \langle P, C \rangle \xLongrightarrow{\Free} \langle P', C'
+  \rangle \), \(\Theta; \Gamma' \vdash \SKIP \COL P'\),
+  \(\OK_{n+1}(P', C')\), \(consistency(H, R, C')\) and \(\Gamma'
+  \subseteq \DOM(R)\). Take \(Q\) as \(P'\), \(C\) as \(C'\) and
+  \(\Gamma\) as \(\Gamma'\).  Then, \( \langle P, C \rangle
+  \xLongrightarrow{\Free} \langle P', C' \rangle \) and \(\Gamma'
+  \subseteq \DOM(R)\) hold, and \(OK_{n+1}(P', C')\) and
+  \(consistency(H', R, C)\) hold from Lemma~\ref{lem:okPreserved} and
+  Lemma~\ref{lem:consistency}.  We also have \(\Theta; \Gamma
+  \vdash \SKIP \COL P'\) from \rn{T-Skip}, \(\TSKIP \le Q\) and
+  \rn{T-Sub}.
 
 \item Case: \( \langle H, R, \LET x = \MALLOC \IN s, n, C\rangle
-  \xlongrightarrow{\Malloc} \langle H', R', [x'/x]s, n - 1, C \rangle \)
+  \xlongrightarrow{\Malloc} \langle H\set{l \mapsto v}, R\set{x'
+    \mapsto l}, [x'/x]s, n - 1, C \rangle \) where \(l \notin
+  \DOM(H)\) and \(x' \notin \DOM(H)\cup\DOM(R)\cup fv(C)\)
 
-  From the assumption \( \Theta; \Gamma \vdash \langle H, R, \LET x =
-  \MALLOC \IN s, n, C \rangle : \langle P, C \rangle\), we have
-  \(\Theta; \Gamma \vdash \LET x = \MALLOC \IN s \COL P\),
-  \(\OK_{n}(P, C)\) and \(consistency(H, R, C)\). By the inversion of
-  typing rules, we have \(\Theta; \Gamma, x \vdash s : P'' \) and \(
-  \Malloc; (x)P'' \le P \) for some \(P''\). By subtyping, we get \(
-  \langle P, C \rangle \xLongrightarrow{\Malloc} \langle Q, F \rangle
-  \) and \( [x'/x]P'' \le Q\) for some \(Q\).
+  From the assumption \( \Theta \vdash \langle H, R, \LET x = \MALLOC
+  \IN s, n, C \rangle : \langle P, C \rangle\), we have \(\Theta;
+  \Gamma \vdash \LET x = \MALLOC \IN s \COL P\), \(\OK_{n}(P, C)\),
+  \(consistency(H, R, C)\) and \(\Gamma \subseteq \DOM(R)\). By the
+  inversion of typing rules, we have \(\Theta; \Gamma, x \vdash s :
+  P'' \) and \( \Malloc; (x)P'' \le P \) for some \(P''\). By
+  subtyping, we get \( \langle P, C \rangle \xLongrightarrow{\Malloc}
+  \langle Q, C \rangle \) and \( (x)P'' \le Q\) for some \(Q\).
 
-  We need to find \(P'\) and \(C'\) such that \(\Theta;\Gamma, x'
-  \vdash [x'/x]s\COL P'\), \( \langle P, C \rangle
-  \xLongrightarrow{\Malloc} \langle P', C' \rangle\),
-  \(consistency(H', R', C')\) and \(OK_{n-1}(P', C')\). Take \(Q\) as
-  \(P'\) and \(C\) as \(C'\).  Then \( \langle P, C \rangle
-  \xLongrightarrow{\Malloc} \langle P', C' \rangle\) holds, and
-  then \(OK_{n-1}(P', C')\) and \(consistency(H', R', C')\) hold by
-  Lemma~\ref{lem:okPreserved} and Lemma~\ref{lem:consistency}. From
-  \(\Theta; \Gamma, x \vdash s : P''\) and \( \Malloc;(x)P'' \le P\),
-  we have \(\Theta; \Gamma, x'' \vdash [x''/x]s : [x''/x]P''\) and \(
-  \Malloc;(x)P'' \le P\), and then by the definition of subtyping we
-  have \([x''/x]P'' \le Q'\) for some \(Q'\). Therefore, we get
-  \(\Theta; \Gamma, x'' \vdash [x''/x]s : Q'\). Take \(x''\) as \(x'\)
-  and \(Q'\) as \(P'\), then \(\Theta;\Gamma, x' \vdash [x'/x]s\COL
-  P'\) holds.
+  We need to find \(P'\) and \(C'\) such that \(\exists \Gamma'\)
+  s.t. \(\Theta; \Gamma' \vdash [x'/x]s\COL P'\), \( \langle P, C
+  \rangle \xLongrightarrow{\Malloc} \langle P', C' \rangle\),
+  \(consistency(H', R', C')\), \(OK_{n-1}(P', C')\) and \(\Gamma'
+  \subseteq \DOM(R\set{x' \mapsto l})\). Take \(Q\) as \(P'\), \(C\)
+  as \(C'\) and \(\Gamma,x'\) as \(\Gamma'\).  Then \( \langle P, C
+  \rangle \xLongrightarrow{\Malloc} \langle P', C' \rangle\) and
+  \(\Gamma' \subseteq \DOM(R\set{x' \mapsto l})\) hold, and then
+  \(OK_{n-1}(P', C')\) and \(consistency(H\set{l\mapsto v}, R\set{x'
+    \mapsto l}, C)\) hold by Lemma~\ref{lem:okPreserved} and
+  Lemma~\ref{lem:consistency}. From \(\Theta; \Gamma, x \vdash s :
+  P''\) and \( \Malloc;(x)P'' \le P\), by replacing \(x\) with
+  \(x''\), we have \(\Theta; \Gamma, x'' \vdash [x''/x]s :
+         [x''/x]P''\) and \( \Malloc;[x''/x]P'' \le P\), and then by the
+         definition of subtyping we have \([x''/x]P'' \le Q'\) for
+         some \(Q'\). Therefore, we get \(\Theta; \Gamma, x'' \vdash
+         [x''/x]s : Q'\). Take \(x''\) as \(x'\) and \(Q'\) as \(P'\),
+         then \(\Theta;\Gamma, x' \vdash [x'/x]s\COL P'\) holds.
       
 \item Case: \( \langle H, R, \SKIP;s, n, C \rangle \rightarrow \langle
   H, R, s, n, C \rangle \)
@@ -680,9 +725,11 @@ By induction on the derivation of \(\langle H, R, s, n, C \rangle
   s_{1} \ \ELSE \ s_{2} \COL P \), \(OK_n(P, C)\) and \(consistency(H,
   R, C)\). From the inversion of typing rules, we have \(\Theta;
   \Gamma \vdash s_{1} \COL P_1\), \(\Theta; \Gamma \vdash s_{2} \COL
-  P_2\) and \((*x)(P_1, P_2) \le P\). According to rule Tr-NNullNotIn1, \(\scon\Sirx \in C\) and \(C' = C \cup \snull\), we have \(\langle
-  (*x)(P_1, P_2) \rangle \xlongrightarrow{\snull} \langle P_1,
-  C \cup \snull \rangle \), and then by the definition of subtyping, we get \(\langle P, C \rangle \xLongrightarrow{\snull}
+  P_2\) and \((*x)(P_1, P_2) \le P\). According to rule
+  Tr-NNullNotIn1, \(\scon\Sirx \in C\) and \(C' = C \cup \snull\), we
+  have \(\langle (*x)(P_1, P_2) \rangle \xlongrightarrow{\snull}
+  \langle P_1, C \cup \snull \rangle \), and then by the definition of
+  subtyping, we get \(\langle P, C \rangle \xLongrightarrow{\snull}
   \langle Q, C\cup \{\snull\} \rangle \) and \(P_1 \le Q\) for some
   \(Q\).
   
@@ -786,8 +833,8 @@ n', C'\rangle \xlongrightarrow{\rho} \OVERFLOW\).  Then, \(n' = 0\)
 and \(\rho = \Malloc \).  From Lemma~\ref{lem:preservation}, there
 exists \(P'\) and \(C'\) such that \(\Theta; \Gamma' \vdash s' \COL
 P'\), \( \langle P, C \rangle \xLongrightarrow{\sigma} \langle P', C'
-\rangle \), and \(\OK_0(P', C')\); hence \(\langle H', R', s',
-0\rangle \xlongrightarrow{\Malloc}\).  However, this contradicts
-Lemma~\ref{lem:immediateSafety}.
+\rangle \), \(\OK_0(P', C')\) and \(consistency(H', R', C')\). So if
+\(\langle H', R', s', 0, C'\rangle \xlongrightarrow{\Malloc}\), it
+will contradict the Lemma~\ref{lem:immediateSafety}.
 
 \end{pfof}
