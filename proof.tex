@@ -461,13 +461,18 @@ If \(consistency(H, R, C)\) and \(\langle H, R, s, n, C \rangle
 
   To prove \(consistency(H, R, C\cup{\NULL(*y)}) \), we chose \(z\)
   arbitrarily. (3) Assuming \(\NULL(*z) \in C\cup\NULL(*y)\). This
-  implies \(\NULL(*z) \in C\). By using (1), we have \(\scon(*z) \in
-  C\). This implies \(\scon(*z) \in C\cup\NULL(*y)\). Assuming
+  implies \(\NULL(*z) \in C\) or \(\NULL(*z) = \NULL(*y)\). First, let
+  us consider \(\NULL(*z) \in C\). By using (1), we have \(\scon(*z)
+  \in C\). This implies \(\scon(*z) \in C\cup\NULL(*y)\). Assuming
   \(H(R(z))\) is defined, then we have \(H(R(z)) = null\) from
-  (1). (4) Assuming \(\neg\NULL(*z) \in C\cup\NULL(*y)\). This implies
-  \(\neg\NULL(*z) \in C\). By using (2), we have \(\scon(*z) \in C\). This
-  implies \(\scon(*z) \in C\cup\NULL(*y)\). Assuming \(H(R(z))\) is
-  defined, then we have \(H(R(z)) \ne null\) from (2). 
+  (1). Then let us consider \(\NULL(*z) = \NULL(*y)\). Because we have
+  \( H(R(y)) = null \) and \(\scon(*y) \in C\), then we get \( H(R(z))
+  = null \) and \(\scon(*z) \in C\). \(\scon(*z) \in C\) implies
+  \(\scon(*z) \in C\cup\NULL(*y)\) (4) Assuming \(\neg\NULL(*z) \in
+  C\cup\NULL(*y)\). This implies \(\neg\NULL(*z) \in C\). By using
+  (2), we have \(\scon(*z) \in C\). This implies \(\scon(*z) \in
+  C\cup\NULL(*y)\). Assuming \(H(R(z))\) is defined, then we have
+  \(H(R(z)) \ne null\) from (2).
 
   Therefore, \(consistency(H, R, C\cup{\NULL(*y)})\) holds.
 
